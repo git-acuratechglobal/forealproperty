@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foreal_property/Theme/navigation.dart';
+import 'package:foreal_property/core/services/local_storage_service/local_storage_service.dart';
 import 'package:foreal_property/core/utils/appbutton.dart';
 import 'package:foreal_property/core/utils/appsnackbar.dart';
 import 'package:foreal_property/core/validator/validator.dart';
@@ -29,6 +30,20 @@ class _ChangepasswordState extends ConsumerState<Changepassword> {
   void initState() {
     super.initState();
 
+
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+
+   
+      final userId = ref.read(localStorageServiceProvider).getuser()?.userId;
+      if (userId != null) {
+        ref.read(changePasswordParamsDataProvider.notifier).update(
+              (p) => p.copyWith(userId: userId.toString()),     
+            );
+      }
+
+      
+    });
     ref.listenManual(authNotifierProvider, (_, next) {
       switch (next) {
         case AsyncData<AuthState?> data when data.value != null:
@@ -53,7 +68,7 @@ class _ChangepasswordState extends ConsumerState<Changepassword> {
     final validator = ref.read(validatorsProvider);
 
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -72,7 +87,7 @@ class _ChangepasswordState extends ConsumerState<Changepassword> {
             children: [
               60.verticalSpace,
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: InkWell(
                   onTap: () {
                     context.pop();
@@ -86,7 +101,7 @@ class _ChangepasswordState extends ConsumerState<Changepassword> {
               ),
               32.verticalSpace,
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Text(
                   'Change Password',
                   style: Theme.of(context).textTheme.headlineMedium,
@@ -96,7 +111,7 @@ class _ChangepasswordState extends ConsumerState<Changepassword> {
 
               /// New Password Field
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: TextFormField(
                   controller: _newPasswordController,
                   validator: validator.validatePassword,
@@ -105,7 +120,7 @@ class _ChangepasswordState extends ConsumerState<Changepassword> {
                     hintStyle: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFFB9B9B9),
+                      color: const Color(0xFFB9B9B9),
                     ),
                     hintText: "New Password",
                     suffixIcon: IconButton(
@@ -133,7 +148,7 @@ class _ChangepasswordState extends ConsumerState<Changepassword> {
               24.verticalSpace,
 
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: TextFormField(
                   controller: _confirmPasswordController,
                   validator: (value) {
@@ -149,7 +164,7 @@ class _ChangepasswordState extends ConsumerState<Changepassword> {
                     hintStyle: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFFB9B9B9),
+                      color: const Color(0xFFB9B9B9),
                     ),
                     hintText: "Confirm Password",
                     suffixIcon: IconButton(
@@ -177,7 +192,7 @@ class _ChangepasswordState extends ConsumerState<Changepassword> {
               24.verticalSpace,
 
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: PrimaryButton(
                   isLoading: ref.watch(authNotifierProvider).isLoading,
                   title: 'Update Password',

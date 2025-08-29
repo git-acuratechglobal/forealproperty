@@ -1,5 +1,4 @@
 
-import 'package:foreal_property/features/auth_feature/model/add_property_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part "add_property_state.freezed.dart";
@@ -10,6 +9,11 @@ class AddPropertyState with _$AddPropertyState{
     required AddPropertyEvent addPropertyEvent,
      String? response,
     // AddPropertyModel? addPropertyModel,
+    //  @Default(false) bool isAddressSaved,
+    // @Default(false) bool isAttributesSaved,
+    // @Default(false) bool isContactSaved,
+    // @Default(false) bool isImagesSaved,
+    // @Default(false) bool isListingSaved,
   }) = _AddPropertyState;
 }
 
@@ -19,5 +23,13 @@ addressUpdate,
 addPropertyAttribute,
 addImage,
 contact,
-listing
+updateContact,
+listing,
+addUpdateOpenHome,
+addContact,
+addOpenHome,
+addOpenHomesRegistration, 
+deleteOpenHome, 
+addTenant,
+addMultipleOwner
 }

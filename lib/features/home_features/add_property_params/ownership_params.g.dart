@@ -10,26 +10,27 @@ _$OwnershipParamsImpl _$$OwnershipParamsImplFromJson(
         Map<String, dynamic> json) =>
     _$OwnershipParamsImpl(
       agentId: (json['AgentId'] as num?)?.toInt() ?? 2,
-      agencyId: (json['AgencyId'] as num?)?.toInt() ?? 1,
+      agencyId: (json['AgencyID'] as num?)?.toInt() ?? 1,
       address: json['Address'] as String?,
-      userRoleID: (json['UserRoleID'] as num?)?.toInt() ?? 10,
+      userRoleID: json['userRoleID'] ?? 10,
       propertyUniqueId: json['PropertyUniqueId'] as String?,
       firstName: json['FirstName'] as String?,
       lastName: json['LastName'] as String?,
       email: json['Email'] as String?,
       mobileNumber: json['MobileNumber'] as String?,
       contactType: (json['ContactType'] as num?)?.toInt() ?? 1,
-      title: (json['Title'] as num?)?.toInt() ?? 2,
+      title: (json['Title'] as num?)?.toInt(),
       contactUniqueId: json['ContactUniqueId'] as String?,
+      typeIAM: (json['TypeIAM'] as num?)?.toInt() ?? 1,
     );
 
 Map<String, dynamic> _$$OwnershipParamsImplToJson(
         _$OwnershipParamsImpl instance) =>
     <String, dynamic>{
       'AgentId': instance.agentId,
-      'AgencyId': instance.agencyId,
+      'AgencyID': instance.agencyId,
       'Address': instance.address,
-      'UserRoleID': instance.userRoleID,
+      'userRoleID': instance.userRoleID,
       'PropertyUniqueId': instance.propertyUniqueId,
       'FirstName': instance.firstName,
       'LastName': instance.lastName,
@@ -38,6 +39,7 @@ Map<String, dynamic> _$$OwnershipParamsImplToJson(
       'ContactType': instance.contactType,
       'Title': instance.title,
       'ContactUniqueId': instance.contactUniqueId,
+      'TypeIAM': instance.typeIAM,
     };
 
 // **************************************************************************
@@ -45,7 +47,7 @@ Map<String, dynamic> _$$OwnershipParamsImplToJson(
 // **************************************************************************
 
 String _$ownershipParamsDataHash() =>
-    r'fc0b0474d9eff0e1478465b485e86c08d2a2fdf8';
+    r'3c045f02151f20b1a527f3c793d72cdb5e66f860';
 
 /// See also [OwnershipParamsData].
 @ProviderFor(OwnershipParamsData)

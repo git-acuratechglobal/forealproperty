@@ -25,7 +25,7 @@ mixin _$AddressParams {
   @JsonKey(name: "PropertySaleRental")
   int? get propertySaleRental => throw _privateConstructorUsedError;
   @JsonKey(name: "PropertyType")
-  String? get propertyType => throw _privateConstructorUsedError;
+  int? get propertyType => throw _privateConstructorUsedError;
   @JsonKey(name: "AgentId")
   int? get agentId => throw _privateConstructorUsedError;
   @JsonKey(name: "AgencyId")
@@ -67,7 +67,7 @@ abstract class $AddressParamsCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: "PropertyId") int propertyId,
       @JsonKey(name: "PropertySaleRental") int? propertySaleRental,
-      @JsonKey(name: "PropertyType") String? propertyType,
+      @JsonKey(name: "PropertyType") int? propertyType,
       @JsonKey(name: "AgentId") int? agentId,
       @JsonKey(name: "AgencyId") int? agencyId,
       @JsonKey(name: "PropertyGooglePlacesLocation")
@@ -122,7 +122,7 @@ class _$AddressParamsCopyWithImpl<$Res, $Val extends AddressParams>
       propertyType: freezed == propertyType
           ? _value.propertyType
           : propertyType // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       agentId: freezed == agentId
           ? _value.agentId
           : agentId // ignore: cast_nullable_to_non_nullable
@@ -178,7 +178,7 @@ abstract class _$$AddressParamsImplCopyWith<$Res>
   $Res call(
       {@JsonKey(name: "PropertyId") int propertyId,
       @JsonKey(name: "PropertySaleRental") int? propertySaleRental,
-      @JsonKey(name: "PropertyType") String? propertyType,
+      @JsonKey(name: "PropertyType") int? propertyType,
       @JsonKey(name: "AgentId") int? agentId,
       @JsonKey(name: "AgencyId") int? agencyId,
       @JsonKey(name: "PropertyGooglePlacesLocation")
@@ -231,7 +231,7 @@ class __$$AddressParamsImplCopyWithImpl<$Res>
       propertyType: freezed == propertyType
           ? _value.propertyType
           : propertyType // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       agentId: freezed == agentId
           ? _value.agentId
           : agentId // ignore: cast_nullable_to_non_nullable
@@ -281,7 +281,7 @@ class __$$AddressParamsImplCopyWithImpl<$Res>
 class _$AddressParamsImpl implements _AddressParams {
   const _$AddressParamsImpl(
       {@JsonKey(name: "PropertyId") this.propertyId = 0,
-      @JsonKey(name: "PropertySaleRental") this.propertySaleRental = 1,
+      @JsonKey(name: "PropertySaleRental") this.propertySaleRental,
       @JsonKey(name: "PropertyType") this.propertyType,
       @JsonKey(name: "AgentId") this.agentId = 2,
       @JsonKey(name: "AgencyId") this.agencyId = 1,
@@ -306,7 +306,7 @@ class _$AddressParamsImpl implements _AddressParams {
   final int? propertySaleRental;
   @override
   @JsonKey(name: "PropertyType")
-  final String? propertyType;
+  final int? propertyType;
   @override
   @JsonKey(name: "AgentId")
   final int? agentId;
@@ -412,7 +412,7 @@ abstract class _AddressParams implements AddressParams {
   const factory _AddressParams(
       {@JsonKey(name: "PropertyId") final int propertyId,
       @JsonKey(name: "PropertySaleRental") final int? propertySaleRental,
-      @JsonKey(name: "PropertyType") final String? propertyType,
+      @JsonKey(name: "PropertyType") final int? propertyType,
       @JsonKey(name: "AgentId") final int? agentId,
       @JsonKey(name: "AgencyId") final int? agencyId,
       @JsonKey(name: "PropertyGooglePlacesLocation")
@@ -436,7 +436,7 @@ abstract class _AddressParams implements AddressParams {
   int? get propertySaleRental;
   @override
   @JsonKey(name: "PropertyType")
-  String? get propertyType;
+  int? get propertyType;
   @override
   @JsonKey(name: "AgentId")
   int? get agentId;

@@ -41,7 +41,7 @@ class _RegisterscreenState extends ConsumerState<Registerscreen> {
            
           ),
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Form(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +62,7 @@ class _RegisterscreenState extends ConsumerState<Registerscreen> {
                   Text(
                     'Sign up with socials or fill the form to continue.',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Color(0xFF494D60),
+                          color: const Color(0xFF494D60),
                         ),
                   ),
                   32.verticalSpace,
@@ -106,7 +106,7 @@ class _RegisterscreenState extends ConsumerState<Registerscreen> {
                         hintStyle: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xFFB9B9B9),
+                          color: const Color(0xFFB9B9B9),
                         ),
                         hintText: "Create Password",
                         suffixIcon: IconButton(
@@ -135,7 +135,7 @@ class _RegisterscreenState extends ConsumerState<Registerscreen> {
                         hintStyle: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xFFB9B9B9),
+                          color: const Color(0xFFB9B9B9),
                         ),
                         hintText: "Create Password",
                         suffixIcon: IconButton(
@@ -160,11 +160,11 @@ class _RegisterscreenState extends ConsumerState<Registerscreen> {
                   24.verticalSpace,
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF164C63),
+                      backgroundColor: const Color(0xFF164C63),
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () {
-                      context.navigateTo(ProfileScreen());
+                      context.push(const ProfileScreen());
                     },
                     child: Text(
                       'Submit',
@@ -224,14 +224,14 @@ class _RegisterscreenState extends ConsumerState<Registerscreen> {
       bottomSheet: Container(
         width: double.infinity,
         // height: 96.h,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 30),
+          padding: const EdgeInsets.symmetric(vertical: 30),
           child: InkWell(
             onTap: () {
-              context.navigateTo(LoginScreen());
+              context.push(const LoginScreen());
             },
             child: Text.rich(
               TextSpan(
@@ -239,7 +239,7 @@ class _RegisterscreenState extends ConsumerState<Registerscreen> {
                   TextSpan(
                     text: 'Don’t have an account? ',
                     style: TextStyle(
-                      color: Color(0xFF494D60),
+                      color: const Color(0xFF494D60),
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w300,
                     ),
@@ -247,7 +247,7 @@ class _RegisterscreenState extends ConsumerState<Registerscreen> {
                   TextSpan(
                     text: 'Login Now',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Color(0xFF164C63),
+                          color: const Color(0xFF164C63),
                         ),
                   ),
                 ],

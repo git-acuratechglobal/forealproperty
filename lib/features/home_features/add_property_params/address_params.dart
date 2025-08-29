@@ -1,3 +1,4 @@
+import 'package:foreal_property/features/home_features/models/get_property_details.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -8,8 +9,8 @@ part 'address_params.g.dart';
 class AddressParams with _$AddressParams {
   const factory AddressParams({
     @JsonKey(name: "PropertyId") @Default(0) int propertyId,
-    @JsonKey(name: "PropertySaleRental")  @Default(1) int? propertySaleRental,
-    @JsonKey(name: "PropertyType") String? propertyType,
+    @JsonKey(name: "PropertySaleRental")  int? propertySaleRental,
+    @JsonKey(name: "PropertyType") int? propertyType,
     @JsonKey(name: "AgentId") @Default(2)  int? agentId,
     @JsonKey(name: "AgencyId") @Default(1)  int? agencyId,
     @JsonKey(name: "PropertyGooglePlacesLocation") String? propertyGooglePlacesLocation,
@@ -34,4 +35,21 @@ class AddressParamsData extends _$AddressParamsData {
   void update(AddressParams Function(AddressParams? p) updateParam) {
     state = updateParam(state);
   }
+    void updateAddressParam(PropertyDetailModel? addressData){
+    state=AddressParams(
+     propertyGooglePlacesLocation:addressData?.propertyGooglePlacesLocation,
+     propertyType: int.parse(addressData!.propertyType!),
+     propertyId:  addressData.propertyId!,
+     unitNumber: addressData.unitNumber,
+     streetName: addressData.streetName,
+     streetNumber: addressData.streetNumber,
+     suburb: addressData.suburb,
+     state: addressData.state,
+     postCode: addressData.postCode,
+     //propertySaleRental: addressData.propertySaleRental,
+     userId: addressData.userId
+     //propertySaleRental: int.parse(addressData.propertySaleRental)
+    );
+   }
+   
 }

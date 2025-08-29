@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 extension NavigationPageExtension on BuildContext {
-  void navigateTo(Widget page) {
+  void push(Widget page) {
     Navigator.push(
       this,
       MaterialPageRoute(builder: (context) => page),
     );
   }
 
-  void navigateAndReplace(Widget page) {
+  void pushReplacement(Widget page) {
     Navigator.pushReplacement(
       this,
       MaterialPageRoute(builder: (context) => page),
@@ -21,7 +21,7 @@ extension NavigationPageExtension on BuildContext {
   }
 
 
-  void navigateAndRemoveUntil(Widget page) {
+  void pushAndRemoveUntil(Widget page) {
     Navigator.pushAndRemoveUntil(
       this,
       MaterialPageRoute(builder: (context) => page),

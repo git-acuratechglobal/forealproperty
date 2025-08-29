@@ -58,8 +58,8 @@ Map<String, dynamic> _$$PropertyAttributesModelImplToJson(
 _$PropertyAttributeDetailsImpl _$$PropertyAttributeDetailsImplFromJson(
         Map<String, dynamic> json) =>
     _$PropertyAttributeDetailsImpl(
-      propertyLandAreaL: (json['PropertyLandAreaL'] as num?)?.toInt(),
-      propertyLandAreaW: (json['PropertyLandAreaW'] as num?)?.toInt(),
+      propertyLandAreaL: (json['PropertyLandAreaL'] as num?)?.toInt() ?? 4000,
+      propertyLandAreaW: (json['PropertyLandAreaW'] as num?)?.toInt() ?? 1,
       countBedrooms: (json['CountBedrooms'] as num?)?.toInt(),
       countBathrooms: (json['CountBathrooms'] as num?)?.toInt(),
       countCarParking: (json['CountCarParking'] as num?)?.toInt(),
@@ -67,7 +67,7 @@ _$PropertyAttributeDetailsImpl _$$PropertyAttributeDetailsImplFromJson(
       countGarageSpace: (json['CountGarageSpace'] as num?)?.toInt(),
       countLivingAreas: (json['CountLivingAreas'] as num?)?.toInt(),
       countToilets: (json['CountToilets'] as num?)?.toInt(),
-      coutryard: json['Coutryard'] as bool?,
+      coutryard: json['Coutryard'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$PropertyAttributeDetailsImplToJson(
@@ -227,7 +227,7 @@ final propertyAttributesModelDataProvider = NotifierProvider<
 
 typedef _$PropertyAttributesModelData = Notifier<PropertyAttributesModel>;
 String _$propertyAttributeDetailsDataHash() =>
-    r'2c212633a9339a678a6faa21ab8440999860b8b0';
+    r'e26059c10919c813d91bebb76e815970dc1351c7';
 
 /// See also [PropertyAttributeDetailsData].
 @ProviderFor(PropertyAttributeDetailsData)

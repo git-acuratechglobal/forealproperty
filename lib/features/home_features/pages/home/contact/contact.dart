@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:foreal_property/Theme/navigation.dart';
+import 'package:foreal_property/features/home_features/pages/home/contact/addcontactfield.dart';
 import 'package:foreal_property/features/home_features/pages/home/contact/allcontacts.dart';
-import 'package:foreal_property/features/home_features/pages/home/notification.dart';
-
 
 class Contact extends StatefulWidget {
-  const Contact({super.key});
+  final VoidCallback? onOpenHomesTap;
+  const Contact({super.key, this.onOpenHomesTap});
 
   @override
   State<Contact> createState() => _ContactState();
@@ -15,19 +16,22 @@ class _ContactState extends State<Contact> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: Scaffold(
-        backgroundColor: Color(0xFFEBF3F5),
-        appBar: PreferredSize(
+        backgroundColor: const Color(0xFFEBF3F5),
+        appBar: const PreferredSize(
           preferredSize: Size.fromHeight(120),
           child: Customappbar(title: 'Contacts'),
         ),
         body: TabBarView(
           children: [
-     Allcontacts(),
-    Allcontacts(),
-    Allcontacts(),
-    Allcontacts(),
+            Allcontacts(
+              filterType: 'all',
+              onOpenHomesTap: widget.onOpenHomesTap,
+            ),
+            const Allcontacts(filterType: '1'), // owner
+            //  Allcontacts(filterType: '7'), // supplier
+            const Allcontacts(filterType: '2'),
           ],
         ),
       ),
@@ -49,29 +53,43 @@ class _CustomappbarState extends State<Customappbar> {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
-      automaticallyImplyLeading: false,
-      title: Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            widget.title,
-            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
-          )),
+      automaticallyImplyLeading: true,
+      // leading: IconButton(
+      //     onPressed: () {
+      //       context.navigateTo(HomeScreen(
+      //         selectTab: 2,
+      //       ));
+      //     },
+      //     icon: Icon(Icons.arrow_back)),
+      centerTitle: true,
+      title: Text(
+        widget.title,
+        style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+      ),
       actions: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
-          child: notification(),
-        ),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: InkWell(
+                onTap: () {
+                  context.push(const AddContactField());
+                },
+                child: Image.asset(
+                  'assets/images/addicon.png',
+                  height: 34.h,
+                  width: 34.w,
+                ))),
       ],
       bottom: TabBar(
         tabAlignment: TabAlignment.fill,
         indicatorSize: TabBarIndicatorSize.tab,
-        labelColor: Color(0xFF164C63),
-        unselectedLabelColor: Color(0xFF494D60),
-        indicatorColor: Color(0xFF75CBCD),
-        dividerColor: Color(0xFFE2E2E2),
+        labelColor: const Color(0xFF164C63),
+        unselectedLabelColor: const Color(0xFF494D60),
+        indicatorColor: const Color(0xFF75CBCD),
+        dividerColor: const Color(0xFFE2E2E2),
         labelStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w700),
-        unselectedLabelStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400),
-        tabs: [
+        unselectedLabelStyle:
+            TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400),
+        tabs: const [
           Tab(
               child: Text(
             'All',
@@ -80,11 +98,11 @@ class _CustomappbarState extends State<Customappbar> {
               child: Text(
             'Owners',
           )),
+          // Tab(
+          //     child: Text(
+          //   'Supplies',
+          // )),
           Tab(
-              child: Text(
-            'Supplies',
-          )),
-            Tab(
               child: Text(
             'Tenant',
           )),

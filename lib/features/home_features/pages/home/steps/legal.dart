@@ -91,221 +91,253 @@ class _LegalState extends ConsumerState<Legal> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            16.verticalSpace,
-            Text(
-              'SELLER SOLICITOR/CONVEYANCER DETAILS',
-              style: TextStyle(
-                color: const Color(0xFF164C63),
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w700,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  16.verticalSpace,
+                  Text(
+                    'SELLER SOLICITOR/CONVEYANCER DETAILS',
+                    style: TextStyle(
+                      color: const Color(0xFF164C63),
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  16.verticalSpace,
+
+                  Text('Seller Firm Type',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                  16.verticalSpace,
+                  WidgetDropdown(
+                    propertyOptions: const ['Agent', 'Owner'],
+                    selectedValue: legalData.sellerFirmType,
+                    onChanged: (String? value) {
+                      sellerFirmTypeController.text = value ?? '';
+                      legalNotifier.updateField('sellerFirmType', value);
+                    },
+                    hintText: 'Select for Seller Firm',
+                  ),
+                  16.verticalSpace,
+
+                  Text('Name of the Seller Firm',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                  16.verticalSpace,
+                  CommonTextField(
+                    label: 'Name of the Firm',
+                    controller: sellerFirmController,
+                    onChanged: (value) {
+                      legalNotifier.updateField('sellerFirm', value);
+                    },
+                  ),
+                  16.verticalSpace,
+
+                  Text('Principal’s Name',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                  16.verticalSpace,
+                  CommonTextField(
+                    label: 'Principal’s Name',
+                    controller: sellerPrincipalNameController,
+                    onChanged: (value) {
+                      legalNotifier.updateField('sellerPrincipalName', value);
+                    },
+                  ),
+                  16.verticalSpace,
+
+                  Text('Email Address',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                  16.verticalSpace,
+                  CommonTextField(
+                    label: 'Email Address',
+                    controller: sellerEmailController,
+                    onChanged: (value) {
+                      legalNotifier.updateField('sellerEmail', value);
+                    },
+                  ),
+                  16.verticalSpace,
+
+                  Text('Phone', style: Theme.of(context).textTheme.bodyLarge),
+                  16.verticalSpace,
+                  CommonTextField(
+                    label: 'Phone Number',
+                    controller: sellerPhoneController,
+                    onChanged: (value) {
+                      legalNotifier.updateField('sellerPhone', value);
+                    },
+                  ),
+                  16.verticalSpace,
+
+                  Text('Fax', style: Theme.of(context).textTheme.bodyLarge),
+                  16.verticalSpace,
+                  CommonTextField(
+                    label: 'Fax',
+                    controller: sellerFaxController,
+                    onChanged: (value) {
+                      legalNotifier.updateField('sellerFax', value);
+                    },
+                  ),
+                  16.verticalSpace,
+
+                  Text('Seller Address',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                  16.verticalSpace,
+                  CommonTextField(
+                    label: 'Search for address',
+                    controller: sellerAddressController,
+                    onChanged: (value) {
+                      legalNotifier.updateField('sellerAddress', value);
+                    },
+                  ),
+                  32.verticalSpace,
+                  const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                  32.verticalSpace,
+
+                  /// BUYER DETAILS
+                  Text(
+                    'BUYER SOLICITOR/CONVEYANCER DETAILS',
+                    style: TextStyle(
+                      color: const Color(0xFF164C63),
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  16.verticalSpace,
+
+                  Text('Buyer Firm Type',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                  16.verticalSpace,
+                  WidgetDropdown(
+                    propertyOptions: const ['Agent', 'Owner'],
+                    selectedValue: legalData.buyerFirmType,
+                    onChanged: (String? value) {
+                      buyerFirmTypeController.text = value ?? '';
+                      legalNotifier.updateField('buyerFirmType', value);
+                    },
+                    hintText: 'Select for Buyer Firm',
+                  ),
+                  16.verticalSpace,
+
+                  Text('Name of the Buyer Firm',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                  16.verticalSpace,
+                  CommonTextField(
+                    label: 'Name of the Buyer Firm',
+                    controller: buyerFirmController,
+                    onChanged: (value) {
+                      legalNotifier.updateField('buyerFirm', value);
+                    },
+                  ),
+                  16.verticalSpace,
+
+                  Text('Principal’s Name',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                  16.verticalSpace,
+                  CommonTextField(
+                    label: 'Principal’s Name',
+                    controller: buyerPrincipalNameController,
+                    onChanged: (value) {
+                      legalNotifier.updateField('buyerPrincipalName', value);
+                    },
+                  ),
+                  16.verticalSpace,
+
+                  Text('Email Address',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                  16.verticalSpace,
+                  CommonTextField(
+                    label: 'Email Address',
+                    controller: buyerEmailController,
+                    onChanged: (value) {
+                      legalNotifier.updateField('buyerEmail', value);
+                    },
+                  ),
+                  16.verticalSpace,
+
+                  Text('Phone', style: Theme.of(context).textTheme.bodyLarge),
+                  16.verticalSpace,
+                  CommonTextField(
+                    label: 'Phone Number',
+                    controller: buyerPhoneController,
+                    onChanged: (value) {
+                      legalNotifier.updateField('buyerPhone', value);
+                    },
+                  ),
+                  16.verticalSpace,
+
+                  Text('Fax', style: Theme.of(context).textTheme.bodyLarge),
+                  16.verticalSpace,
+                  CommonTextField(
+                    label: 'Fax',
+                    controller: buyerFaxController,
+                    onChanged: (value) {
+                      legalNotifier.updateField('buyerFax', value);
+                    },
+                  ),
+                  16.verticalSpace,
+
+                  Text('Buyer Address',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                  16.verticalSpace,
+                  CommonTextField(
+                    label: 'Search for address',
+                    controller: buyerAddressController,
+                    onChanged: (value) {
+                      legalNotifier.updateField('buyerAddress', value);
+                    },
+                  ),
+                  32.verticalSpace,
+                ],
               ),
             ),
-            16.verticalSpace,
-
-            Text('Seller Firm Type',
-                style: Theme.of(context).textTheme.bodyLarge),
-            16.verticalSpace,
-            WidgetDropdown(
-              propertyOptions: ['Agent', 'Owner'],
-              selectedValue: legalData.sellerFirmType,
-              onChanged: (String? value) {
-                sellerFirmTypeController.text = value ?? '';
-                legalNotifier.updateField('sellerFirmType', value);
-              },
-              hintText: 'Select for Seller Firm',
-            ),
-            16.verticalSpace,
-
-            Text('Name of the Seller Firm',
-                style: Theme.of(context).textTheme.bodyLarge),
-            16.verticalSpace,
-            CommonTextField(
-              label: 'Name of the Firm',
-              controller: sellerFirmController,
-              onChanged: (value) {
-                legalNotifier.updateField('sellerFirm', value);
-              },
-            ),
-            16.verticalSpace,
-
-            Text('Principal’s Name',
-                style: Theme.of(context).textTheme.bodyLarge),
-            16.verticalSpace,
-            CommonTextField(
-              label: 'Principal’s Name',
-              controller: sellerPrincipalNameController,
-              onChanged: (value) {
-                legalNotifier.updateField('sellerPrincipalName', value);
-              },
-            ),
-            16.verticalSpace,
-
-            Text('Email Address', style: Theme.of(context).textTheme.bodyLarge),
-            16.verticalSpace,
-            CommonTextField(
-              label: 'Email Address',
-              controller: sellerEmailController,
-              onChanged: (value) {
-                legalNotifier.updateField('sellerEmail', value);
-              },
-            ),
-            16.verticalSpace,
-
-            Text('Phone', style: Theme.of(context).textTheme.bodyLarge),
-            16.verticalSpace,
-            CommonTextField(
-              label: 'Phone Number',
-              controller: sellerPhoneController,
-              onChanged: (value) {
-                legalNotifier.updateField('sellerPhone', value);
-              },
-            ),
-            16.verticalSpace,
-
-            Text('Fax', style: Theme.of(context).textTheme.bodyLarge),
-            16.verticalSpace,
-            CommonTextField(
-              label: 'Fax',
-              controller: sellerFaxController,
-              onChanged: (value) {
-                legalNotifier.updateField('sellerFax', value);
-              },
-            ),
-            16.verticalSpace,
-
-            Text('Seller Address',
-                style: Theme.of(context).textTheme.bodyLarge),
-            16.verticalSpace,
-            CommonTextField(
-              label: 'Search for address',
-              controller: sellerAddressController,
-              onChanged: (value) {
-                legalNotifier.updateField('sellerAddress', value);
-              },
-            ),
-            32.verticalSpace,
-            Divider(height: 1, color: Color(0xFFE2E2E2)),
-            32.verticalSpace,
-
-            /// BUYER DETAILS
-            Text(
-              'BUYER SOLICITOR/CONVEYANCER DETAILS',
-              style: TextStyle(
-                color: const Color(0xFF164C63),
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w700,
+            Container(
+              padding: const EdgeInsets.only(top: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                    offset: const Offset(0, -3),
+                  ),
+                ],
+              ),
+              child: BottomAppBar(
+                color: Colors.white,
+                child: PrimaryButton(
+                  isLoading: ref.watch(propertyNotifierProvider).isLoading,
+                  title: 'Next',
+                  onClick: () {},
+                ),
               ),
             ),
-            16.verticalSpace,
-
-            Text('Buyer Firm Type',
-                style: Theme.of(context).textTheme.bodyLarge),
-            16.verticalSpace,
-            WidgetDropdown(
-              propertyOptions: ['Agent', 'Owner'],
-              selectedValue: legalData.buyerFirmType,
-              onChanged: (String? value) {
-                buyerFirmTypeController.text = value ?? '';
-                legalNotifier.updateField('buyerFirmType', value);
-              },
-              hintText: 'Select for Buyer Firm',
-            ),
-            16.verticalSpace,
-
-            Text('Name of the Buyer Firm',
-                style: Theme.of(context).textTheme.bodyLarge),
-            16.verticalSpace,
-            CommonTextField(
-              label: 'Name of the Buyer Firm',
-              controller: buyerFirmController,
-              onChanged: (value) {
-                legalNotifier.updateField('buyerFirm', value);
-              },
-            ),
-            16.verticalSpace,
-
-            Text('Principal’s Name',
-                style: Theme.of(context).textTheme.bodyLarge),
-            16.verticalSpace,
-            CommonTextField(
-              label: 'Principal’s Name',
-              controller: buyerPrincipalNameController,
-              onChanged: (value) {
-                legalNotifier.updateField('buyerPrincipalName', value);
-              },
-            ),
-            16.verticalSpace,
-
-            Text('Email Address', style: Theme.of(context).textTheme.bodyLarge),
-            16.verticalSpace,
-            CommonTextField(
-              label: 'Email Address',
-              controller: buyerEmailController,
-              onChanged: (value) {
-                legalNotifier.updateField('buyerEmail', value);
-              },
-            ),
-            16.verticalSpace,
-
-            Text('Phone', style: Theme.of(context).textTheme.bodyLarge),
-            16.verticalSpace,
-            CommonTextField(
-              label: 'Phone Number',
-              controller: buyerPhoneController,
-              onChanged: (value) {
-                legalNotifier.updateField('buyerPhone', value);
-              },
-            ),
-            16.verticalSpace,
-
-            Text('Fax', style: Theme.of(context).textTheme.bodyLarge),
-            16.verticalSpace,
-            CommonTextField(
-              label: 'Fax',
-              controller: buyerFaxController,
-              onChanged: (value) {
-                legalNotifier.updateField('buyerFax', value);
-              },
-            ),
-            16.verticalSpace,
-
-            Text('Buyer Address', style: Theme.of(context).textTheme.bodyLarge),
-            16.verticalSpace,
-            CommonTextField(
-              label: 'Search for address',
-              controller: buyerAddressController,
-              onChanged: (value) {
-                legalNotifier.updateField('buyerAddress', value);
-              },
-            ),
-            32.verticalSpace,
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(top: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              spreadRadius: 2,
-              offset: Offset(0, -3),
-            ),
-          ],
-        ),
-        child: BottomAppBar(
-          color: Colors.white,
-          child: PrimaryButton(
-            isLoading: ref.watch(propertyNotifierProvider).isLoading,
-            title: 'Next',
-            onClick: () {},
-          ),
-        ),
-      ),
+      // bottomNavigationBar: Container(
+      //   padding: EdgeInsets.only(top: 10),
+      //   decoration: BoxDecoration(
+      //     color: Colors.white,
+      //     boxShadow: [
+      //       BoxShadow(
+      //         color: Colors.black.withOpacity(0.1),
+      //         blurRadius: 10,
+      //         spreadRadius: 2,
+      //         offset: Offset(0, -3),
+      //       ),
+      //     ],
+      //   ),
+      //   child: BottomAppBar(
+      //     color: Colors.white,
+      //     child: PrimaryButton(
+      //       isLoading: ref.watch(propertyNotifierProvider).isLoading,
+      //       title: 'Next',
+      //       onClick: () {},
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

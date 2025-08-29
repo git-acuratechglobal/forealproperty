@@ -29,7 +29,7 @@ class _WelcomeScreen1State extends ConsumerState<WelcomeScreen1> {
       body: Stack(
         children: [
           PageView.builder(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
             controller: pageController,
             itemCount: onBoardingPages.length,
             onPageChanged: (index) {
@@ -72,7 +72,7 @@ class _WelcomeScreen1State extends ConsumerState<WelcomeScreen1> {
               ),
               10.verticalSpace,
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 27),
+                padding: const EdgeInsets.symmetric(horizontal: 27),
                 child: AutoSizeText(
                   softWrap: true,
                 overflow: TextOverflow.ellipsis,
@@ -93,20 +93,20 @@ class _WelcomeScreen1State extends ConsumerState<WelcomeScreen1> {
                        child: Row(
                          children: [
                            ListView.separated(
-                             physics: NeverScrollableScrollPhysics(),
+                             physics: const NeverScrollableScrollPhysics(),
                              scrollDirection: Axis.horizontal,
                              shrinkWrap: true,
                              itemCount: onBoardindPages.length,
                              itemBuilder: (BuildContext context, int index) {
                                final bool isSelected = currentPageIndex == index;
                                return AnimatedContainer(
-                                   duration: Duration(microseconds: 500),
+                                   duration: const Duration(microseconds: 500),
                                    height: 6.h,
                                    width: isSelected ? 26.w : 16.w,
                                    decoration: ShapeDecoration(
                                      color: isSelected
-                                         ? Color(0xFF75CBCD)
-                                         : Color(0xFFDEDEDE),
+                                         ? const Color(0xFF75CBCD)
+                                         : const Color(0xFFDEDEDE),
                                      shape: RoundedRectangleBorder(
                                        borderRadius: BorderRadius.circular(20),
                                      ),
@@ -136,12 +136,12 @@ class _WelcomeScreen1State extends ConsumerState<WelcomeScreen1> {
                       onPressed: () {
                         if (currentPageIndex == 2) {
                           ref.read(localStorageServiceProvider).setOnBoardingComplete();
-                          context.navigateTo(LoginScreen());
+                          context.push(const LoginScreen());
                         } else {
                           setState(() {
                             currentPageIndex++;
                             pageController.nextPage(
-                                duration: Duration(milliseconds: 500),
+                                duration: const Duration(milliseconds: 500),
                                 curve: Curves.easeInOut);
                           });
                         }
@@ -151,7 +151,7 @@ class _WelcomeScreen1State extends ConsumerState<WelcomeScreen1> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Spacer(),
+                          const Spacer(),
                           Text(
                             'Get Started',
                             style: TextStyle(
@@ -186,7 +186,7 @@ class _WelcomeScreen1State extends ConsumerState<WelcomeScreen1> {
 }
 
 List<Widget> onBoardindPages = [
-  WelcomeScreen1(),
-  WelcomeScreen1(),
-  WelcomeScreen1()
+  const WelcomeScreen1(),
+  const WelcomeScreen1(),
+  const WelcomeScreen1()
 ];

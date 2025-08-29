@@ -3,28 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'get_property_listing_model.g.dart';
 
 @JsonSerializable(createToJson: false)
-class PropertyListingModel {
-    PropertyListingModel({
-        required this.countAll,
-        required this.countSaleListing,
-        required this.countRentalListing,
-        required this.countSold,
-        required this.countLeased,
-        required this.countOffMarket,
-        required this.propertyListingList,
-    });
 
-    final int? countAll;
-    final int? countSaleListing;
-    final int? countRentalListing;
-    final int? countSold;
-    final int? countLeased;
-    final int? countOffMarket;
-    final List<PropertyListingList>? propertyListingList;
-
-    factory PropertyListingModel.fromJson(Map<String, dynamic> json) => _$PropertyListingModelFromJson(json);
-
-}
 
 @JsonSerializable(createToJson: false)
 class PropertyListingList {
@@ -57,8 +36,11 @@ class PropertyListingList {
         required this.createdAt,
         required this.reaUploadedDate,
         required this.domainUploadedDate,
+        required this.propertyPic,
+        required this.heading
     });
-
+    final String? heading;
+      final String? propertyPic;
     final int? listingId;
     final int? propertySaleRental;
     final int? propertyId;

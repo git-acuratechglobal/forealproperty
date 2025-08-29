@@ -7,7 +7,7 @@ part of 'get_property_list.dart';
 // **************************************************************************
 
 String _$getAddedPropertyListHash() =>
-    r'6ecf299721ce5f5e44adeef207c9558c3de0ead6';
+    r'6c67882eb4c79830c530aac7e7896e48f1821130';
 
 /// See also [GetAddedPropertyList].
 @ProviderFor(GetAddedPropertyList)

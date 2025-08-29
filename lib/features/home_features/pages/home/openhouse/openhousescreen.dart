@@ -9,8 +9,8 @@ class Openhousescreen extends ConsumerStatefulWidget {
 class _OpenhousescreenState extends ConsumerState<Openhousescreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-   backgroundColor: const Color(0xFFEBF3F5),
+    return const Scaffold(
+   backgroundColor: Color(0xFFEBF3F5),
       body: Column(),
     );
   }

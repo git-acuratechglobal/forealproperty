@@ -508,7 +508,7 @@ PropertyAttributeDetails _$PropertyAttributeDetailsFromJson(
 /// @nodoc
 mixin _$PropertyAttributeDetails {
   @JsonKey(name: "PropertyLandAreaL")
-  int? get propertyLandAreaL => throw _privateConstructorUsedError;
+  int get propertyLandAreaL => throw _privateConstructorUsedError;
   @JsonKey(name: "PropertyLandAreaW")
   int? get propertyLandAreaW => throw _privateConstructorUsedError;
   @JsonKey(name: "CountBedrooms")
@@ -545,7 +545,7 @@ abstract class $PropertyAttributeDetailsCopyWith<$Res> {
       _$PropertyAttributeDetailsCopyWithImpl<$Res, PropertyAttributeDetails>;
   @useResult
   $Res call(
-      {@JsonKey(name: "PropertyLandAreaL") int? propertyLandAreaL,
+      {@JsonKey(name: "PropertyLandAreaL") int propertyLandAreaL,
       @JsonKey(name: "PropertyLandAreaW") int? propertyLandAreaW,
       @JsonKey(name: "CountBedrooms") int? countBedrooms,
       @JsonKey(name: "CountBathrooms") int? countBathrooms,
@@ -573,7 +573,7 @@ class _$PropertyAttributeDetailsCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? propertyLandAreaL = freezed,
+    Object? propertyLandAreaL = null,
     Object? propertyLandAreaW = freezed,
     Object? countBedrooms = freezed,
     Object? countBathrooms = freezed,
@@ -585,10 +585,10 @@ class _$PropertyAttributeDetailsCopyWithImpl<$Res,
     Object? coutryard = freezed,
   }) {
     return _then(_value.copyWith(
-      propertyLandAreaL: freezed == propertyLandAreaL
+      propertyLandAreaL: null == propertyLandAreaL
           ? _value.propertyLandAreaL
           : propertyLandAreaL // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       propertyLandAreaW: freezed == propertyLandAreaW
           ? _value.propertyLandAreaW
           : propertyLandAreaW // ignore: cast_nullable_to_non_nullable
@@ -639,7 +639,7 @@ abstract class _$$PropertyAttributeDetailsImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: "PropertyLandAreaL") int? propertyLandAreaL,
+      {@JsonKey(name: "PropertyLandAreaL") int propertyLandAreaL,
       @JsonKey(name: "PropertyLandAreaW") int? propertyLandAreaW,
       @JsonKey(name: "CountBedrooms") int? countBedrooms,
       @JsonKey(name: "CountBathrooms") int? countBathrooms,
@@ -666,7 +666,7 @@ class __$$PropertyAttributeDetailsImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? propertyLandAreaL = freezed,
+    Object? propertyLandAreaL = null,
     Object? propertyLandAreaW = freezed,
     Object? countBedrooms = freezed,
     Object? countBathrooms = freezed,
@@ -678,10 +678,10 @@ class __$$PropertyAttributeDetailsImplCopyWithImpl<$Res>
     Object? coutryard = freezed,
   }) {
     return _then(_$PropertyAttributeDetailsImpl(
-      propertyLandAreaL: freezed == propertyLandAreaL
+      propertyLandAreaL: null == propertyLandAreaL
           ? _value.propertyLandAreaL
           : propertyLandAreaL // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       propertyLandAreaW: freezed == propertyLandAreaW
           ? _value.propertyLandAreaW
           : propertyLandAreaW // ignore: cast_nullable_to_non_nullable
@@ -726,8 +726,8 @@ class __$$PropertyAttributeDetailsImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PropertyAttributeDetailsImpl implements _PropertyAttributeDetails {
   _$PropertyAttributeDetailsImpl(
-      {@JsonKey(name: "PropertyLandAreaL") this.propertyLandAreaL,
-      @JsonKey(name: "PropertyLandAreaW") this.propertyLandAreaW,
+      {@JsonKey(name: "PropertyLandAreaL") this.propertyLandAreaL = 4000,
+      @JsonKey(name: "PropertyLandAreaW") this.propertyLandAreaW = 1,
       @JsonKey(name: "CountBedrooms") this.countBedrooms,
       @JsonKey(name: "CountBathrooms") this.countBathrooms,
       @JsonKey(name: "CountCarParking") this.countCarParking,
@@ -735,14 +735,14 @@ class _$PropertyAttributeDetailsImpl implements _PropertyAttributeDetails {
       @JsonKey(name: "CountGarageSpace") this.countGarageSpace,
       @JsonKey(name: "CountLivingAreas") this.countLivingAreas,
       @JsonKey(name: "CountToilets") this.countToilets,
-      @JsonKey(name: "Coutryard") this.coutryard});
+      @JsonKey(name: "Coutryard") this.coutryard = true});
 
   factory _$PropertyAttributeDetailsImpl.fromJson(Map<String, dynamic> json) =>
       _$$PropertyAttributeDetailsImplFromJson(json);
 
   @override
   @JsonKey(name: "PropertyLandAreaL")
-  final int? propertyLandAreaL;
+  final int propertyLandAreaL;
   @override
   @JsonKey(name: "PropertyLandAreaW")
   final int? propertyLandAreaW;
@@ -837,7 +837,7 @@ class _$PropertyAttributeDetailsImpl implements _PropertyAttributeDetails {
 
 abstract class _PropertyAttributeDetails implements PropertyAttributeDetails {
   factory _PropertyAttributeDetails(
-          {@JsonKey(name: "PropertyLandAreaL") final int? propertyLandAreaL,
+          {@JsonKey(name: "PropertyLandAreaL") final int propertyLandAreaL,
           @JsonKey(name: "PropertyLandAreaW") final int? propertyLandAreaW,
           @JsonKey(name: "CountBedrooms") final int? countBedrooms,
           @JsonKey(name: "CountBathrooms") final int? countBathrooms,
@@ -854,7 +854,7 @@ abstract class _PropertyAttributeDetails implements PropertyAttributeDetails {
 
   @override
   @JsonKey(name: "PropertyLandAreaL")
-  int? get propertyLandAreaL;
+  int get propertyLandAreaL;
   @override
   @JsonKey(name: "PropertyLandAreaW")
   int? get propertyLandAreaW;

@@ -6,31 +6,28 @@ part 'get_property_list.g.dart';
 
 @riverpod
 class GetAddedPropertyList extends _$GetAddedPropertyList {
-
- @override
+  @override
   FutureOr<List<GetPropertyList>?> build() async {
-    return await ref.read(homeServiceProvider).getPropertyList(
+   await Future.delayed(const Duration(seconds: 2));
+    return await ref.watch(homeServiceProvider).getPropertyList(
         agencyId: 1,
-        recordsPerPage: 10,
-        search: "",
+        recordsPerPage:15,
         sortBy: "CreatedDate",
         sortOrder: "Desc",
-        purpose: "");
+        );
   }
 
-  Future<void> getaddedPropertyList({
-    int agencyId = 1,
-    int recordsPerPage = 10,
-  }) async {
+  Future<void> searchProperty({required searchQuery}) async {
     state = const AsyncLoading();
-
     state = await AsyncValue.guard(() async {
       return await ref.read(homeServiceProvider).getPropertyList(
-          agencyId: agencyId,
-          recordsPerPage: recordsPerPage,
-          search: "",
-          sortBy: "Desc",
-          purpose: "");
+            agencyId: 1,
+            recordsPerPage: 15,
+            search: searchQuery,
+            sortBy: "CreatedDate",
+            sortOrder: "Desc",
+            purpose: "",
+          );
     });
   }
 }

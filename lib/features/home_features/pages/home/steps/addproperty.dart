@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +6,8 @@ import 'package:foreal_property/Theme/navigation.dart';
 import 'package:foreal_property/core/utils/appsnackbar.dart';
 import 'package:foreal_property/features/home_features/add_property_provider/add_property.dart';
 import 'package:foreal_property/features/home_features/add_property_state/add_property_state.dart';
+import 'package:foreal_property/features/home_features/models/get_property_details.dart';
+import 'package:foreal_property/features/home_features/pages/home/bottomnavbar.dart';
 import 'package:foreal_property/features/home_features/pages/home/steps/address.dart';
 import 'package:foreal_property/features/home_features/pages/home/steps/aggrement.dart';
 import 'package:foreal_property/features/home_features/pages/home/steps/attributes.dart';
@@ -17,9 +17,24 @@ import 'package:foreal_property/features/home_features/pages/home/steps/ownershi
 import 'package:foreal_property/features/home_features/pages/home/steps/photos.dart';
 import 'package:foreal_property/features/home_features/pages/home/steps/propertylisting.dart';
 import 'package:foreal_property/features/home_features/pages/home/steps/uploadpropert.dart';
+import 'package:foreal_property/features/home_features/providers/get_property_list.dart';
 
 class AddProperty extends ConsumerStatefulWidget {
-  const AddProperty({super.key});
+  const AddProperty({
+    super.key,
+    this.propertyData,
+    this.propertyUniqueId,
+    this.propertyId,
+    this.selectedTabIndex = 0,
+    this.isEditMode = false,
+    this.selectedInnerTabIndex,
+  });
+  final PropertyDetailModel? propertyData;
+  final String? propertyUniqueId;
+  final int? propertyId;
+  final int selectedTabIndex;
+  final bool? isEditMode;
+  final int? selectedInnerTabIndex;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _AddPropertyState();
@@ -35,14 +50,30 @@ class _AddPropertyState extends ConsumerState<AddProperty>
   late TabController listingTabController;
 
   late List<Widget> addPropertyWidgetList = [
-    PropertyTabWidget(tabController: propertyTabController),
-    OwnershipTabWidget(tabController: ownershipTabController),
-    ListingTabWidget(tabController: listingTabController),
+    PropertyTabWidget(
+      tabController: propertyTabController,
+      propertyData: widget.propertyData,
+      propertyId: widget.propertyId,
+    ),
+    OwnershipTabWidget(
+      tabController: ownershipTabController,
+      propertyData: widget.propertyData,
+      propertyUniqueId: widget.propertyData!.propertyUniqueId,
+    ),
+    ListingTabWidget(
+      tabController: listingTabController,
+      propertyData: widget.propertyData,
+      initialTabIndex: widget.selectedInnerTabIndex ?? 0,
+    ),
   ];
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      currentPageIndex = widget.selectedTabIndex;
+      addPropertyPageController.jumpToPage(currentPageIndex);
+    });
     propertyTabController = TabController(
       length: 2,
       vsync: this,
@@ -68,11 +99,6 @@ class _AddPropertyState extends ConsumerState<AddProperty>
             if (currentPageIndex == 0) {
               final response = (addPropertyState?.response ?? "").toLowerCase();
 
-              if (response.contains("internal server error")) {
-                Utils.showSnackBar(context, addPropertyState?.response ?? "");
-                return;
-              }
-
               if (response == "record updated successfully") {
                 if (propertyTabController.index <
                     propertyTabController.length - 1) {
@@ -91,6 +117,11 @@ class _AddPropertyState extends ConsumerState<AddProperty>
 
               if (response == "attribute added successfully" ||
                   response == "record updated successfully") {
+                if (propertyTabController.index <
+                    propertyTabController.length - 1) {
+                  propertyTabController
+                      .animateTo(propertyTabController.index + 1);
+                }
                 if (currentPageIndex < addPropertyWidgetList.length - 1) {
                   addPropertyPageController.nextPage(
                     duration: const Duration(milliseconds: 200),
@@ -102,19 +133,23 @@ class _AddPropertyState extends ConsumerState<AddProperty>
               Utils.showSnackBar(context, addPropertyState?.response ?? "");
             }
           }
-          if (addPropertyState?.addPropertyEvent == AddPropertyEvent.contact) {
+
+          if (addPropertyState?.addPropertyEvent == AddPropertyEvent.contact ||
+              addPropertyState?.addPropertyEvent ==
+                  AddPropertyEvent.updateContact) {
             if (currentPageIndex == 1) {
               final response = (addPropertyState?.response ?? "").toLowerCase();
 
-              if (response == "contact added successfully") {
-                // Move tab
+              if (response == "contact added successfully" ||
+                  response == "contact details updated successfully") {
+                // Switch tab
                 if (ownershipTabController.index <
                     ownershipTabController.length - 1) {
                   ownershipTabController
                       .animateTo(ownershipTabController.index + 1);
                 }
 
-                // Move page
+                // Switch page
                 if (currentPageIndex < addPropertyWidgetList.length - 1) {
                   addPropertyPageController.nextPage(
                     duration: const Duration(milliseconds: 200),
@@ -123,7 +158,7 @@ class _AddPropertyState extends ConsumerState<AddProperty>
                 }
               }
 
-              // Show the response
+              //Show the response
               Utils.showSnackBar(context, addPropertyState?.response ?? "");
             }
           }
@@ -133,11 +168,10 @@ class _AddPropertyState extends ConsumerState<AddProperty>
               final response = (addPropertyState?.response ?? "").toLowerCase();
               if (response == "record updated successfully") {
                 if (listingTabController.index <
-                    listingTabController.length - 1) {
+                    listingTabController.length - 2) {
                   listingTabController
-                      .animateTo(listingTabController.index + 1);
+                      .animateTo(listingTabController.index + 2);
                 }
-
                 Utils.showSnackBar(context, addPropertyState?.response ?? "");
               }
             }
@@ -148,22 +182,22 @@ class _AddPropertyState extends ConsumerState<AddProperty>
               if (response == "record updated successfully" ||
                   response == "listing already exists") {
                 if (listingTabController.index <
-                    listingTabController.length - 1) {
+                    listingTabController.length - 2) {
                   listingTabController
-                      .animateTo(listingTabController.index + 1);
+                      .animateTo(listingTabController.index + 2);
                 }
                 Utils.showSnackBar(context, addPropertyState?.response ?? "");
               }
             }
-            _showDialog(context);
+            ref.invalidate(getAddedPropertyListProvider);
+
+            _showDialog(context, 1);
           }
 
           break;
       }
     });
   }
-
-  
 
   @override
   void dispose() {
@@ -174,30 +208,18 @@ class _AddPropertyState extends ConsumerState<AddProperty>
     super.dispose();
   }
 
-  void _showDialog(BuildContext context) {
+  void _showDialog(BuildContext context, int targetTabIndex) {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
       barrierLabel: "Dismiss",
+      barrierColor: Colors.black.withValues(alpha: 0.3), // fixed dim layer
       transitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (context, animation, secondaryAnimation) {
-        return BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Align(
-              alignment: Alignment.center,
-              child: Material(
-                color: Colors.transparent,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Uploadpropert(),
-                ),
-              ),
-            ),
+        return  Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Uploadpropert(targetTabIndex: 1,  onNavigateTo: () => const HomeScreen(selectTab: 1, ),), // 👈 Keep blur inside this widget
           ),
         );
       },
@@ -227,10 +249,18 @@ class _AddPropertyState extends ConsumerState<AddProperty>
           ),
         ),
         leading: Padding(
-          padding: EdgeInsets.only(left: 24),
+          padding: const EdgeInsets.only(left: 24),
           child: InkWell(
             onTap: () {
-              context.pop();
+              if (addPropertyPageController.page != null &&
+                  addPropertyPageController.page! > 0) {
+                addPropertyPageController.previousPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              } else {
+                context.pop();
+              }
             },
             child: Image.asset(
               'assets/images/arrow-left.png',
@@ -240,7 +270,7 @@ class _AddPropertyState extends ConsumerState<AddProperty>
           ),
         ),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(140),
+          preferredSize: const Size.fromHeight(140),
           child: Column(
             children: [
               StepperWidget(
@@ -248,12 +278,12 @@ class _AddPropertyState extends ConsumerState<AddProperty>
                 onStepChanged: (int index) {
                   addPropertyPageController.animateToPage(
                     index,
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                   );
                 },
               ),
-              Divider(
+              const Divider(
                 height: 1,
                 color: Color(0xFFE2E2E2),
               ),
@@ -274,49 +304,18 @@ class _AddPropertyState extends ConsumerState<AddProperty>
           return addPropertyWidgetList[index];
         },
       ),
-      // bottomNavigationBar: Container(
-      //   padding: EdgeInsets.only(top: 10),
-      //   decoration: BoxDecoration(
-      //     color: Colors.white,
-      //     boxShadow: [
-      //       BoxShadow(
-      //         color: Colors.black.withOpacity(0.1),
-      //         blurRadius: 10,
-      //         spreadRadius: 2,
-      //         offset: Offset(0, -3),
-      //       ),
-      //     ],
-      //   ),
-      //   child: BottomAppBar(
-      //     color: Colors.white,
-      //     child: ElevatedButton(
-      //       style: ElevatedButton.styleFrom(
-      //         backgroundColor: const Color(0xFF164C63),
-      //         foregroundColor: Colors.white,
-      //         shape: RoundedRectangleBorder(
-      //           borderRadius: BorderRadius.circular(38),
-      //         ),
-      //       ),
-      //       onPressed: () {
-
-      //          ref.read(propertyNotifierProvider.notifier).addPropertyAddress();
-      //       },
-      //       child: Text(currentPageIndex < addPropertyWidgetList.length - 1
-      //           ? 'Next'
-      //           : 'Next'),
-      //     ),
-      //   ),
-      // ),
     );
   }
 }
 
 class PropertyTabWidget extends StatelessWidget {
-  const PropertyTabWidget({
-    super.key,
-    required this.tabController, 
-  });
-
+  const PropertyTabWidget(
+      {super.key,
+      required this.tabController,
+      this.propertyData,
+      this.propertyId});
+  final PropertyDetailModel? propertyData;
+  final int? propertyId;
   final TabController tabController;
 
   @override
@@ -325,7 +324,7 @@ class PropertyTabWidget extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: AddPropertyTab(
             tabController: tabController,
             tablist: propertytablist,
@@ -335,8 +334,14 @@ class PropertyTabWidget extends StatelessWidget {
           child: TabBarView(
             controller: tabController,
             children: [
-              AdressWidget(),
-              AttributeWidget(),
+              AdressWidget(
+                propertyData: propertyData,
+                PropertyId: propertyData!.propertyId,
+              ),
+              AttributeWidget(
+                propertyData: propertyData,
+                PropertyId: propertyData!.propertyId,
+              ),
             ],
           ),
         ),
@@ -346,10 +351,13 @@ class PropertyTabWidget extends StatelessWidget {
 }
 
 class OwnershipTabWidget extends StatelessWidget {
-  const OwnershipTabWidget({
-    super.key,
-    required this.tabController, 
-  });
+  final PropertyDetailModel? propertyData;
+  final String? propertyUniqueId;
+  const OwnershipTabWidget(
+      {super.key,
+      required this.tabController,
+      this.propertyData,
+      this.propertyUniqueId});
 
   final TabController tabController;
 
@@ -368,7 +376,15 @@ class OwnershipTabWidget extends StatelessWidget {
         Expanded(
           child: TabBarView(
             controller: tabController,
-            children: [OwnershipWidget(), AggrementWidget(), FeesWidget()],
+            children: [
+              OwnershipWidget(
+                propertyData: propertyData,
+                propertyUniqueId: propertyData!.propertyUniqueId,
+                //   contactUniqueId: propertyData!.contactlistModel?[0].contactUId,
+              ),
+              const AggrementWidget(),
+              const FeesWidget()
+            ],
           ),
         ),
       ],
@@ -377,9 +393,14 @@ class OwnershipTabWidget extends StatelessWidget {
 }
 
 class ListingTabWidget extends StatelessWidget {
+  final PropertyDetailModel? propertyData;
+  final int initialTabIndex;
+
   const ListingTabWidget({
     super.key,
-    required this.tabController, 
+    required this.tabController,
+    required this.initialTabIndex,
+    this.propertyData,
   });
 
   final TabController tabController;
@@ -387,22 +408,34 @@ class ListingTabWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> propertytablist = ['Photos', 'Legal', 'PropertyListing'];
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        children: [
-          AddPropertyTab(
+
+    // Jump to selected tab in TabController (inside ListingTabWidget)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (tabController.index != initialTabIndex) {
+        tabController.animateTo(initialTabIndex);
+      }
+    });
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+          child: AddPropertyTab(
             tabController: tabController,
             tablist: propertytablist,
           ),
-          Expanded(
-            child: TabBarView(
-              controller: tabController,
-              children: [Photos(), Legal(), PropertyListing()],
-            ),
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: tabController,
+            children: [
+              Photos(propertyData: propertyData),
+              const Legal(),
+              PropertyListing(propertyData: propertyData),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -443,18 +476,18 @@ class _StepperWidgetState extends State<StepperWidget> {
       internalPadding: 0,
       stepRadius: 20,
       showLoadingAnimation: false,
-      lineStyle: LineStyle(
+      lineStyle: const LineStyle(
         lineLength: 80,
         lineType: LineType.normal,
         lineThickness: 1,
         lineSpace: 0,
         unreachedLineType: LineType.normal,
-        defaultLineColor: const Color(0xFFE2E2E2),
+        defaultLineColor: Color(0xFFE2E2E2),
       ),
       activeStep: widget.activeStep,
       onStepReached: (index) {
-        if (index <= widget.activeStep && widget.onStepChanged != null) {
-          widget.onStepChanged!(index); // only call if it's not null
+        if (widget.onStepChanged != null) {
+          widget.onStepChanged!(index);
         }
       },
       steps: List.generate(
@@ -517,7 +550,7 @@ class _AddPropertyTabState extends State<AddPropertyTab> {
           unselectedLabelStyle: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF164C63),
+            color: const Color(0xFF164C63),
           ),
           labelStyle: Theme.of(context)
               .textTheme
@@ -526,9 +559,9 @@ class _AddPropertyTabState extends State<AddPropertyTab> {
           dividerColor: Colors.transparent,
           controller: widget.tabController,
           indicatorColor: Colors.transparent,
-          indicatorPadding: EdgeInsets.symmetric(vertical: 2),
+          indicatorPadding: const EdgeInsets.symmetric(vertical: 2),
           indicator: BoxDecoration(
-              color: Color(0xFF164C63),
+              color: const Color(0xFF164C63),
               borderRadius: BorderRadius.circular(10)),
           tabs: List.generate(widget.tablist.length, (index) {
             return SizedBox(

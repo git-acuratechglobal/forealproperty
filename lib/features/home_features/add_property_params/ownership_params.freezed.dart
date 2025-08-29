@@ -22,12 +22,12 @@ OwnershipParams _$OwnershipParamsFromJson(Map<String, dynamic> json) {
 mixin _$OwnershipParams {
   @JsonKey(name: "AgentId")
   int get agentId => throw _privateConstructorUsedError;
-  @JsonKey(name: "AgencyId")
+  @JsonKey(name: "AgencyID")
   int get agencyId => throw _privateConstructorUsedError;
   @JsonKey(name: "Address")
   String? get address => throw _privateConstructorUsedError;
-  @JsonKey(name: "UserRoleID")
-  int get userRoleID => throw _privateConstructorUsedError;
+  @JsonKey(name: "userRoleID")
+  dynamic get userRoleID => throw _privateConstructorUsedError;
   @JsonKey(name: "PropertyUniqueId")
   String? get propertyUniqueId => throw _privateConstructorUsedError;
   @JsonKey(name: "FirstName")
@@ -39,11 +39,13 @@ mixin _$OwnershipParams {
   @JsonKey(name: "MobileNumber")
   String? get mobileNumber => throw _privateConstructorUsedError;
   @JsonKey(name: "ContactType")
-  int get contactType => throw _privateConstructorUsedError;
+  int? get contactType => throw _privateConstructorUsedError;
   @JsonKey(name: "Title")
-  int get title => throw _privateConstructorUsedError;
+  int? get title => throw _privateConstructorUsedError;
   @JsonKey(name: "ContactUniqueId")
   String? get contactUniqueId => throw _privateConstructorUsedError;
+  @JsonKey(name: "TypeIAM")
+  int? get typeIAM => throw _privateConstructorUsedError;
 
   /// Serializes this OwnershipParams to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -63,17 +65,18 @@ abstract class $OwnershipParamsCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: "AgentId") int agentId,
-      @JsonKey(name: "AgencyId") int agencyId,
+      @JsonKey(name: "AgencyID") int agencyId,
       @JsonKey(name: "Address") String? address,
-      @JsonKey(name: "UserRoleID") int userRoleID,
+      @JsonKey(name: "userRoleID") dynamic userRoleID,
       @JsonKey(name: "PropertyUniqueId") String? propertyUniqueId,
       @JsonKey(name: "FirstName") String? firstName,
       @JsonKey(name: "LastName") String? lastName,
       @JsonKey(name: "Email") String? email,
       @JsonKey(name: "MobileNumber") String? mobileNumber,
-      @JsonKey(name: "ContactType") int contactType,
-      @JsonKey(name: "Title") int title,
-      @JsonKey(name: "ContactUniqueId") String? contactUniqueId});
+      @JsonKey(name: "ContactType") int? contactType,
+      @JsonKey(name: "Title") int? title,
+      @JsonKey(name: "ContactUniqueId") String? contactUniqueId,
+      @JsonKey(name: "TypeIAM") int? typeIAM});
 }
 
 /// @nodoc
@@ -94,15 +97,16 @@ class _$OwnershipParamsCopyWithImpl<$Res, $Val extends OwnershipParams>
     Object? agentId = null,
     Object? agencyId = null,
     Object? address = freezed,
-    Object? userRoleID = null,
+    Object? userRoleID = freezed,
     Object? propertyUniqueId = freezed,
     Object? firstName = freezed,
     Object? lastName = freezed,
     Object? email = freezed,
     Object? mobileNumber = freezed,
-    Object? contactType = null,
-    Object? title = null,
+    Object? contactType = freezed,
+    Object? title = freezed,
     Object? contactUniqueId = freezed,
+    Object? typeIAM = freezed,
   }) {
     return _then(_value.copyWith(
       agentId: null == agentId
@@ -117,10 +121,10 @@ class _$OwnershipParamsCopyWithImpl<$Res, $Val extends OwnershipParams>
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
               as String?,
-      userRoleID: null == userRoleID
+      userRoleID: freezed == userRoleID
           ? _value.userRoleID
           : userRoleID // ignore: cast_nullable_to_non_nullable
-              as int,
+              as dynamic,
       propertyUniqueId: freezed == propertyUniqueId
           ? _value.propertyUniqueId
           : propertyUniqueId // ignore: cast_nullable_to_non_nullable
@@ -141,18 +145,22 @@ class _$OwnershipParamsCopyWithImpl<$Res, $Val extends OwnershipParams>
           ? _value.mobileNumber
           : mobileNumber // ignore: cast_nullable_to_non_nullable
               as String?,
-      contactType: null == contactType
+      contactType: freezed == contactType
           ? _value.contactType
           : contactType // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
+              as int?,
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       contactUniqueId: freezed == contactUniqueId
           ? _value.contactUniqueId
           : contactUniqueId // ignore: cast_nullable_to_non_nullable
               as String?,
+      typeIAM: freezed == typeIAM
+          ? _value.typeIAM
+          : typeIAM // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -167,17 +175,18 @@ abstract class _$$OwnershipParamsImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(name: "AgentId") int agentId,
-      @JsonKey(name: "AgencyId") int agencyId,
+      @JsonKey(name: "AgencyID") int agencyId,
       @JsonKey(name: "Address") String? address,
-      @JsonKey(name: "UserRoleID") int userRoleID,
+      @JsonKey(name: "userRoleID") dynamic userRoleID,
       @JsonKey(name: "PropertyUniqueId") String? propertyUniqueId,
       @JsonKey(name: "FirstName") String? firstName,
       @JsonKey(name: "LastName") String? lastName,
       @JsonKey(name: "Email") String? email,
       @JsonKey(name: "MobileNumber") String? mobileNumber,
-      @JsonKey(name: "ContactType") int contactType,
-      @JsonKey(name: "Title") int title,
-      @JsonKey(name: "ContactUniqueId") String? contactUniqueId});
+      @JsonKey(name: "ContactType") int? contactType,
+      @JsonKey(name: "Title") int? title,
+      @JsonKey(name: "ContactUniqueId") String? contactUniqueId,
+      @JsonKey(name: "TypeIAM") int? typeIAM});
 }
 
 /// @nodoc
@@ -196,15 +205,16 @@ class __$$OwnershipParamsImplCopyWithImpl<$Res>
     Object? agentId = null,
     Object? agencyId = null,
     Object? address = freezed,
-    Object? userRoleID = null,
+    Object? userRoleID = freezed,
     Object? propertyUniqueId = freezed,
     Object? firstName = freezed,
     Object? lastName = freezed,
     Object? email = freezed,
     Object? mobileNumber = freezed,
-    Object? contactType = null,
-    Object? title = null,
+    Object? contactType = freezed,
+    Object? title = freezed,
     Object? contactUniqueId = freezed,
+    Object? typeIAM = freezed,
   }) {
     return _then(_$OwnershipParamsImpl(
       agentId: null == agentId
@@ -219,10 +229,7 @@ class __$$OwnershipParamsImplCopyWithImpl<$Res>
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
               as String?,
-      userRoleID: null == userRoleID
-          ? _value.userRoleID
-          : userRoleID // ignore: cast_nullable_to_non_nullable
-              as int,
+      userRoleID: freezed == userRoleID ? _value.userRoleID! : userRoleID,
       propertyUniqueId: freezed == propertyUniqueId
           ? _value.propertyUniqueId
           : propertyUniqueId // ignore: cast_nullable_to_non_nullable
@@ -243,18 +250,22 @@ class __$$OwnershipParamsImplCopyWithImpl<$Res>
           ? _value.mobileNumber
           : mobileNumber // ignore: cast_nullable_to_non_nullable
               as String?,
-      contactType: null == contactType
+      contactType: freezed == contactType
           ? _value.contactType
           : contactType // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: null == title
+              as int?,
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       contactUniqueId: freezed == contactUniqueId
           ? _value.contactUniqueId
           : contactUniqueId // ignore: cast_nullable_to_non_nullable
               as String?,
+      typeIAM: freezed == typeIAM
+          ? _value.typeIAM
+          : typeIAM // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -264,17 +275,18 @@ class __$$OwnershipParamsImplCopyWithImpl<$Res>
 class _$OwnershipParamsImpl implements _OwnershipParams {
   const _$OwnershipParamsImpl(
       {@JsonKey(name: "AgentId") this.agentId = 2,
-      @JsonKey(name: "AgencyId") this.agencyId = 1,
+      @JsonKey(name: "AgencyID") this.agencyId = 1,
       @JsonKey(name: "Address") this.address,
-      @JsonKey(name: "UserRoleID") this.userRoleID = 10,
+      @JsonKey(name: "userRoleID") this.userRoleID = 10,
       @JsonKey(name: "PropertyUniqueId") this.propertyUniqueId,
       @JsonKey(name: "FirstName") this.firstName,
       @JsonKey(name: "LastName") this.lastName,
       @JsonKey(name: "Email") this.email,
       @JsonKey(name: "MobileNumber") this.mobileNumber,
       @JsonKey(name: "ContactType") this.contactType = 1,
-      @JsonKey(name: "Title") this.title = 2,
-      @JsonKey(name: "ContactUniqueId") this.contactUniqueId});
+      @JsonKey(name: "Title") this.title,
+      @JsonKey(name: "ContactUniqueId") this.contactUniqueId,
+      @JsonKey(name: "TypeIAM") this.typeIAM = 1});
 
   factory _$OwnershipParamsImpl.fromJson(Map<String, dynamic> json) =>
       _$$OwnershipParamsImplFromJson(json);
@@ -283,14 +295,14 @@ class _$OwnershipParamsImpl implements _OwnershipParams {
   @JsonKey(name: "AgentId")
   final int agentId;
   @override
-  @JsonKey(name: "AgencyId")
+  @JsonKey(name: "AgencyID")
   final int agencyId;
   @override
   @JsonKey(name: "Address")
   final String? address;
   @override
-  @JsonKey(name: "UserRoleID")
-  final int userRoleID;
+  @JsonKey(name: "userRoleID")
+  final dynamic userRoleID;
   @override
   @JsonKey(name: "PropertyUniqueId")
   final String? propertyUniqueId;
@@ -308,17 +320,20 @@ class _$OwnershipParamsImpl implements _OwnershipParams {
   final String? mobileNumber;
   @override
   @JsonKey(name: "ContactType")
-  final int contactType;
+  final int? contactType;
   @override
   @JsonKey(name: "Title")
-  final int title;
+  final int? title;
   @override
   @JsonKey(name: "ContactUniqueId")
   final String? contactUniqueId;
+  @override
+  @JsonKey(name: "TypeIAM")
+  final int? typeIAM;
 
   @override
   String toString() {
-    return 'OwnershipParams(agentId: $agentId, agencyId: $agencyId, address: $address, userRoleID: $userRoleID, propertyUniqueId: $propertyUniqueId, firstName: $firstName, lastName: $lastName, email: $email, mobileNumber: $mobileNumber, contactType: $contactType, title: $title, contactUniqueId: $contactUniqueId)';
+    return 'OwnershipParams(agentId: $agentId, agencyId: $agencyId, address: $address, userRoleID: $userRoleID, propertyUniqueId: $propertyUniqueId, firstName: $firstName, lastName: $lastName, email: $email, mobileNumber: $mobileNumber, contactType: $contactType, title: $title, contactUniqueId: $contactUniqueId, typeIAM: $typeIAM)';
   }
 
   @override
@@ -330,8 +345,8 @@ class _$OwnershipParamsImpl implements _OwnershipParams {
             (identical(other.agencyId, agencyId) ||
                 other.agencyId == agencyId) &&
             (identical(other.address, address) || other.address == address) &&
-            (identical(other.userRoleID, userRoleID) ||
-                other.userRoleID == userRoleID) &&
+            const DeepCollectionEquality()
+                .equals(other.userRoleID, userRoleID) &&
             (identical(other.propertyUniqueId, propertyUniqueId) ||
                 other.propertyUniqueId == propertyUniqueId) &&
             (identical(other.firstName, firstName) ||
@@ -345,7 +360,8 @@ class _$OwnershipParamsImpl implements _OwnershipParams {
                 other.contactType == contactType) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.contactUniqueId, contactUniqueId) ||
-                other.contactUniqueId == contactUniqueId));
+                other.contactUniqueId == contactUniqueId) &&
+            (identical(other.typeIAM, typeIAM) || other.typeIAM == typeIAM));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -355,7 +371,7 @@ class _$OwnershipParamsImpl implements _OwnershipParams {
       agentId,
       agencyId,
       address,
-      userRoleID,
+      const DeepCollectionEquality().hash(userRoleID),
       propertyUniqueId,
       firstName,
       lastName,
@@ -363,7 +379,8 @@ class _$OwnershipParamsImpl implements _OwnershipParams {
       mobileNumber,
       contactType,
       title,
-      contactUniqueId);
+      contactUniqueId,
+      typeIAM);
 
   /// Create a copy of OwnershipParams
   /// with the given fields replaced by the non-null parameter values.
@@ -384,19 +401,19 @@ class _$OwnershipParamsImpl implements _OwnershipParams {
 
 abstract class _OwnershipParams implements OwnershipParams {
   const factory _OwnershipParams(
-          {@JsonKey(name: "AgentId") final int agentId,
-          @JsonKey(name: "AgencyId") final int agencyId,
-          @JsonKey(name: "Address") final String? address,
-          @JsonKey(name: "UserRoleID") final int userRoleID,
-          @JsonKey(name: "PropertyUniqueId") final String? propertyUniqueId,
-          @JsonKey(name: "FirstName") final String? firstName,
-          @JsonKey(name: "LastName") final String? lastName,
-          @JsonKey(name: "Email") final String? email,
-          @JsonKey(name: "MobileNumber") final String? mobileNumber,
-          @JsonKey(name: "ContactType") final int contactType,
-          @JsonKey(name: "Title") final int title,
-          @JsonKey(name: "ContactUniqueId") final String? contactUniqueId}) =
-      _$OwnershipParamsImpl;
+      {@JsonKey(name: "AgentId") final int agentId,
+      @JsonKey(name: "AgencyID") final int agencyId,
+      @JsonKey(name: "Address") final String? address,
+      @JsonKey(name: "userRoleID") final dynamic userRoleID,
+      @JsonKey(name: "PropertyUniqueId") final String? propertyUniqueId,
+      @JsonKey(name: "FirstName") final String? firstName,
+      @JsonKey(name: "LastName") final String? lastName,
+      @JsonKey(name: "Email") final String? email,
+      @JsonKey(name: "MobileNumber") final String? mobileNumber,
+      @JsonKey(name: "ContactType") final int? contactType,
+      @JsonKey(name: "Title") final int? title,
+      @JsonKey(name: "ContactUniqueId") final String? contactUniqueId,
+      @JsonKey(name: "TypeIAM") final int? typeIAM}) = _$OwnershipParamsImpl;
 
   factory _OwnershipParams.fromJson(Map<String, dynamic> json) =
       _$OwnershipParamsImpl.fromJson;
@@ -405,14 +422,14 @@ abstract class _OwnershipParams implements OwnershipParams {
   @JsonKey(name: "AgentId")
   int get agentId;
   @override
-  @JsonKey(name: "AgencyId")
+  @JsonKey(name: "AgencyID")
   int get agencyId;
   @override
   @JsonKey(name: "Address")
   String? get address;
   @override
-  @JsonKey(name: "UserRoleID")
-  int get userRoleID;
+  @JsonKey(name: "userRoleID")
+  dynamic get userRoleID;
   @override
   @JsonKey(name: "PropertyUniqueId")
   String? get propertyUniqueId;
@@ -430,13 +447,16 @@ abstract class _OwnershipParams implements OwnershipParams {
   String? get mobileNumber;
   @override
   @JsonKey(name: "ContactType")
-  int get contactType;
+  int? get contactType;
   @override
   @JsonKey(name: "Title")
-  int get title;
+  int? get title;
   @override
   @JsonKey(name: "ContactUniqueId")
   String? get contactUniqueId;
+  @override
+  @JsonKey(name: "TypeIAM")
+  int? get typeIAM;
 
   /// Create a copy of OwnershipParams
   /// with the given fields replaced by the non-null parameter values.

@@ -37,6 +37,10 @@ mixin _$AddImage {
   int get propertyLandAreaW => throw _privateConstructorUsedError;
   @JsonKey(name: "FloorImages")
   List<String>? get floorImages => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false)
+  List<String>? get UpdatedfloorImages => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false)
+  List<String>? get updatePropertyImages => throw _privateConstructorUsedError;
 
   /// Serializes this AddImage to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -62,7 +66,9 @@ abstract class $AddImageCopyWith<$Res> {
       @JsonKey(name: "PropertyImages") List<String>? propertyImages,
       @JsonKey(name: "PropertyLandAreaL") String propertyLandAreaL,
       @JsonKey(name: "PropertyLandAreaW") int propertyLandAreaW,
-      @JsonKey(name: "FloorImages") List<String>? floorImages});
+      @JsonKey(name: "FloorImages") List<String>? floorImages,
+      @JsonKey(includeToJson: false) List<String>? UpdatedfloorImages,
+      @JsonKey(includeToJson: false) List<String>? updatePropertyImages});
 }
 
 /// @nodoc
@@ -88,6 +94,8 @@ class _$AddImageCopyWithImpl<$Res, $Val extends AddImage>
     Object? propertyLandAreaL = null,
     Object? propertyLandAreaW = null,
     Object? floorImages = freezed,
+    Object? UpdatedfloorImages = freezed,
+    Object? updatePropertyImages = freezed,
   }) {
     return _then(_value.copyWith(
       propertyBuildingTypeZoning: null == propertyBuildingTypeZoning
@@ -122,6 +130,14 @@ class _$AddImageCopyWithImpl<$Res, $Val extends AddImage>
           ? _value.floorImages
           : floorImages // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      UpdatedfloorImages: freezed == UpdatedfloorImages
+          ? _value.UpdatedfloorImages
+          : UpdatedfloorImages // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      updatePropertyImages: freezed == updatePropertyImages
+          ? _value.updatePropertyImages
+          : updatePropertyImages // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ) as $Val);
   }
 }
@@ -143,7 +159,9 @@ abstract class _$$AddImageImplCopyWith<$Res>
       @JsonKey(name: "PropertyImages") List<String>? propertyImages,
       @JsonKey(name: "PropertyLandAreaL") String propertyLandAreaL,
       @JsonKey(name: "PropertyLandAreaW") int propertyLandAreaW,
-      @JsonKey(name: "FloorImages") List<String>? floorImages});
+      @JsonKey(name: "FloorImages") List<String>? floorImages,
+      @JsonKey(includeToJson: false) List<String>? UpdatedfloorImages,
+      @JsonKey(includeToJson: false) List<String>? updatePropertyImages});
 }
 
 /// @nodoc
@@ -167,6 +185,8 @@ class __$$AddImageImplCopyWithImpl<$Res>
     Object? propertyLandAreaL = null,
     Object? propertyLandAreaW = null,
     Object? floorImages = freezed,
+    Object? UpdatedfloorImages = freezed,
+    Object? updatePropertyImages = freezed,
   }) {
     return _then(_$AddImageImpl(
       propertyBuildingTypeZoning: null == propertyBuildingTypeZoning
@@ -201,6 +221,14 @@ class __$$AddImageImplCopyWithImpl<$Res>
           ? _value._floorImages
           : floorImages // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      UpdatedfloorImages: freezed == UpdatedfloorImages
+          ? _value._UpdatedfloorImages
+          : UpdatedfloorImages // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      updatePropertyImages: freezed == updatePropertyImages
+          ? _value._updatePropertyImages
+          : updatePropertyImages // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -214,12 +242,19 @@ class _$AddImageImpl implements _AddImage {
       @JsonKey(name: "PropertyDescription") this.propertyDescription,
       @JsonKey(name: "PropertyHeading") this.propertyHeading,
       @JsonKey(name: "PropertyId") this.propertyId,
-      @JsonKey(name: "PropertyImages") final List<String>? propertyImages,
+      @JsonKey(name: "PropertyImages")
+      final List<String>? propertyImages = const [],
       @JsonKey(name: "PropertyLandAreaL") this.propertyLandAreaL = "400",
       @JsonKey(name: "PropertyLandAreaW") this.propertyLandAreaW = 8,
-      @JsonKey(name: "FloorImages") final List<String>? floorImages})
+      @JsonKey(name: "FloorImages") final List<String>? floorImages = const [],
+      @JsonKey(includeToJson: false)
+      final List<String>? UpdatedfloorImages = const [],
+      @JsonKey(includeToJson: false)
+      final List<String>? updatePropertyImages = const []})
       : _propertyImages = propertyImages,
-        _floorImages = floorImages;
+        _floorImages = floorImages,
+        _UpdatedfloorImages = UpdatedfloorImages,
+        _updatePropertyImages = updatePropertyImages;
 
   factory _$AddImageImpl.fromJson(Map<String, dynamic> json) =>
       _$$AddImageImplFromJson(json);
@@ -265,9 +300,33 @@ class _$AddImageImpl implements _AddImage {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<String>? _UpdatedfloorImages;
+  @override
+  @JsonKey(includeToJson: false)
+  List<String>? get UpdatedfloorImages {
+    final value = _UpdatedfloorImages;
+    if (value == null) return null;
+    if (_UpdatedfloorImages is EqualUnmodifiableListView)
+      return _UpdatedfloorImages;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<String>? _updatePropertyImages;
+  @override
+  @JsonKey(includeToJson: false)
+  List<String>? get updatePropertyImages {
+    final value = _updatePropertyImages;
+    if (value == null) return null;
+    if (_updatePropertyImages is EqualUnmodifiableListView)
+      return _updatePropertyImages;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   String toString() {
-    return 'AddImage(propertyBuildingTypeZoning: $propertyBuildingTypeZoning, propertyDescription: $propertyDescription, propertyHeading: $propertyHeading, propertyId: $propertyId, propertyImages: $propertyImages, propertyLandAreaL: $propertyLandAreaL, propertyLandAreaW: $propertyLandAreaW, floorImages: $floorImages)';
+    return 'AddImage(propertyBuildingTypeZoning: $propertyBuildingTypeZoning, propertyDescription: $propertyDescription, propertyHeading: $propertyHeading, propertyId: $propertyId, propertyImages: $propertyImages, propertyLandAreaL: $propertyLandAreaL, propertyLandAreaW: $propertyLandAreaW, floorImages: $floorImages, UpdatedfloorImages: $UpdatedfloorImages, updatePropertyImages: $updatePropertyImages)';
   }
 
   @override
@@ -292,7 +351,11 @@ class _$AddImageImpl implements _AddImage {
             (identical(other.propertyLandAreaW, propertyLandAreaW) ||
                 other.propertyLandAreaW == propertyLandAreaW) &&
             const DeepCollectionEquality()
-                .equals(other._floorImages, _floorImages));
+                .equals(other._floorImages, _floorImages) &&
+            const DeepCollectionEquality()
+                .equals(other._UpdatedfloorImages, _UpdatedfloorImages) &&
+            const DeepCollectionEquality()
+                .equals(other._updatePropertyImages, _updatePropertyImages));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -306,7 +369,9 @@ class _$AddImageImpl implements _AddImage {
       const DeepCollectionEquality().hash(_propertyImages),
       propertyLandAreaL,
       propertyLandAreaW,
-      const DeepCollectionEquality().hash(_floorImages));
+      const DeepCollectionEquality().hash(_floorImages),
+      const DeepCollectionEquality().hash(_UpdatedfloorImages),
+      const DeepCollectionEquality().hash(_updatePropertyImages));
 
   /// Create a copy of AddImage
   /// with the given fields replaced by the non-null parameter values.
@@ -334,8 +399,10 @@ abstract class _AddImage implements AddImage {
       @JsonKey(name: "PropertyImages") final List<String>? propertyImages,
       @JsonKey(name: "PropertyLandAreaL") final String propertyLandAreaL,
       @JsonKey(name: "PropertyLandAreaW") final int propertyLandAreaW,
-      @JsonKey(name: "FloorImages")
-      final List<String>? floorImages}) = _$AddImageImpl;
+      @JsonKey(name: "FloorImages") final List<String>? floorImages,
+      @JsonKey(includeToJson: false) final List<String>? UpdatedfloorImages,
+      @JsonKey(includeToJson: false)
+      final List<String>? updatePropertyImages}) = _$AddImageImpl;
 
   factory _AddImage.fromJson(Map<String, dynamic> json) =
       _$AddImageImpl.fromJson;
@@ -364,6 +431,12 @@ abstract class _AddImage implements AddImage {
   @override
   @JsonKey(name: "FloorImages")
   List<String>? get floorImages;
+  @override
+  @JsonKey(includeToJson: false)
+  List<String>? get UpdatedfloorImages;
+  @override
+  @JsonKey(includeToJson: false)
+  List<String>? get updatePropertyImages;
 
   /// Create a copy of AddImage
   /// with the given fields replaced by the non-null parameter values.

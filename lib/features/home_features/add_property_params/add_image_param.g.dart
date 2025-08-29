@@ -14,13 +14,23 @@ _$AddImageImpl _$$AddImageImplFromJson(Map<String, dynamic> json) =>
       propertyHeading: json['PropertyHeading'] as String?,
       propertyId: (json['PropertyId'] as num?)?.toInt(),
       propertyImages: (json['PropertyImages'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
       propertyLandAreaL: json['PropertyLandAreaL'] as String? ?? "400",
       propertyLandAreaW: (json['PropertyLandAreaW'] as num?)?.toInt() ?? 8,
       floorImages: (json['FloorImages'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      UpdatedfloorImages: (json['UpdatedfloorImages'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      updatePropertyImages: (json['updatePropertyImages'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$AddImageImplToJson(_$AddImageImpl instance) =>
@@ -39,7 +49,7 @@ Map<String, dynamic> _$$AddImageImplToJson(_$AddImageImpl instance) =>
 // RiverpodGenerator
 // **************************************************************************
 
-String _$addImageDataHash() => r'b9b057a2620cef1b8225acc6007754312887a648';
+String _$addImageDataHash() => r'acf037a9d8d8a0b000150d6c2bcdb6cdb1c507d5';
 
 /// See also [AddImageData].
 @ProviderFor(AddImageData)

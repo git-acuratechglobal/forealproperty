@@ -23,8 +23,8 @@ class LocalStorageService {
 
   static const String _userKey = 'user';
   static const String _onBoardingKey = 'onBoarding';
- // static const String _propertyId = 'propertyId';
-static const String _propertyModel = 'propertModel';
+  // static const String _propertyId = 'propertyId';
+  static const String _propertyModel = 'propertModel';
   Future<void> setUser(UserModel user) async {
     await _preferences.setString(_userKey, jsonEncode(user.toJson()));
   }
@@ -34,9 +34,9 @@ static const String _propertyModel = 'propertModel';
     return userJson == null ? null : UserModel.fromJson(jsonDecode(userJson));
   }
 
- Future<void> clearUser() async {
-   await _preferences.remove(_userKey);
- }
+  Future<void> clearUser() async {
+    await _preferences.remove(_userKey);
+  }
 
   Future<void> setOnBoardingComplete() async {
     await _preferences.setBool(_onBoardingKey, true);
@@ -46,12 +46,15 @@ static const String _propertyModel = 'propertModel';
     return _preferences.getBool(_onBoardingKey);
   }
 
-  Future<void> setPropertyModel(AddPropertyModel addPropertyModel) async{
-    await _preferences.setString(_propertyModel,  jsonEncode(addPropertyModel.toJson()));
+  Future<void> setPropertyModel(AddPropertyModel addPropertyModel) async {
+    await _preferences.setString(
+        _propertyModel, jsonEncode(addPropertyModel.toJson()));
   }
 
-  AddPropertyModel?  getPropertyModel(){
+  AddPropertyModel? getPropertyModel() {
     final propertyModelJson = _preferences.getString(_propertyModel);
-    return propertyModelJson == null ? null : AddPropertyModel.fromJson(jsonDecode(propertyModelJson));
+    return propertyModelJson == null
+        ? null
+        : AddPropertyModel.fromJson(jsonDecode(propertyModelJson));
   }
 }

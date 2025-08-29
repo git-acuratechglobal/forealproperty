@@ -50,17 +50,18 @@ class AuthService {
     });
   }
 
-  Future<Response> asyncGuard<Response>(
-      Future<Response> Function() apiCall) async {
-    try {
-      return await apiCall();
-    } on CheckedFromJsonException catch (e) {
-      throw "Something went wrong! ${e.toString()}"
-          .replaceAll("CheckedFromJsonException", "");
-    } on FormatException catch (e) {
-      throw "Unable to process data from server. reason: ${e.message}";
-    } catch (e) {
-      rethrow;
-    }
+
+}
+Future<Response> asyncGuard<Response>(
+    Future<Response> Function() apiCall) async {
+  try {
+    return await apiCall();
+  } on CheckedFromJsonException catch (e) {
+    throw "Something went wrong! ${e.toString()}"
+        .replaceAll("CheckedFromJsonException", "");
+  } on FormatException catch (e) {
+    throw "Unable to process data from server. reason: ${e.message}";
+  } catch (e) {
+    rethrow;
   }
 }

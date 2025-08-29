@@ -30,7 +30,7 @@ Map<String, dynamic> _$$SignUpParamsImplToJson(_$SignUpParamsImpl instance) =>
 // RiverpodGenerator
 // **************************************************************************
 
-String _$signUpParamsDataHash() => r'c5aedcb1b0cd5c59a22a40980d51a9264d1f1883';
+String _$signUpParamsDataHash() => r'b150a307cba828289c4b1bbeb09adeef108c8996';
 
 /// See also [SignUpParamsData].
 @ProviderFor(SignUpParamsData)

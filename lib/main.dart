@@ -16,22 +16,29 @@ void main() async {
           //   enabled: !kReleaseMode,
           //   builder: (context) => MyApp(), // Wrap your app
           // ),
-          MyApp()));
+          const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-        designSize: Size(375, 812),
-        builder: (context, child) {
-          return MaterialApp(
-            title: 'Foreal Property',
-            theme: Themes.lightTheme,
-            home: SplashScreen1(),
-            debugShowCheckedModeBanner: false,
-          );
-        });
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).unfocus();
+      },
+      child: ScreenUtilInit(
+          designSize: const Size(375, 812),
+          builder: (context, child) {
+            return MaterialApp(
+              title: 'Foreal Property',
+              theme: Themes.lightTheme,
+              home: const SplashScreen1(),
+              // home: AgreementView(),
+              debugShowCheckedModeBanner: false,
+            );
+          }),
+    );
   }
 }
+                    

@@ -1,0 +1,2 @@
+/Users/harmandeepsingh/Documents/GitHub/forealproperty/android/app/.cxx/Debug/r221d3wf/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/harmandeepsingh/Documents/GitHub/forealproperty/android/app/.cxx/Debug/r221d3wf/arm64-v8a/CMakeFiles/rebuild_cache.dir

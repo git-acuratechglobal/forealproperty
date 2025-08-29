@@ -21,7 +21,7 @@ ListingParams _$ListingParamsFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ListingParams {
   @JsonKey(name: "ListingId")
-  int get listingId => throw _privateConstructorUsedError;
+  int? get listingId => throw _privateConstructorUsedError;
   @JsonKey(name: "PropertySaleRental")
   int get propertySaleRental => throw _privateConstructorUsedError;
   @JsonKey(name: "PropertyId")
@@ -40,8 +40,22 @@ mixin _$ListingParams {
   bool? get isDualAgent => throw _privateConstructorUsedError;
   @JsonKey(name: "IsShowPrice")
   bool? get isShowPrice => throw _privateConstructorUsedError;
+  @JsonKey(name: "ShowText")
+  String? get showText => throw _privateConstructorUsedError;
   @JsonKey(name: "ListingAgentId")
   int get listingAgentId => throw _privateConstructorUsedError;
+  @JsonKey(name: "RentTenure")
+  int? get rentTenure => throw _privateConstructorUsedError;
+  @JsonKey(name: "IsNew")
+  int? get isNew => throw _privateConstructorUsedError;
+  @JsonKey(name: "ReaUploadId")
+  String? get reaUploadId => throw _privateConstructorUsedError;
+  @JsonKey(name: "DateAvailable")
+  String? get dateAvailable => throw _privateConstructorUsedError;
+  @JsonKey(name: "UserId")
+  int? get userId => throw _privateConstructorUsedError;
+  @JsonKey(name: "LoggedUserId")
+  int? get loggedUserId => throw _privateConstructorUsedError;
 
   /// Serializes this ListingParams to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -60,7 +74,7 @@ abstract class $ListingParamsCopyWith<$Res> {
       _$ListingParamsCopyWithImpl<$Res, ListingParams>;
   @useResult
   $Res call(
-      {@JsonKey(name: "ListingId") int listingId,
+      {@JsonKey(name: "ListingId") int? listingId,
       @JsonKey(name: "PropertySaleRental") int propertySaleRental,
       @JsonKey(name: "PropertyId") int? propertyId,
       @JsonKey(name: "ListingStatus") int? listingStatus,
@@ -70,7 +84,14 @@ abstract class $ListingParamsCopyWith<$Res> {
       @JsonKey(name: "IsCommercial") bool? isCommercial,
       @JsonKey(name: "IsDualAgent") bool? isDualAgent,
       @JsonKey(name: "IsShowPrice") bool? isShowPrice,
-      @JsonKey(name: "ListingAgentId") int listingAgentId});
+      @JsonKey(name: "ShowText") String? showText,
+      @JsonKey(name: "ListingAgentId") int listingAgentId,
+      @JsonKey(name: "RentTenure") int? rentTenure,
+      @JsonKey(name: "IsNew") int? isNew,
+      @JsonKey(name: "ReaUploadId") String? reaUploadId,
+      @JsonKey(name: "DateAvailable") String? dateAvailable,
+      @JsonKey(name: "UserId") int? userId,
+      @JsonKey(name: "LoggedUserId") int? loggedUserId});
 }
 
 /// @nodoc
@@ -88,7 +109,7 @@ class _$ListingParamsCopyWithImpl<$Res, $Val extends ListingParams>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? listingId = null,
+    Object? listingId = freezed,
     Object? propertySaleRental = null,
     Object? propertyId = freezed,
     Object? listingStatus = freezed,
@@ -98,13 +119,20 @@ class _$ListingParamsCopyWithImpl<$Res, $Val extends ListingParams>
     Object? isCommercial = freezed,
     Object? isDualAgent = freezed,
     Object? isShowPrice = freezed,
+    Object? showText = freezed,
     Object? listingAgentId = null,
+    Object? rentTenure = freezed,
+    Object? isNew = freezed,
+    Object? reaUploadId = freezed,
+    Object? dateAvailable = freezed,
+    Object? userId = freezed,
+    Object? loggedUserId = freezed,
   }) {
     return _then(_value.copyWith(
-      listingId: null == listingId
+      listingId: freezed == listingId
           ? _value.listingId
           : listingId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       propertySaleRental: null == propertySaleRental
           ? _value.propertySaleRental
           : propertySaleRental // ignore: cast_nullable_to_non_nullable
@@ -141,10 +169,38 @@ class _$ListingParamsCopyWithImpl<$Res, $Val extends ListingParams>
           ? _value.isShowPrice
           : isShowPrice // ignore: cast_nullable_to_non_nullable
               as bool?,
+      showText: freezed == showText
+          ? _value.showText
+          : showText // ignore: cast_nullable_to_non_nullable
+              as String?,
       listingAgentId: null == listingAgentId
           ? _value.listingAgentId
           : listingAgentId // ignore: cast_nullable_to_non_nullable
               as int,
+      rentTenure: freezed == rentTenure
+          ? _value.rentTenure
+          : rentTenure // ignore: cast_nullable_to_non_nullable
+              as int?,
+      isNew: freezed == isNew
+          ? _value.isNew
+          : isNew // ignore: cast_nullable_to_non_nullable
+              as int?,
+      reaUploadId: freezed == reaUploadId
+          ? _value.reaUploadId
+          : reaUploadId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      dateAvailable: freezed == dateAvailable
+          ? _value.dateAvailable
+          : dateAvailable // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      loggedUserId: freezed == loggedUserId
+          ? _value.loggedUserId
+          : loggedUserId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -158,7 +214,7 @@ abstract class _$$ListingParamsImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: "ListingId") int listingId,
+      {@JsonKey(name: "ListingId") int? listingId,
       @JsonKey(name: "PropertySaleRental") int propertySaleRental,
       @JsonKey(name: "PropertyId") int? propertyId,
       @JsonKey(name: "ListingStatus") int? listingStatus,
@@ -168,7 +224,14 @@ abstract class _$$ListingParamsImplCopyWith<$Res>
       @JsonKey(name: "IsCommercial") bool? isCommercial,
       @JsonKey(name: "IsDualAgent") bool? isDualAgent,
       @JsonKey(name: "IsShowPrice") bool? isShowPrice,
-      @JsonKey(name: "ListingAgentId") int listingAgentId});
+      @JsonKey(name: "ShowText") String? showText,
+      @JsonKey(name: "ListingAgentId") int listingAgentId,
+      @JsonKey(name: "RentTenure") int? rentTenure,
+      @JsonKey(name: "IsNew") int? isNew,
+      @JsonKey(name: "ReaUploadId") String? reaUploadId,
+      @JsonKey(name: "DateAvailable") String? dateAvailable,
+      @JsonKey(name: "UserId") int? userId,
+      @JsonKey(name: "LoggedUserId") int? loggedUserId});
 }
 
 /// @nodoc
@@ -184,7 +247,7 @@ class __$$ListingParamsImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? listingId = null,
+    Object? listingId = freezed,
     Object? propertySaleRental = null,
     Object? propertyId = freezed,
     Object? listingStatus = freezed,
@@ -194,13 +257,20 @@ class __$$ListingParamsImplCopyWithImpl<$Res>
     Object? isCommercial = freezed,
     Object? isDualAgent = freezed,
     Object? isShowPrice = freezed,
+    Object? showText = freezed,
     Object? listingAgentId = null,
+    Object? rentTenure = freezed,
+    Object? isNew = freezed,
+    Object? reaUploadId = freezed,
+    Object? dateAvailable = freezed,
+    Object? userId = freezed,
+    Object? loggedUserId = freezed,
   }) {
     return _then(_$ListingParamsImpl(
-      listingId: null == listingId
+      listingId: freezed == listingId
           ? _value.listingId
           : listingId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       propertySaleRental: null == propertySaleRental
           ? _value.propertySaleRental
           : propertySaleRental // ignore: cast_nullable_to_non_nullable
@@ -237,10 +307,38 @@ class __$$ListingParamsImplCopyWithImpl<$Res>
           ? _value.isShowPrice
           : isShowPrice // ignore: cast_nullable_to_non_nullable
               as bool?,
+      showText: freezed == showText
+          ? _value.showText
+          : showText // ignore: cast_nullable_to_non_nullable
+              as String?,
       listingAgentId: null == listingAgentId
           ? _value.listingAgentId
           : listingAgentId // ignore: cast_nullable_to_non_nullable
               as int,
+      rentTenure: freezed == rentTenure
+          ? _value.rentTenure
+          : rentTenure // ignore: cast_nullable_to_non_nullable
+              as int?,
+      isNew: freezed == isNew
+          ? _value.isNew
+          : isNew // ignore: cast_nullable_to_non_nullable
+              as int?,
+      reaUploadId: freezed == reaUploadId
+          ? _value.reaUploadId
+          : reaUploadId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      dateAvailable: freezed == dateAvailable
+          ? _value.dateAvailable
+          : dateAvailable // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      loggedUserId: freezed == loggedUserId
+          ? _value.loggedUserId
+          : loggedUserId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -252,21 +350,28 @@ class _$ListingParamsImpl implements _ListingParams {
       {@JsonKey(name: "ListingId") this.listingId = 0,
       @JsonKey(name: "PropertySaleRental") this.propertySaleRental = 1,
       @JsonKey(name: "PropertyId") this.propertyId,
-      @JsonKey(name: "ListingStatus") this.listingStatus,
-      @JsonKey(name: "PropertyAgreementType") this.propertyAgreementType,
+      @JsonKey(name: "ListingStatus") this.listingStatus = 1,
+      @JsonKey(name: "PropertyAgreementType") this.propertyAgreementType = 2,
       @JsonKey(name: "PropertyPrice") this.propertyPrice,
       @JsonKey(name: "RentPrice") this.rentPrice = 0,
-      @JsonKey(name: "IsCommercial") this.isCommercial,
-      @JsonKey(name: "IsDualAgent") this.isDualAgent,
-      @JsonKey(name: "IsShowPrice") this.isShowPrice,
-      @JsonKey(name: "ListingAgentId") this.listingAgentId = 4});
+      @JsonKey(name: "IsCommercial") this.isCommercial = false,
+      @JsonKey(name: "IsDualAgent") this.isDualAgent = false,
+      @JsonKey(name: "IsShowPrice") this.isShowPrice = true,
+      @JsonKey(name: "ShowText") this.showText,
+      @JsonKey(name: "ListingAgentId") this.listingAgentId = 4,
+      @JsonKey(name: "RentTenure") this.rentTenure,
+      @JsonKey(name: "IsNew") this.isNew = 1,
+      @JsonKey(name: "ReaUploadId") this.reaUploadId,
+      @JsonKey(name: "DateAvailable") this.dateAvailable,
+      @JsonKey(name: "UserId") this.userId,
+      @JsonKey(name: "LoggedUserId") this.loggedUserId = 2});
 
   factory _$ListingParamsImpl.fromJson(Map<String, dynamic> json) =>
       _$$ListingParamsImplFromJson(json);
 
   @override
   @JsonKey(name: "ListingId")
-  final int listingId;
+  final int? listingId;
   @override
   @JsonKey(name: "PropertySaleRental")
   final int propertySaleRental;
@@ -295,12 +400,33 @@ class _$ListingParamsImpl implements _ListingParams {
   @JsonKey(name: "IsShowPrice")
   final bool? isShowPrice;
   @override
+  @JsonKey(name: "ShowText")
+  final String? showText;
+  @override
   @JsonKey(name: "ListingAgentId")
   final int listingAgentId;
+  @override
+  @JsonKey(name: "RentTenure")
+  final int? rentTenure;
+  @override
+  @JsonKey(name: "IsNew")
+  final int? isNew;
+  @override
+  @JsonKey(name: "ReaUploadId")
+  final String? reaUploadId;
+  @override
+  @JsonKey(name: "DateAvailable")
+  final String? dateAvailable;
+  @override
+  @JsonKey(name: "UserId")
+  final int? userId;
+  @override
+  @JsonKey(name: "LoggedUserId")
+  final int? loggedUserId;
 
   @override
   String toString() {
-    return 'ListingParams(listingId: $listingId, propertySaleRental: $propertySaleRental, propertyId: $propertyId, listingStatus: $listingStatus, propertyAgreementType: $propertyAgreementType, propertyPrice: $propertyPrice, rentPrice: $rentPrice, isCommercial: $isCommercial, isDualAgent: $isDualAgent, isShowPrice: $isShowPrice, listingAgentId: $listingAgentId)';
+    return 'ListingParams(listingId: $listingId, propertySaleRental: $propertySaleRental, propertyId: $propertyId, listingStatus: $listingStatus, propertyAgreementType: $propertyAgreementType, propertyPrice: $propertyPrice, rentPrice: $rentPrice, isCommercial: $isCommercial, isDualAgent: $isDualAgent, isShowPrice: $isShowPrice, showText: $showText, listingAgentId: $listingAgentId, rentTenure: $rentTenure, isNew: $isNew, reaUploadId: $reaUploadId, dateAvailable: $dateAvailable, userId: $userId, loggedUserId: $loggedUserId)';
   }
 
   @override
@@ -328,8 +454,20 @@ class _$ListingParamsImpl implements _ListingParams {
                 other.isDualAgent == isDualAgent) &&
             (identical(other.isShowPrice, isShowPrice) ||
                 other.isShowPrice == isShowPrice) &&
+            (identical(other.showText, showText) ||
+                other.showText == showText) &&
             (identical(other.listingAgentId, listingAgentId) ||
-                other.listingAgentId == listingAgentId));
+                other.listingAgentId == listingAgentId) &&
+            (identical(other.rentTenure, rentTenure) ||
+                other.rentTenure == rentTenure) &&
+            (identical(other.isNew, isNew) || other.isNew == isNew) &&
+            (identical(other.reaUploadId, reaUploadId) ||
+                other.reaUploadId == reaUploadId) &&
+            (identical(other.dateAvailable, dateAvailable) ||
+                other.dateAvailable == dateAvailable) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.loggedUserId, loggedUserId) ||
+                other.loggedUserId == loggedUserId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -346,7 +484,14 @@ class _$ListingParamsImpl implements _ListingParams {
       isCommercial,
       isDualAgent,
       isShowPrice,
-      listingAgentId);
+      showText,
+      listingAgentId,
+      rentTenure,
+      isNew,
+      reaUploadId,
+      dateAvailable,
+      userId,
+      loggedUserId);
 
   /// Create a copy of ListingParams
   /// with the given fields replaced by the non-null parameter values.
@@ -366,7 +511,7 @@ class _$ListingParamsImpl implements _ListingParams {
 
 abstract class _ListingParams implements ListingParams {
   const factory _ListingParams(
-      {@JsonKey(name: "ListingId") final int listingId,
+      {@JsonKey(name: "ListingId") final int? listingId,
       @JsonKey(name: "PropertySaleRental") final int propertySaleRental,
       @JsonKey(name: "PropertyId") final int? propertyId,
       @JsonKey(name: "ListingStatus") final int? listingStatus,
@@ -376,15 +521,22 @@ abstract class _ListingParams implements ListingParams {
       @JsonKey(name: "IsCommercial") final bool? isCommercial,
       @JsonKey(name: "IsDualAgent") final bool? isDualAgent,
       @JsonKey(name: "IsShowPrice") final bool? isShowPrice,
-      @JsonKey(name: "ListingAgentId")
-      final int listingAgentId}) = _$ListingParamsImpl;
+      @JsonKey(name: "ShowText") final String? showText,
+      @JsonKey(name: "ListingAgentId") final int listingAgentId,
+      @JsonKey(name: "RentTenure") final int? rentTenure,
+      @JsonKey(name: "IsNew") final int? isNew,
+      @JsonKey(name: "ReaUploadId") final String? reaUploadId,
+      @JsonKey(name: "DateAvailable") final String? dateAvailable,
+      @JsonKey(name: "UserId") final int? userId,
+      @JsonKey(name: "LoggedUserId")
+      final int? loggedUserId}) = _$ListingParamsImpl;
 
   factory _ListingParams.fromJson(Map<String, dynamic> json) =
       _$ListingParamsImpl.fromJson;
 
   @override
   @JsonKey(name: "ListingId")
-  int get listingId;
+  int? get listingId;
   @override
   @JsonKey(name: "PropertySaleRental")
   int get propertySaleRental;
@@ -413,8 +565,29 @@ abstract class _ListingParams implements ListingParams {
   @JsonKey(name: "IsShowPrice")
   bool? get isShowPrice;
   @override
+  @JsonKey(name: "ShowText")
+  String? get showText;
+  @override
   @JsonKey(name: "ListingAgentId")
   int get listingAgentId;
+  @override
+  @JsonKey(name: "RentTenure")
+  int? get rentTenure;
+  @override
+  @JsonKey(name: "IsNew")
+  int? get isNew;
+  @override
+  @JsonKey(name: "ReaUploadId")
+  String? get reaUploadId;
+  @override
+  @JsonKey(name: "DateAvailable")
+  String? get dateAvailable;
+  @override
+  @JsonKey(name: "UserId")
+  int? get userId;
+  @override
+  @JsonKey(name: "LoggedUserId")
+  int? get loggedUserId;
 
   /// Create a copy of ListingParams
   /// with the given fields replaced by the non-null parameter values.

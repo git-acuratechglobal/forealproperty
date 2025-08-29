@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class Utils{
+class Utils {
   static void showSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
         content: Text(message),
+        duration: const Duration(seconds: 2),
       ),
     );
   }

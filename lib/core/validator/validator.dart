@@ -28,13 +28,23 @@ class Validators {
   }
 
   String? validateMobile(String? phone) {
-    if (phone == null || phone.isEmpty) {
-      return "Phone field can't be empty";
-    } else if (phone.length < 10) {
-      return "Phone Number must contain atleast 10 digits";
-    }
-    return null;
+  if (phone == null || phone.trim().isEmpty) {
+    return 'Phone number is required';
   }
+
+  final trimmed = phone.trim();
+
+  if (trimmed.length != 8) {
+    return 'Phone number must be exactly 8 digits';
+  }
+
+  if (!RegExp(r'^\d{8}$').hasMatch(trimmed)) {
+    return 'Only digits allowed';
+  }
+
+  return null;
+}
+
 
   String? validateConfirmPassword(String? confirmPassword, String password) {
     if (confirmPassword == null || confirmPassword.isEmpty) {
@@ -61,3 +71,5 @@ class Validators {
     };
   }
 }
+
+

@@ -1,3 +1,4 @@
+import 'package:foreal_property/features/home_features/models/get_property_details.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -35,7 +36,7 @@ class PropertyAttributeDetails with _$PropertyAttributeDetails {
     @JsonKey(name: "CountGarageSpace") int? countGarageSpace,
     @JsonKey(name: "CountLivingAreas") int? countLivingAreas,
     @JsonKey(name: "CountToilets") int? countToilets,
-    @JsonKey(name: "Coutryard") bool? coutryard,
+    @JsonKey(name: "Coutryard") @Default(true) bool? coutryard,
   }) = _PropertyAttributeDetails;
 
   factory PropertyAttributeDetails.fromJson(Map<String, dynamic> json) =>
@@ -131,6 +132,25 @@ class PropertyAttributesModelData extends _$PropertyAttributesModelData {
   void update(PropertyAttributesModel Function(PropertyAttributesModel? p) updateParam) {
     state = updateParam(state);
   }
+// void updateAttributes(PropertyDetailModel? attributes) {
+//   if (attributes == null) return;
+
+//   final attributeDetails = PropertyAttributeDetails(
+//     countBedrooms: attributes.countBedrooms,
+//     countBathrooms: attributes.countBathrooms,
+//     countCarParking: attributes.countCarParking,
+//     countEnsuites: attributes.countEnsuites,
+//     countGarageSpace: attributes.countGarageSpace,
+//     countLivingAreas: attributes.countLivingAreas,
+//     countToilets: attributes.countToilets,
+//   );
+
+//   state = PropertyAttributesModel(
+//     userId: attributes.userId!,
+//     propertyId: attributes.propertyId,
+//     propertyAttibuteDetails: attributeDetails,
+//   );
+// }
 }
 
 @Riverpod(keepAlive: true)
@@ -145,6 +165,18 @@ class PropertyAttributeDetailsData extends _$PropertyAttributeDetailsData {
   if (updated != state) {
     state = updated;
   }
+  }
+
+  void updateAttributes(PropertyDetailModel? attributeData){
+state= PropertyAttributeDetails(
+  countBedrooms: attributeData!.countBedrooms,
+  countBathrooms: attributeData.countBathrooms,
+  countCarParking: attributeData.countCarParking,
+  countEnsuites: attributeData.countEnsuites,
+  countGarageSpace: attributeData.countGarageSpace,
+  countLivingAreas: attributeData.countLivingAreas,
+  countToilets: attributeData.countToilets
+);
   }
 }
 

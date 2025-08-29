@@ -18,7 +18,7 @@ class ApiClient {
   Future<Response> get(
     String path, {
     Map<String, dynamic>? queryParams,
-    Map<String, dynamic>? headers, required Map<String, Object> queryParameters,
+    Map<String, dynamic>? headers,
   }) async {
     return asyncGuard(() async {
       return await _dio.get(
@@ -32,12 +32,14 @@ class ApiClient {
   Future<Response> post(
     String path, {
     dynamic data,
+     Map<String, dynamic>? queryParams,
     Map<String, dynamic>? headers,
   }) async {
     return asyncGuard(() async {
       return await _dio.post(
         path,
         data: data,
+         queryParameters: queryParams,
         options: Options(headers: _mergeHeaders(headers)),
       );
     });

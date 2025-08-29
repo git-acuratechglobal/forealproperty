@@ -40,7 +40,7 @@ class _UpdateprofileState extends ConsumerState<Updateprofile> {
     final user = ref.watch(userProvider);
     return Scaffold(
       //   extendBodyBehindAppBar: true,
-      backgroundColor: Color(0xFFEBF3F5),
+      backgroundColor: const Color(0xFFEBF3F5),
 
       body: SingleChildScrollView(
         child: Container(
@@ -53,41 +53,21 @@ class _UpdateprofileState extends ConsumerState<Updateprofile> {
                   Container(
                     height: 200,
                     color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              'Profile',
-                              style: TextStyle(
-                                color: const Color(0xFF1A1B28),
-                                fontSize: 20.sp,
-                                fontFamily: 'Plus Jakarta Sans',
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
+                    child: Center(
+                      child: Text(
+                        'Profile',
+                        style: TextStyle(
+                          color: const Color(0xFF1A1B28),
+                          fontSize: 24.sp,
+                        
+                          fontWeight: FontWeight.bold,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 24, bottom: 42),
-                          child: InkWell(
-                            onTap: () {
-                              context.pop();
-                            },
-                            child: Image.asset(
-                              'assets/images/exit.png',
-                              height: 15.h,
-                              width: 15.w,
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                   55.verticalSpace,
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: InkWell(
                       onTap: _pickImage,
                       child: Text(
@@ -102,7 +82,7 @@ class _UpdateprofileState extends ConsumerState<Updateprofile> {
                   ),
                   24.verticalSpace,
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: TextFormField(
                       initialValue: user?.firstName,
                       decoration: InputDecoration(
@@ -117,7 +97,7 @@ class _UpdateprofileState extends ConsumerState<Updateprofile> {
                   ),
                   24.verticalSpace,
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: TextFormField(
                       initialValue: user?.email,
                       decoration: InputDecoration(
@@ -178,7 +158,7 @@ class _UpdateprofileState extends ConsumerState<Updateprofile> {
                       4.horizontalSpace,
                       InkWell(
                         onTap: () {
-                          context.navigateTo(Changepassword());
+                          context.push(const Changepassword());
                         },
                         child: Text(
                           'Change Password',
@@ -193,22 +173,22 @@ class _UpdateprofileState extends ConsumerState<Updateprofile> {
                   ),
                   42.verticalSpace,
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF164C63),
+                            backgroundColor: const Color(0xFF164C63),
                             foregroundColor: Colors.white,
                           ),
                           onPressed: () {},
-                          child: Text('Update Changes')),
+                          child: const Text('Update Changes')),
                     ),
                   ),
                   32.verticalSpace,
 
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: PrimaryButton(
                       isLoading: ref.watch(authNotifierProvider).isLoading,
                       title: 'LogOut',
@@ -217,7 +197,7 @@ class _UpdateprofileState extends ConsumerState<Updateprofile> {
                             .read(localStorageServiceProvider)
                             .clearUser()
                             .then((val) {
-                          context.navigateAndRemoveUntil(LoginScreen());
+                          context.pushAndRemoveUntil(const LoginScreen());
                         });
                       },
                     ),

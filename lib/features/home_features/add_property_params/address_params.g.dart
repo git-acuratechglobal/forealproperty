@@ -9,8 +9,8 @@ part of 'address_params.dart';
 _$AddressParamsImpl _$$AddressParamsImplFromJson(Map<String, dynamic> json) =>
     _$AddressParamsImpl(
       propertyId: (json['PropertyId'] as num?)?.toInt() ?? 0,
-      propertySaleRental: (json['PropertySaleRental'] as num?)?.toInt() ?? 1,
-      propertyType: json['PropertyType'] as String?,
+      propertySaleRental: (json['PropertySaleRental'] as num?)?.toInt(),
+      propertyType: (json['PropertyType'] as num?)?.toInt(),
       agentId: (json['AgentId'] as num?)?.toInt() ?? 2,
       agencyId: (json['AgencyId'] as num?)?.toInt() ?? 1,
       propertyGooglePlacesLocation:
@@ -45,7 +45,7 @@ Map<String, dynamic> _$$AddressParamsImplToJson(_$AddressParamsImpl instance) =>
 // RiverpodGenerator
 // **************************************************************************
 
-String _$addressParamsDataHash() => r'8f94c04bdb2777c8b47c1ec32eafddeb7071664a';
+String _$addressParamsDataHash() => r'17ace6ee90fe0b2a09b9ff3a5b6c82217fe5df5d';
 
 /// See also [AddressParamsData].
 @ProviderFor(AddressParamsData)

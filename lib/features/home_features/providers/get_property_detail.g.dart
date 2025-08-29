@@ -6,7 +6,7 @@ part of 'get_property_detail.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getPropertyDetailHash() => r'7063213314dea5e50098c76e53aa40b190a04e9e';
+String _$getPropertyDetailHash() => r'a7e551c63ab4548f498cd46879df0ac1027babe1';
 
 /// See also [GetPropertyDetail].
 @ProviderFor(GetPropertyDetail)

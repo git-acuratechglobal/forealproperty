@@ -23,26 +23,26 @@ class _SplashScreen1State extends ConsumerState<SplashScreen1> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         _isStartAnimation = true;
       });
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(Duration(seconds: 3), () {
+      Future.delayed(const Duration(seconds: 3), () {
         final user = ref.read(localStorageServiceProvider).getuser();
         final isOnBoadingComplete =
             ref.read(localStorageServiceProvider).getOnBoardingComplete() ??
                 false;
         if (!isOnBoadingComplete) {
-          context.navigateTo(WelcomeScreen1());
+          context.pushReplacement(const WelcomeScreen1());
         }
         if (user == null) {
-          context.navigateAndRemoveUntil(LoginScreen());
+          context.pushAndRemoveUntil(const LoginScreen());
           return;
         }
         ref.read(userProvider.notifier).update((_) => user);
-        context.navigateTo(HomeScreen());
+        context.pushAndRemoveUntil(const HomeScreen());
       });
     });
   }
@@ -51,9 +51,9 @@ class _SplashScreen1State extends ConsumerState<SplashScreen1> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnimatedContainer(
-        duration: Duration(seconds: 1),
+        duration: const Duration(seconds: 1),
         curve: Curves.easeInOut,
-        color: _isStartAnimation ? Color(0xFF164C63) : Color(0xFFEBF3F5),
+        color: _isStartAnimation ? const Color(0xFF164C63) : const Color(0xFFEBF3F5),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -62,17 +62,17 @@ class _SplashScreen1State extends ConsumerState<SplashScreen1> {
                   child: Image.asset('assets/images/path78.png',
                       width: 109, height: 117)),
               AnimatedSwitcher(
-                duration: Duration(seconds: 1),
+                duration: const Duration(seconds: 1),
                 child: _isStartAnimation
                     ? Image.asset(
                         'assets/images/property2.png',
-                        key: ValueKey('property2'),
+                        key: const ValueKey('property2'),
                         width: 149.81.sp,
                         height: 208.77.sp,
                       )
                     : Image.asset(
                         'assets/images/property.png',
-                        key: ValueKey('property1'),
+                        key: const ValueKey('property1'),
                         width: 149.81.sp,
                         height: 208.77.sp,
                       ),
@@ -81,7 +81,7 @@ class _SplashScreen1State extends ConsumerState<SplashScreen1> {
               Expanded(
                 child: AnimatedOpacity(
                   opacity: _isStartAnimation ? 1.0 : 0.0,
-                  duration: Duration(seconds: 1),
+                  duration: const Duration(seconds: 1),
                   child: Image.asset(
                     'assets/images/path78.png',
                   ),

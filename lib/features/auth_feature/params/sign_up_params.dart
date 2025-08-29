@@ -33,7 +33,7 @@ class SignUpParams with _$SignUpParams {
 class SignUpParamsData extends _$SignUpParamsData {
   @override
  SignUpParams  build() {
-    return  SignUpParams();
+    return  const SignUpParams();
   }
 
 

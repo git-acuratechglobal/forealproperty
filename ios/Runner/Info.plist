@@ -4,8 +4,16 @@
   <dict>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>This app needs permission for the photo library</string>
-    <key>NSCameraUsageDescription</key>
-    <string>This app needs permission for the phone camera</string>
+    <key>NSDocumentsUsageDescription</key>
+    <string>This app requires access to your files to upload them.</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+    <string>tel</string>
+    <string>mailto</string>
+    </array>
+
+   <key>NSCameraUsageDescription</key>
+   <string>We need to access your camera to take photos</string>
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDevelopmentRegion</key>

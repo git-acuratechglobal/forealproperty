@@ -6,20 +6,6 @@ part of 'get_property_listing_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PropertyListingModel _$PropertyListingModelFromJson(
-        Map<String, dynamic> json) =>
-    PropertyListingModel(
-      countAll: (json['countAll'] as num?)?.toInt(),
-      countSaleListing: (json['countSaleListing'] as num?)?.toInt(),
-      countRentalListing: (json['countRentalListing'] as num?)?.toInt(),
-      countSold: (json['countSold'] as num?)?.toInt(),
-      countLeased: (json['countLeased'] as num?)?.toInt(),
-      countOffMarket: (json['countOffMarket'] as num?)?.toInt(),
-      propertyListingList: (json['propertyListingList'] as List<dynamic>?)
-          ?.map((e) => PropertyListingList.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-
 PropertyListingList _$PropertyListingListFromJson(Map<String, dynamic> json) =>
     PropertyListingList(
       listingId: (json['listingId'] as num?)?.toInt(),
@@ -56,4 +42,6 @@ PropertyListingList _$PropertyListingListFromJson(Map<String, dynamic> json) =>
       domainUploadedDate: json['domainUploadedDate'] == null
           ? null
           : DateTime.parse(json['domainUploadedDate'] as String),
+      propertyPic: json['propertyPic'] as String?,
+      heading: json['heading'] as String?,
     );

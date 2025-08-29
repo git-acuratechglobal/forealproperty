@@ -15,7 +15,7 @@ class _VerifyemailState extends ConsumerState<Verifyemail> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -28,7 +28,7 @@ class _VerifyemailState extends ConsumerState<Verifyemail> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -47,7 +47,7 @@ class _VerifyemailState extends ConsumerState<Verifyemail> {
               Text(
                 'Verify email \naddress',
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: Color(0xFF1A1B28),
+                      color: const Color(0xFF1A1B28),
                     ),
               ),
               16.verticalSpace,
@@ -56,10 +56,10 @@ class _VerifyemailState extends ConsumerState<Verifyemail> {
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
-                    ?.copyWith(color: Color(0xFF494D60)),
+                    ?.copyWith(color: const Color(0xFF494D60)),
               ),
               32.verticalSpace,
-              Form(
+              const Form(
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -74,7 +74,7 @@ class _VerifyemailState extends ConsumerState<Verifyemail> {
               32.verticalSpace,
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF164C63),
+                  backgroundColor: const Color(0xFF164C63),
                   foregroundColor: Colors.white,
                 ),
                 onPressed: () {
@@ -93,7 +93,7 @@ class _VerifyemailState extends ConsumerState<Verifyemail> {
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     // foregroundColor: Color(0xFF164C63),
-                    side: BorderSide(
+                    side: const BorderSide(
                       color: Color(0xFF164C63),
                     )),
                 onPressed: () {
@@ -102,19 +102,19 @@ class _VerifyemailState extends ConsumerState<Verifyemail> {
                 child: Text(
                   'Resend code',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Color(0xFF164C63),
+                        color: const Color(0xFF164C63),
                       ),
                 ),
               ),
               24.verticalSpace,
-              Center(
+              const Center(
                 child: Text.rich(
                   TextSpan(
                     children: [
                       TextSpan(
                         text: 'Remaining time:',
                         style: TextStyle(
-                          color: const Color(0xFF494D60),
+                          color: Color(0xFF494D60),
                           fontSize: 14,
                           fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w300,
@@ -124,7 +124,7 @@ class _VerifyemailState extends ConsumerState<Verifyemail> {
                       TextSpan(
                         text: ' 00:59s',
                         style: TextStyle(
-                          color: const Color(0xFF164C63),
+                          color: Color(0xFF164C63),
                           fontSize: 14,
                           fontFamily: 'Plus Jakarta Sans',
                           fontWeight: FontWeight.w700,
@@ -176,7 +176,7 @@ class _OtpverifyState extends State<Otpverify> {
                 LengthLimitingTextInputFormatter(1),
                 FilteringTextInputFormatter.digitsOnly
               ],
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: '0',
                 border: OutlineInputBorder(
                   borderSide: BorderSide(color: Color(0xFFE2E2E2)),

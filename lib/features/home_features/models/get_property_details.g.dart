@@ -13,15 +13,19 @@ PropertyDetailModel _$PropertyDetailModelFromJson(Map<String, dynamic> json) =>
       propertyImageSequence: json['propertyImageSequence'],
       propertyFloorImageSequence: json['propertyFloorImageSequence'],
       uploadDocumentNameArray: json['uploadDocumentNameArray'],
-      propertyPics: json['propertyPics'],
-      contactsList: json['contactsList'],
+      propertyPics: (json['propertyPics'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      contactsList: (json['contactsList'] as List<dynamic>?)
+          ?.map((e) => ContactsList.fromJson(e as Map<String, dynamic>))
+          .toList(),
       countofEnquiry: (json['countofEnquiry'] as num?)?.toInt(),
       countofopenhome: (json['countofopenhome'] as num?)?.toInt(),
       countofsaleoffers: (json['countofsaleoffers'] as num?)?.toInt(),
       countofRental: (json['countofRental'] as num?)?.toInt(),
-      openHomeList: json['openHomeList'],
+      openHomeList: json['openHomeList'] as List<dynamic>?,
       uploadedImagesName: json['uploadedImagesName'],
-      floorPics: json['floorPics'],
+      floorPics: json['floorPics'] as List<dynamic>?,
       uploadedFloorImagesName: json['uploadedFloorImagesName'],
       pageMode: (json['pageMode'] as num?)?.toInt(),
       uploadedDocuments: json['uploadedDocuments'],
@@ -38,47 +42,43 @@ PropertyDetailModel _$PropertyDetailModelFromJson(Map<String, dynamic> json) =>
       agentId: (json['agentId'] as num?)?.toInt(),
       agentPhotoPath: json['agent_Photo_Path'],
       agentName: json['agent_Name'] as String?,
-      agentEmail: json['agent_Email'] as String?,
+      agentEmail: json['agent_Email'],
       agentTitle: json['agent_Title'],
       agentUniqueId: json['agentUniqueId'] as String?,
       agentYearsOfExperience:
           (json['agent_YearsOfExperience'] as num?)?.toInt(),
-      agentLicenseExpiry: json['agent_LicenseExpiry'] == null
-          ? null
-          : DateTime.parse(json['agent_LicenseExpiry'] as String),
-      agentEmergencyContactName: json['agent_EmergencyContactName'],
+      agentLicenseExpiry: json['agent_LicenseExpiry'] as String?,
+      agentEmergencyContactName: json['agent_EmergencyContactName'] as String?,
       agentAreaofWorking: json['agent_AreaofWorking'],
       agentAddress: json['agent_Address'] as String?,
       agentContact: json['agent_Contact'] as String?,
       agentLicenseNumber: json['agent_LicenseNumber'] as String?,
       agentRegistraionExpiry: json['agent_RegistraionExpiry'],
-      agentEmergencyContactDetails: json['agent_EmergencyContactDetails'],
+      agentEmergencyContactDetails:
+          json['agent_EmergencyContactDetails'] as String?,
       agentDescription: json['agent_Description'] as String?,
-      agentResidentialAddress: json['agent_ResidentialAddress'],
+      agentResidentialAddress: json['agent_ResidentialAddress'] as String?,
       appraisalEmailLog: json['appraisalEmailLog'],
       userId: (json['userId'] as num?)?.toInt(),
-      propertyContactId: json['propertyContactId'],
-      isPropertyEnlist: json['isPropertyEnlist'] as bool?,
-      propertyEnlistDate: json['propertyEnlistDate'] == null
-          ? null
-          : DateTime.parse(json['propertyEnlistDate'] as String),
+      propertyContactId: (json['propertyContactId'] as num?)?.toInt(),
+      isPropertyEnlist: json['isPropertyEnlist'],
+      propertyEnlistDate: json['propertyEnlistDate'],
       propertyContactName: json['propertyContactName'] as String?,
-      propertyContactUid: json['propertyContactUID'],
+      propertyContactUid: json['propertyContactUID'] as String?,
       hastoDeletePictures: json['hastoDeletePictures'],
       hastoDeleteFloorPictures: json['hastoDeleteFloorPictures'],
       contactCompanyName: json['contactCompanyName'],
-      primaryContactName: json['primaryContactName'],
+      primaryContactName: json['primaryContactName'] as String?,
       isLeasedSold: json['isLeasedSold'] as bool?,
       suburb: json['suburb'] as String?,
-      ownerAccountFolio: json['ownerAccountFolio'],
+      ownerAccountFolio: json['ownerAccountFolio'] as String?,
       propertyName: json['propertyName'],
       note: json['note'],
       propertyGooglePlacesLocation:
           json['propertyGooglePlacesLocation'] as String?,
-      propertyGooglePlacesLocationLat:
-          json['propertyGooglePlacesLocationLat'] as String?,
+      propertyGooglePlacesLocationLat: json['propertyGooglePlacesLocationLat'],
       propertyGooglePlacesLocationLong:
-          json['propertyGooglePlacesLocationLong'] as String?,
+          json['propertyGooglePlacesLocationLong'],
       getFormatedAddress: json['getFormatedAddress'] as String?,
       state: json['state'] as String?,
       postCode: json['postCode'] as String?,
@@ -91,13 +91,13 @@ PropertyDetailModel _$PropertyDetailModelFromJson(Map<String, dynamic> json) =>
       streetNumber: json['streetNumber'] as String?,
       propertyDescription: json['propertyDescription'] as String?,
       propertyReferenceField: json['propertyReferenceField'],
-      countBedrooms: (json['countBedrooms'] as num?)?.toInt(),
+      countBedrooms: json['countBedrooms'],
       countCarParking: (json['countCarParking'] as num?)?.toInt(),
-      countBathrooms: (json['countBathrooms'] as num?)?.toInt(),
+      countBathrooms: json['countBathrooms'],
       propertyType: json['propertyType'] as String?,
       propertyAgreementType: json['propertyAgreementType'],
       sPropertyType: json['sPropertyType'] as String?,
-      propertyLandAreaL: json['propertyLandAreaL'],
+      propertyLandAreaL: (json['propertyLandAreaL'] as num?)?.toInt(),
       propertyLandAreaTypeList: json['propertyLandAreaTypeList'],
       propertyLandAreaW: (json['propertyLandAreaW'] as num?)?.toInt(),
       propertyBuildingTypeLotplan: json['propertyBuildingTypeLotplan'],
@@ -114,9 +114,7 @@ PropertyDetailModel _$PropertyDetailModelFromJson(Map<String, dynamic> json) =>
       propertyBuildingTypeZoningName: json['propertyBuildingTypeZoningName'],
       propertySoldDate: json['propertySoldDate'],
       propertySoldPrice: json['propertySoldPrice'],
-      createdDate: json['createdDate'] == null
-          ? null
-          : DateTime.parse(json['createdDate'] as String),
+      createdDate: json['createdDate'] as String?,
       isDeleted: json['isDeleted'],
       deletedOn: json['deletedOn'],
       isApproved: json['isApproved'],
@@ -137,21 +135,16 @@ PropertyDetailModel _$PropertyDetailModelFromJson(Map<String, dynamic> json) =>
       propertyBuyerEmail: json['propertyBuyerEmail'],
       propertyBuyerPhone: json['propertyBuyerPhone'],
       propertyBuyerFax: json['propertyBuyerFax'],
-      propertySellerConvyencor: json['propertySellerConvyencor'] == null
-          ? null
-          : PropertyErConvyencor.fromJson(
-              json['propertySellerConvyencor'] as Map<String, dynamic>),
-      propertyBuyerConvyencor: json['propertyBuyerConvyencor'] == null
-          ? null
-          : PropertyErConvyencor.fromJson(
-              json['propertyBuyerConvyencor'] as Map<String, dynamic>),
+      propertyFor: json['propertyFor'],
+      propertySellerConvyencor: json['propertySellerConvyencor'],
+      propertyBuyerConvyencor: json['propertyBuyerConvyencor'],
       floorPlanByte: json['floorPlan_Byte'],
       floorPlanPath: json['floorPlan_Path'],
       listingDetails: (json['listingDetails'] as List<dynamic>?)
           ?.map((e) => ListingDetail.fromJson(e as Map<String, dynamic>))
           .toList(),
       propertyDocuments: json['propertyDocuments'] as List<dynamic>?,
-      agreements: json['agreements'],
+      agreements: json['agreements'] as List<dynamic>?,
       saleAgreement: json['saleAgreement'],
       managementAgreement: json['managementAgreement'],
       tenantAgreement: json['tenantAgreement'],
@@ -234,20 +227,20 @@ PropertyDetailModel _$PropertyDetailModelFromJson(Map<String, dynamic> json) =>
       listAppraisalNotes: json['listAppraisalNotes'],
       listAppraisalFollowup: json['listAppraisalFollowup'],
       appraisalModel: json['appraisalModel'],
-      appraisalModellist: json['appraisalModellist'],
+      appraisalModellist: json['appraisalModellist'] as List<dynamic>?,
       addUpdateOfferModel: json['addUpdateOfferModel'],
       userType: json['userType'],
       agentList: json['agentList'],
-      agentPropertiesModel: (json['agentPropertiesModel'] as List<dynamic>?)
-          ?.map((e) => AgentPropertiesModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      agentPropertiesModel: json['agentPropertiesModel'] as List<dynamic>?,
       isWishlist: json['isWishlist'] as bool?,
       hasSolicitorDetails: json['hasSolicitorDetails'] as bool?,
-      contactlistModel: json['contactlistModel'],
-      contactHistoryList: json['contactHistoryList'],
+      contactlistModel: (json['contactlistModel'] as List<dynamic>?)
+          ?.map((e) => ContactlistModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      contactHistoryList: json['contactHistoryList'] as List<dynamic>?,
       hdnPrimaryContact: json['hdnPrimaryContact'],
-      primaryContactEmail: json['primaryContactEmail'],
-      propertyEnquiryCount: json['propertyEnquiryCount'],
+      primaryContactEmail: json['primaryContactEmail'] as String?,
+      propertyEnquiryCount: (json['propertyEnquiryCount'] as num?)?.toInt(),
       agreementType: json['agreementType'],
       propertyStatus: json['propertyStatus'],
       isNew: (json['isNew'] as num?)?.toInt(),
@@ -263,19 +256,44 @@ PropertyDetailModel _$PropertyDetailModelFromJson(Map<String, dynamic> json) =>
       openHomeuniqueId: json['openHomeuniqueId'],
       eventDate: json['eventDate'],
       openHomeListingModel: json['openHomeListingModel'],
-      addUpdatesPropertyOwnersModel: json['addUpdatesPropertyOwnersModel'],
+      addUpdatesPropertyOwnersModel: json['addUpdatesPropertyOwnersModel'] ==
+              null
+          ? null
+          : AddUpdatesPropertyOwnersModel.fromJson(
+              json['addUpdatesPropertyOwnersModel'] as Map<String, dynamic>),
       addUpdatePropertyAttributesModel:
-          json['addUpdatePropertyAttributesModel'],
+          json['addUpdatePropertyAttributesModel'] == null
+              ? null
+              : AddUpdatePropertyAttributesModel.fromJson(
+                  json['addUpdatePropertyAttributesModel']
+                      as Map<String, dynamic>),
       addUpdatePropertyAdditionalDetailsModel:
-          json['addUpdatePropertyAdditionalDetailsModel'],
+          json['addUpdatePropertyAdditionalDetailsModel'] == null
+              ? null
+              : AddUpdatePropertyAdditionalDetailsModel.fromJson(
+                  json['addUpdatePropertyAdditionalDetailsModel']
+                      as Map<String, dynamic>),
       addUpdatePropertyLegalDetailsModel:
-          json['addUpdatePropertyLegalDetailsModel'],
-      addUpdatePropertyDocumentModel: json['addUpdatePropertyDocumentModel'],
+          json['addUpdatePropertyLegalDetailsModel'] == null
+              ? null
+              : AddUpdatePropertyLegalDetailsModel.fromJson(
+                  json['addUpdatePropertyLegalDetailsModel']
+                      as Map<String, dynamic>),
+      addUpdatePropertyDocumentModel: json['addUpdatePropertyDocumentModel'] ==
+              null
+          ? null
+          : AddUpdatePropertyDocumentModel.fromJson(
+              json['addUpdatePropertyDocumentModel'] as Map<String, dynamic>),
       addContactDetails: json['addContactDetails'],
-      tenantDetails: json['tenantDetails'],
-      tenantFolioDetails: json['tenantFolioDetails'],
-      rentPrice: (json['rentPrice'] as num?)?.toInt(),
-      rentTenure: (json['rentTenure'] as num?)?.toInt(),
+      tenantDetails: (json['tenantDetails'] as List<dynamic>?)
+          ?.map((e) => TenantDetail.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      tenantFolioDetails: json['tenantFolioDetails'] == null
+          ? null
+          : TenantFolioDetails.fromJson(
+              json['tenantFolioDetails'] as Map<String, dynamic>),
+      rentPrice: json['rentPrice'],
+      rentTenure: json['rentTenure'],
       reaUploadId: json['reaUploadId'],
       domainUploadId: json['domainUploadId'],
       listingStatus: json['listingStatus'],
@@ -294,60 +312,741 @@ PropertyDetailModel _$PropertyDetailModelFromJson(Map<String, dynamic> json) =>
       isPropertyLost: json['isPropertyLost'] as bool?,
       followUpDate: json['followUpDate'],
       addContact: json['addContact'] as bool?,
-      updateHistories: json['updateHistories'],
-      ownerFolioDetails: json['ownerFolioDetails'],
+      updateHistories: (json['updateHistories'] as List<dynamic>?)
+          ?.map((e) => UpdateHistory.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      ownerFolioDetails: json['ownerFolioDetails'] == null
+          ? null
+          : OwnerFolioDetails.fromJson(
+              json['ownerFolioDetails'] as Map<String, dynamic>),
       redirectUrl: json['redirectUrl'],
     );
 
-AgentPropertiesModel _$AgentPropertiesModelFromJson(
+Map<String, dynamic> _$PropertyDetailModelToJson(
+        PropertyDetailModel instance) =>
+    <String, dynamic>{
+      'viewType': instance.viewType,
+      'propertyUniqueID': instance.propertyUniqueId,
+      'propertyImageSequence': instance.propertyImageSequence,
+      'propertyFloorImageSequence': instance.propertyFloorImageSequence,
+      'uploadDocumentNameArray': instance.uploadDocumentNameArray,
+      'propertyPics': instance.propertyPics,
+      'contactsList': instance.contactsList,
+      'countofEnquiry': instance.countofEnquiry,
+      'countofopenhome': instance.countofopenhome,
+      'countofsaleoffers': instance.countofsaleoffers,
+      'countofRental': instance.countofRental,
+      'openHomeList': instance.openHomeList,
+      'uploadedImagesName': instance.uploadedImagesName,
+      'floorPics': instance.floorPics,
+      'uploadedFloorImagesName': instance.uploadedFloorImagesName,
+      'pageMode': instance.pageMode,
+      'uploadedDocuments': instance.uploadedDocuments,
+      'uploadedImages': instance.uploadedImages,
+      'location': instance.location,
+      'propertyHeading': instance.propertyHeading,
+      'propertyId': instance.propertyId,
+      'agencyId': instance.agencyId,
+      'agencyLogo': instance.agencyLogo,
+      'agencyBrandColor': instance.agencyBrandColor,
+      'agencyUniqueId': instance.agencyUniqueId,
+      'agencyName': instance.agencyName,
+      'address': instance.address,
+      'agentId': instance.agentId,
+      'agent_Photo_Path': instance.agentPhotoPath,
+      'agent_Name': instance.agentName,
+      'agent_Email': instance.agentEmail,
+      'agent_Title': instance.agentTitle,
+      'agentUniqueId': instance.agentUniqueId,
+      'agent_YearsOfExperience': instance.agentYearsOfExperience,
+      'agent_LicenseExpiry': instance.agentLicenseExpiry,
+      'agent_EmergencyContactName': instance.agentEmergencyContactName,
+      'agent_AreaofWorking': instance.agentAreaofWorking,
+      'agent_Address': instance.agentAddress,
+      'agent_Contact': instance.agentContact,
+      'agent_LicenseNumber': instance.agentLicenseNumber,
+      'agent_RegistraionExpiry': instance.agentRegistraionExpiry,
+      'agent_EmergencyContactDetails': instance.agentEmergencyContactDetails,
+      'agent_Description': instance.agentDescription,
+      'agent_ResidentialAddress': instance.agentResidentialAddress,
+      'appraisalEmailLog': instance.appraisalEmailLog,
+      'userId': instance.userId,
+      'propertyContactId': instance.propertyContactId,
+      'isPropertyEnlist': instance.isPropertyEnlist,
+      'propertyEnlistDate': instance.propertyEnlistDate,
+      'propertyContactName': instance.propertyContactName,
+      'propertyContactUID': instance.propertyContactUid,
+      'hastoDeletePictures': instance.hastoDeletePictures,
+      'hastoDeleteFloorPictures': instance.hastoDeleteFloorPictures,
+      'contactCompanyName': instance.contactCompanyName,
+      'primaryContactName': instance.primaryContactName,
+      'isLeasedSold': instance.isLeasedSold,
+      'suburb': instance.suburb,
+      'ownerAccountFolio': instance.ownerAccountFolio,
+      'propertyName': instance.propertyName,
+      'note': instance.note,
+      'propertyGooglePlacesLocation': instance.propertyGooglePlacesLocation,
+      'propertyGooglePlacesLocationLat':
+          instance.propertyGooglePlacesLocationLat,
+      'propertyGooglePlacesLocationLong':
+          instance.propertyGooglePlacesLocationLong,
+      'getFormatedAddress': instance.getFormatedAddress,
+      'state': instance.state,
+      'postCode': instance.postCode,
+      'propertySaleRental': instance.propertySaleRental,
+      'propertyOccupiedTenanted': instance.propertyOccupiedTenanted,
+      'propertySaleRentalList': instance.propertySaleRentalList,
+      'propertyOccupiedTenantedList': instance.propertyOccupiedTenantedList,
+      'streetName': instance.streetName,
+      'unitNumber': instance.unitNumber,
+      'streetNumber': instance.streetNumber,
+      'propertyDescription': instance.propertyDescription,
+      'propertyReferenceField': instance.propertyReferenceField,
+      'countBedrooms': instance.countBedrooms,
+      'countCarParking': instance.countCarParking,
+      'countBathrooms': instance.countBathrooms,
+      'propertyType': instance.propertyType,
+      'propertyAgreementType': instance.propertyAgreementType,
+      'sPropertyType': instance.sPropertyType,
+      'propertyLandAreaL': instance.propertyLandAreaL,
+      'propertyLandAreaTypeList': instance.propertyLandAreaTypeList,
+      'propertyLandAreaW': instance.propertyLandAreaW,
+      'propertyBuildingTypeLotplan': instance.propertyBuildingTypeLotplan,
+      'propertyBuildingTypeLotplanName':
+          instance.propertyBuildingTypeLotplanName,
+      'propertyBuildingTypeYearBuilt': instance.propertyBuildingTypeYearBuilt,
+      'propertyBuildingTypeYearBuiltName':
+          instance.propertyBuildingTypeYearBuiltName,
+      'propertyBuildingTypeYearBuiltList':
+          instance.propertyBuildingTypeYearBuiltList,
+      'propertyBuildingTypeZoning': instance.propertyBuildingTypeZoning,
+      'propertyBuildingTypeZoningName': instance.propertyBuildingTypeZoningName,
+      'propertySoldDate': instance.propertySoldDate,
+      'propertySoldPrice': instance.propertySoldPrice,
+      'createdDate': instance.createdDate,
+      'isDeleted': instance.isDeleted,
+      'deletedOn': instance.deletedOn,
+      'isApproved': instance.isApproved,
+      'isPropertyScrap': instance.isPropertyScrap,
+      'isRemoveFromList': instance.isRemoveFromList,
+      'isAddedByAffiliate': instance.isAddedByAffiliate,
+      'approvedOn': instance.approvedOn,
+      'propertyPrice': instance.propertyPrice,
+      'propertySellerFirmName': instance.propertySellerFirmName,
+      'propertySellerPrincipalName': instance.propertySellerPrincipalName,
+      'propertySellerAddress': instance.propertySellerAddress,
+      'propertySellerEmail': instance.propertySellerEmail,
+      'propertySellerPhone': instance.propertySellerPhone,
+      'propertySellerFax': instance.propertySellerFax,
+      'propertyBuyerFirmName': instance.propertyBuyerFirmName,
+      'propertyBuyerPrincipalName': instance.propertyBuyerPrincipalName,
+      'propertyBuyerAddress': instance.propertyBuyerAddress,
+      'propertyBuyerEmail': instance.propertyBuyerEmail,
+      'propertyBuyerPhone': instance.propertyBuyerPhone,
+      'propertyBuyerFax': instance.propertyBuyerFax,
+      'propertyFor': instance.propertyFor,
+      'propertySellerConvyencor': instance.propertySellerConvyencor,
+      'propertyBuyerConvyencor': instance.propertyBuyerConvyencor,
+      'floorPlan_Byte': instance.floorPlanByte,
+      'floorPlan_Path': instance.floorPlanPath,
+      'listingDetails': instance.listingDetails,
+      'propertyDocuments': instance.propertyDocuments,
+      'agreements': instance.agreements,
+      'saleAgreement': instance.saleAgreement,
+      'managementAgreement': instance.managementAgreement,
+      'tenantAgreement': instance.tenantAgreement,
+      'verificationProofs': instance.verificationProofs,
+      'propertyPictures': instance.propertyPictures,
+      'externalId1': instance.externalId1,
+      'externalId2': instance.externalId2,
+      'externalId3': instance.externalId3,
+      'webRootPath': instance.webRootPath,
+      'propertyLegalDetail': instance.propertyLegalDetail,
+      'purpose': instance.purpose,
+      'ePurpose': instance.ePurpose,
+      'purposeName': instance.purposeName,
+      'energyRating': instance.energyRating,
+      'energyRatingName': instance.energyRatingName,
+      'countEnsuites': instance.countEnsuites,
+      'countToilets': instance.countToilets,
+      'countGarageSpace': instance.countGarageSpace,
+      'countLivingAreas': instance.countLivingAreas,
+      'balcony': instance.balcony,
+      'deck': instance.deck,
+      'outdoorEntertainmentArea': instance.outdoorEntertainmentArea,
+      'remoteGarage': instance.remoteGarage,
+      'shed': instance.shed,
+      'swimmmingPoolInGround': instance.swimmmingPoolInGround,
+      'coutryard': instance.coutryard,
+      'fullyFenced': instance.fullyFenced,
+      'outsideSpa': instance.outsideSpa,
+      'secureParking': instance.secureParking,
+      'swimmmingPoolAboveGround': instance.swimmmingPoolAboveGround,
+      'tennisCourt': instance.tennisCourt,
+      'alarmSystem': instance.alarmSystem,
+      'builtInWardrobes': instance.builtInWardrobes,
+      'ductedVacuumSystem': instance.ductedVacuumSystem,
+      'gym': instance.gym,
+      'intercom': instance.intercom,
+      'rumpusRoom': instance.rumpusRoom,
+      'workshop': instance.workshop,
+      'broadbandInternetAvailable': instance.broadbandInternetAvailable,
+      'dishwasher': instance.dishwasher,
+      'floorboards': instance.floorboards,
+      'insideSpa': instance.insideSpa,
+      'payTVAccess': instance.payTvAccess,
+      'study': instance.study,
+      'airConditioning': instance.airConditioning,
+      'ductedHeating': instance.ductedHeating,
+      'gasHeating': instance.gasHeating,
+      'openFireplace': instance.openFireplace,
+      'splitSystemAirConditioning': instance.splitSystemAirConditioning,
+      'ductedCooling': instance.ductedCooling,
+      'evaporativeCooling': instance.evaporativeCooling,
+      'hydraulicHeating': instance.hydraulicHeating,
+      'reverseCycleAirConditioning': instance.reverseCycleAirConditioning,
+      'splitSystemHeating': instance.splitSystemHeating,
+      'greyWaterSystem': instance.greyWaterSystem,
+      'solarPanels': instance.solarPanels,
+      'solarHotWater': instance.solarHotWater,
+      'waterTank': instance.waterTank,
+      'showBasicDetails': instance.showBasicDetails,
+      'propertyArea': instance.propertyArea,
+      'secondaryContacts': instance.secondaryContacts,
+      'imagesNameArray': instance.imagesNameArray,
+      'floorImagesNameArray': instance.floorImagesNameArray,
+      'propertyNotes': instance.propertyNotes,
+      'cmaReportPath': instance.cmaReportPath,
+      'appraisalUniqueId': instance.appraisalUniqueId,
+      'isDraft': instance.isDraft,
+      'recommededPriceFrom': instance.recommededPriceFrom,
+      'recommededPriceTo': instance.recommededPriceTo,
+      'cmaReportPrice': instance.cmaReportPrice,
+      'propertyStatusStage': instance.propertyStatusStage,
+      'affiliateId': instance.affiliateId,
+      'leadOnProgress': instance.leadOnProgress,
+      'uploadOnPM': instance.uploadOnPm,
+      'inspectionDue': instance.inspectionDue,
+      'inspectionFrequency': instance.inspectionFrequency,
+      'inspectionFrequencyType': instance.inspectionFrequencyType,
+      'listAppraisalNotes': instance.listAppraisalNotes,
+      'listAppraisalFollowup': instance.listAppraisalFollowup,
+      'appraisalModel': instance.appraisalModel,
+      'appraisalModellist': instance.appraisalModellist,
+      'addUpdateOfferModel': instance.addUpdateOfferModel,
+      'userType': instance.userType,
+      'agentList': instance.agentList,
+      'agentPropertiesModel': instance.agentPropertiesModel,
+      'isWishlist': instance.isWishlist,
+      'hasSolicitorDetails': instance.hasSolicitorDetails,
+      'contactlistModel': instance.contactlistModel,
+      'contactHistoryList': instance.contactHistoryList,
+      'hdnPrimaryContact': instance.hdnPrimaryContact,
+      'primaryContactEmail': instance.primaryContactEmail,
+      'propertyEnquiryCount': instance.propertyEnquiryCount,
+      'agreementType': instance.agreementType,
+      'propertyStatus': instance.propertyStatus,
+      'isNew': instance.isNew,
+      'isDualAgent': instance.isDualAgent,
+      'leadAgent': instance.leadAgent,
+      'dualAgent': instance.dualAgent,
+      'dualAgentName': instance.dualAgentName,
+      'showText': instance.showText,
+      'isShowPrice': instance.isShowPrice,
+      'isOpenHome': instance.isOpenHome,
+      'startTime': instance.startTime,
+      'endTime': instance.endTime,
+      'openHomeuniqueId': instance.openHomeuniqueId,
+      'eventDate': instance.eventDate,
+      'openHomeListingModel': instance.openHomeListingModel,
+      'addUpdatesPropertyOwnersModel': instance.addUpdatesPropertyOwnersModel,
+      'addUpdatePropertyAttributesModel':
+          instance.addUpdatePropertyAttributesModel,
+      'addUpdatePropertyAdditionalDetailsModel':
+          instance.addUpdatePropertyAdditionalDetailsModel,
+      'addUpdatePropertyLegalDetailsModel':
+          instance.addUpdatePropertyLegalDetailsModel,
+      'addUpdatePropertyDocumentModel': instance.addUpdatePropertyDocumentModel,
+      'addContactDetails': instance.addContactDetails,
+      'tenantDetails': instance.tenantDetails,
+      'tenantFolioDetails': instance.tenantFolioDetails,
+      'rentPrice': instance.rentPrice,
+      'rentTenure': instance.rentTenure,
+      'reaUploadId': instance.reaUploadId,
+      'domainUploadId': instance.domainUploadId,
+      'listingStatus': instance.listingStatus,
+      'isCommercial': instance.isCommercial,
+      'saveUpload': instance.saveUpload,
+      'isWaitingForApproval': instance.isWaitingForApproval,
+      'waitingOperation': instance.waitingOperation,
+      'waitingPortalsToUpload': instance.waitingPortalsToUpload,
+      'isPrincipleLogged': instance.isPrincipleLogged,
+      'isAppraisalAdded': instance.isAppraisalAdded,
+      'isAgreementuploaded': instance.isAgreementuploaded,
+      'isCOSUploaded': instance.isCosUploaded,
+      'isListedProperty': instance.isListedProperty,
+      'saleLeaseAgreementUploaded': instance.saleLeaseAgreementUploaded,
+      'leasedSoldProperty': instance.leasedSoldProperty,
+      'isPropertyLost': instance.isPropertyLost,
+      'followUpDate': instance.followUpDate,
+      'addContact': instance.addContact,
+      'updateHistories': instance.updateHistories,
+      'ownerFolioDetails': instance.ownerFolioDetails,
+      'redirectUrl': instance.redirectUrl,
+    };
+
+AddUpdatePropertyAdditionalDetailsModel
+    _$AddUpdatePropertyAdditionalDetailsModelFromJson(
+            Map<String, dynamic> json) =>
+        AddUpdatePropertyAdditionalDetailsModel(
+          propertyImageSequence: json['propertyImageSequence'],
+          propertyFloorImageSequence: json['propertyFloorImageSequence'],
+          propertyUniqueId: json['propertyUniqueID'] as String?,
+          propertyHeading: json['propertyHeading'] as String?,
+          propertyBuildingTypeZoning:
+              json['propertyBuildingTypeZoning'] as String?,
+          propertyLandAreaL: (json['propertyLandAreaL'] as num?)?.toInt(),
+          propertyLandAreaW: (json['propertyLandAreaW'] as num?)?.toInt(),
+          propertyLandAreaTypeList: json['propertyLandAreaTypeList'],
+          propertyDescription: json['propertyDescription'] as String?,
+          propertyPics: (json['propertyPics'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList(),
+          floorPics: json['floorPics'] as List<dynamic>?,
+          hastoDeletePictures: json['hastoDeletePictures'],
+          hastoDeleteFloorPictures: json['hastoDeleteFloorPictures'],
+          uploadedImages: json['uploadedImages'],
+          imagesNameArray: json['imagesNameArray'],
+          floorImagesNameArray: json['floorImagesNameArray'],
+          uploadedFloorImagesName: json['uploadedFloorImagesName'],
+          uploadedImagesName: json['uploadedImagesName'],
+        );
+
+Map<String, dynamic> _$AddUpdatePropertyAdditionalDetailsModelToJson(
+        AddUpdatePropertyAdditionalDetailsModel instance) =>
+    <String, dynamic>{
+      'propertyImageSequence': instance.propertyImageSequence,
+      'propertyFloorImageSequence': instance.propertyFloorImageSequence,
+      'propertyUniqueID': instance.propertyUniqueId,
+      'propertyHeading': instance.propertyHeading,
+      'propertyBuildingTypeZoning': instance.propertyBuildingTypeZoning,
+      'propertyLandAreaL': instance.propertyLandAreaL,
+      'propertyLandAreaW': instance.propertyLandAreaW,
+      'propertyLandAreaTypeList': instance.propertyLandAreaTypeList,
+      'propertyDescription': instance.propertyDescription,
+      'propertyPics': instance.propertyPics,
+      'floorPics': instance.floorPics,
+      'hastoDeletePictures': instance.hastoDeletePictures,
+      'hastoDeleteFloorPictures': instance.hastoDeleteFloorPictures,
+      'uploadedImages': instance.uploadedImages,
+      'imagesNameArray': instance.imagesNameArray,
+      'floorImagesNameArray': instance.floorImagesNameArray,
+      'uploadedFloorImagesName': instance.uploadedFloorImagesName,
+      'uploadedImagesName': instance.uploadedImagesName,
+    };
+
+AddUpdatePropertyAttributesModel _$AddUpdatePropertyAttributesModelFromJson(
         Map<String, dynamic> json) =>
-    AgentPropertiesModel(
-      propertyUniqueId: json['propertyUniqueId'] as String?,
-      propertyImage: json['propertyImage'] as String?,
-      propertyPrice: json['propertyPrice'],
-      enlistDate: json['enlistDate'] == null
-          ? null
-          : DateTime.parse(json['enlistDate'] as String),
-      isWishlist: json['isWishlist'] as bool?,
+    AddUpdatePropertyAttributesModel(
+      propertyUniqueId: json['propertyUniqueID'] as String?,
+      countBedrooms: json['countBedrooms'],
+      countCarParking: (json['countCarParking'] as num?)?.toInt(),
+      countBathrooms: json['countBathrooms'],
+      countEnsuites: (json['countEnsuites'] as num?)?.toInt(),
+      countToilets: (json['countToilets'] as num?)?.toInt(),
+      countGarageSpace: (json['countGarageSpace'] as num?)?.toInt(),
+      countLivingAreas: (json['countLivingAreas'] as num?)?.toInt(),
+      balcony: json['balcony'] as bool?,
+      deck: json['deck'] as bool?,
+      outdoorEntertainmentArea: json['outdoorEntertainmentArea'] as bool?,
+      remoteGarage: json['remoteGarage'] as bool?,
+      shed: json['shed'] as bool?,
+      swimmmingPoolInGround: json['swimmmingPoolInGround'] as bool?,
+      coutryard: json['coutryard'] as bool?,
+      fullyFenced: json['fullyFenced'] as bool?,
+      outsideSpa: json['outsideSpa'] as bool?,
+      secureParking: json['secureParking'] as bool?,
+      swimmmingPoolAboveGround: json['swimmmingPoolAboveGround'] as bool?,
+      tennisCourt: json['tennisCourt'] as bool?,
+      alarmSystem: json['alarmSystem'] as bool?,
+      builtInWardrobes: json['builtInWardrobes'] as bool?,
+      ductedVacuumSystem: json['ductedVacuumSystem'] as bool?,
+      gym: json['gym'] as bool?,
+      intercom: json['intercom'] as bool?,
+      rumpusRoom: json['rumpusRoom'] as bool?,
+      workshop: json['workshop'] as bool?,
+      broadbandInternetAvailable: json['broadbandInternetAvailable'] as bool?,
+      dishwasher: json['dishwasher'] as bool?,
+      floorboards: json['floorboards'] as bool?,
+      insideSpa: json['insideSpa'] as bool?,
+      payTvAccess: json['payTVAccess'] as bool?,
+      study: json['study'] as bool?,
+      airConditioning: json['airConditioning'] as bool?,
+      ductedHeating: json['ductedHeating'] as bool?,
+      gasHeating: json['gasHeating'] as bool?,
+      openFireplace: json['openFireplace'] as bool?,
+      splitSystemAirConditioning: json['splitSystemAirConditioning'] as bool?,
+      ductedCooling: json['ductedCooling'] as bool?,
+      evaporativeCooling: json['evaporativeCooling'] as bool?,
+      hydraulicHeating: json['hydraulicHeating'] as bool?,
+      reverseCycleAirConditioning: json['reverseCycleAirConditioning'] as bool?,
+      splitSystemHeating: json['splitSystemHeating'] as bool?,
+      greyWaterSystem: json['greyWaterSystem'] as bool?,
+      solarPanels: json['solarPanels'] as bool?,
+      solarHotWater: json['solarHotWater'] as bool?,
+      waterTank: json['waterTank'] as bool?,
+      showBasicDetails: json['showBasicDetails'] as bool?,
     );
+
+Map<String, dynamic> _$AddUpdatePropertyAttributesModelToJson(
+        AddUpdatePropertyAttributesModel instance) =>
+    <String, dynamic>{
+      'propertyUniqueID': instance.propertyUniqueId,
+      'countBedrooms': instance.countBedrooms,
+      'countCarParking': instance.countCarParking,
+      'countBathrooms': instance.countBathrooms,
+      'countEnsuites': instance.countEnsuites,
+      'countToilets': instance.countToilets,
+      'countGarageSpace': instance.countGarageSpace,
+      'countLivingAreas': instance.countLivingAreas,
+      'balcony': instance.balcony,
+      'deck': instance.deck,
+      'outdoorEntertainmentArea': instance.outdoorEntertainmentArea,
+      'remoteGarage': instance.remoteGarage,
+      'shed': instance.shed,
+      'swimmmingPoolInGround': instance.swimmmingPoolInGround,
+      'coutryard': instance.coutryard,
+      'fullyFenced': instance.fullyFenced,
+      'outsideSpa': instance.outsideSpa,
+      'secureParking': instance.secureParking,
+      'swimmmingPoolAboveGround': instance.swimmmingPoolAboveGround,
+      'tennisCourt': instance.tennisCourt,
+      'alarmSystem': instance.alarmSystem,
+      'builtInWardrobes': instance.builtInWardrobes,
+      'ductedVacuumSystem': instance.ductedVacuumSystem,
+      'gym': instance.gym,
+      'intercom': instance.intercom,
+      'rumpusRoom': instance.rumpusRoom,
+      'workshop': instance.workshop,
+      'broadbandInternetAvailable': instance.broadbandInternetAvailable,
+      'dishwasher': instance.dishwasher,
+      'floorboards': instance.floorboards,
+      'insideSpa': instance.insideSpa,
+      'payTVAccess': instance.payTvAccess,
+      'study': instance.study,
+      'airConditioning': instance.airConditioning,
+      'ductedHeating': instance.ductedHeating,
+      'gasHeating': instance.gasHeating,
+      'openFireplace': instance.openFireplace,
+      'splitSystemAirConditioning': instance.splitSystemAirConditioning,
+      'ductedCooling': instance.ductedCooling,
+      'evaporativeCooling': instance.evaporativeCooling,
+      'hydraulicHeating': instance.hydraulicHeating,
+      'reverseCycleAirConditioning': instance.reverseCycleAirConditioning,
+      'splitSystemHeating': instance.splitSystemHeating,
+      'greyWaterSystem': instance.greyWaterSystem,
+      'solarPanels': instance.solarPanels,
+      'solarHotWater': instance.solarHotWater,
+      'waterTank': instance.waterTank,
+      'showBasicDetails': instance.showBasicDetails,
+    };
+
+AddUpdatePropertyDocumentModel _$AddUpdatePropertyDocumentModelFromJson(
+        Map<String, dynamic> json) =>
+    AddUpdatePropertyDocumentModel(
+      propertyId: (json['propertyId'] as num?)?.toInt(),
+      propertyDocuments: json['propertyDocuments'] as List<dynamic>?,
+    );
+
+Map<String, dynamic> _$AddUpdatePropertyDocumentModelToJson(
+        AddUpdatePropertyDocumentModel instance) =>
+    <String, dynamic>{
+      'propertyId': instance.propertyId,
+      'propertyDocuments': instance.propertyDocuments,
+    };
+
+AddUpdatePropertyLegalDetailsModel _$AddUpdatePropertyLegalDetailsModelFromJson(
+        Map<String, dynamic> json) =>
+    AddUpdatePropertyLegalDetailsModel(
+      propertyUniqueId: json['propertyUniqueID'] as String?,
+      propertySellerFirmName: json['propertySellerFirmName'],
+      propertySellerPrincipalName: json['propertySellerPrincipalName'],
+      propertySellerEmail: json['propertySellerEmail'],
+      propertySellerPhone: json['propertySellerPhone'],
+      propertySellerFax: json['propertySellerFax'],
+      propertySellerAddress: json['propertySellerAddress'],
+      propertyBuyerFirmName: json['propertyBuyerFirmName'],
+      propertyBuyerPrincipalName: json['propertyBuyerPrincipalName'],
+      propertyBuyerEmail: json['propertyBuyerEmail'],
+      propertyBuyerPhone: json['propertyBuyerPhone'],
+      propertyBuyerFax: json['propertyBuyerFax'],
+      propertyBuyerAddress: json['propertyBuyerAddress'],
+      propertySoldDate: json['propertySoldDate'],
+      propertySoldPrice: json['propertySoldPrice'],
+    );
+
+Map<String, dynamic> _$AddUpdatePropertyLegalDetailsModelToJson(
+        AddUpdatePropertyLegalDetailsModel instance) =>
+    <String, dynamic>{
+      'propertyUniqueID': instance.propertyUniqueId,
+      'propertySellerFirmName': instance.propertySellerFirmName,
+      'propertySellerPrincipalName': instance.propertySellerPrincipalName,
+      'propertySellerEmail': instance.propertySellerEmail,
+      'propertySellerPhone': instance.propertySellerPhone,
+      'propertySellerFax': instance.propertySellerFax,
+      'propertySellerAddress': instance.propertySellerAddress,
+      'propertyBuyerFirmName': instance.propertyBuyerFirmName,
+      'propertyBuyerPrincipalName': instance.propertyBuyerPrincipalName,
+      'propertyBuyerEmail': instance.propertyBuyerEmail,
+      'propertyBuyerPhone': instance.propertyBuyerPhone,
+      'propertyBuyerFax': instance.propertyBuyerFax,
+      'propertyBuyerAddress': instance.propertyBuyerAddress,
+      'propertySoldDate': instance.propertySoldDate,
+      'propertySoldPrice': instance.propertySoldPrice,
+    };
+
+AddUpdatesPropertyOwnersModel _$AddUpdatesPropertyOwnersModelFromJson(
+        Map<String, dynamic> json) =>
+    AddUpdatesPropertyOwnersModel(
+      propertyUniqueId: json['propertyUniqueID'] as String?,
+      propertyContactName: json['propertyContactName'],
+      hdnPrimaryContact: json['hdnPrimaryContact'],
+      contactlistModel: json['contactlistModel'] as List<dynamic>?,
+      contactlistModelView: (json['contactlistModelView'] as List<dynamic>?)
+          ?.map((e) => ContactlistModelView.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      contactHistoryList: json['contactHistoryList'] as List<dynamic>?,
+      isUpdateOwner: json['isUpdateOwner'] as bool?,
+      ismanageOwnership: json['ismanageOwnership'] as bool?,
+    );
+
+Map<String, dynamic> _$AddUpdatesPropertyOwnersModelToJson(
+        AddUpdatesPropertyOwnersModel instance) =>
+    <String, dynamic>{
+      'propertyUniqueID': instance.propertyUniqueId,
+      'propertyContactName': instance.propertyContactName,
+      'hdnPrimaryContact': instance.hdnPrimaryContact,
+      'contactlistModel': instance.contactlistModel,
+      'contactlistModelView': instance.contactlistModelView,
+      'contactHistoryList': instance.contactHistoryList,
+      'isUpdateOwner': instance.isUpdateOwner,
+      'ismanageOwnership': instance.ismanageOwnership,
+    };
+
+ContactlistModelView _$ContactlistModelViewFromJson(
+        Map<String, dynamic> json) =>
+    ContactlistModelView(
+      ownerId: (json['ownerId'] as num?)?.toInt(),
+      contactId: (json['contactId'] as num?)?.toInt(),
+      contactUId: json['contactUId'],
+      isPrimary: json['isPrimary'] as bool?,
+      contactName: json['contactName'] as String?,
+      contactEmail: json['contactEmail'] as String?,
+      name: json['name'] as String?,
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      phone: json['phone'] as String?,
+      fromDate: json['fromDate'] as String?,
+      toDate: json['toDate'],
+      title: json['title'],
+      contactType: json['contactType'],
+      address: json['address'],
+      isVerificationLinkSend: json['isVerificationLinkSend'] as bool?,
+      abn: json['abn'],
+      companyName: json['companyName'],
+      typeIam: json['typeIAM'] as String?,
+      verificationProofs: json['verificationProofs'],
+    );
+
+Map<String, dynamic> _$ContactlistModelViewToJson(
+        ContactlistModelView instance) =>
+    <String, dynamic>{
+      'ownerId': instance.ownerId,
+      'contactId': instance.contactId,
+      'contactUId': instance.contactUId,
+      'isPrimary': instance.isPrimary,
+      'contactName': instance.contactName,
+      'contactEmail': instance.contactEmail,
+      'name': instance.name,
+      'firstName': instance.firstName,
+      'lastName': instance.lastName,
+      'phone': instance.phone,
+      'fromDate': instance.fromDate,
+      'toDate': instance.toDate,
+      'title': instance.title,
+      'contactType': instance.contactType,
+      'address': instance.address,
+      'isVerificationLinkSend': instance.isVerificationLinkSend,
+      'abn': instance.abn,
+      'companyName': instance.companyName,
+      'typeIAM': instance.typeIam,
+      'verificationProofs': instance.verificationProofs,
+    };
+
+ContactlistModel _$ContactlistModelFromJson(Map<String, dynamic> json) =>
+    ContactlistModel(
+      ownerId: (json['ownerId'] as num?)?.toInt(),
+      contactId: (json['contactId'] as num?)?.toInt(),
+      contactUId: json['contactUId'] as String?,
+      isPrimary: json['isPrimary'] as bool?,
+      contactName: json['contactName'] as String?,
+      contactEmail: json['contactEmail'] as String?,
+      name: json['name'] as String?,
+      firstName: json['firstName'] as String?,
+      lastName: json['lastName'] as String?,
+      phone: json['phone'] as String?,
+      fromDate: json['fromDate'],
+      toDate: json['toDate'],
+      title: (json['title'] as num?)?.toInt(),
+      contactType: (json['contactType'] as num?)?.toInt(),
+      address: json['address'],
+      isVerificationLinkSend: json['isVerificationLinkSend'] as bool?,
+      abn: json['abn'],
+      companyName: json['companyName'],
+      typeIam: json['typeIAM'] as String?,
+      verificationProofs: json['verificationProofs'],
+    );
+
+Map<String, dynamic> _$ContactlistModelToJson(ContactlistModel instance) =>
+    <String, dynamic>{
+      'ownerId': instance.ownerId,
+      'contactId': instance.contactId,
+      'contactUId': instance.contactUId,
+      'isPrimary': instance.isPrimary,
+      'contactName': instance.contactName,
+      'contactEmail': instance.contactEmail,
+      'name': instance.name,
+      'firstName': instance.firstName,
+      'lastName': instance.lastName,
+      'phone': instance.phone,
+      'fromDate': instance.fromDate,
+      'toDate': instance.toDate,
+      'title': instance.title,
+      'contactType': instance.contactType,
+      'address': instance.address,
+      'isVerificationLinkSend': instance.isVerificationLinkSend,
+      'abn': instance.abn,
+      'companyName': instance.companyName,
+      'typeIAM': instance.typeIam,
+      'verificationProofs': instance.verificationProofs,
+    };
+
+ContactsList _$ContactsListFromJson(Map<String, dynamic> json) => ContactsList(
+      name: json['name'] as String?,
+      uniqueId: json['uniqueID'] as String?,
+    );
+
+Map<String, dynamic> _$ContactsListToJson(ContactsList instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'uniqueID': instance.uniqueId,
+    };
 
 ListingDetail _$ListingDetailFromJson(Map<String, dynamic> json) =>
     ListingDetail(
       listingId: (json['listingId'] as num?)?.toInt(),
       propertySaleRental: (json['propertySaleRental'] as num?)?.toInt(),
       propertyId: (json['propertyId'] as num?)?.toInt(),
-      reaUploadId: json['reaUploadId'] as String?,
+      reaUploadId: json['reaUploadId'],
       domainUploadId: json['domainUploadId'],
-      listingStatus: (json['listingStatus'] as num?)?.toInt(),
-      propertyPrice: json['propertyPrice'],
+      listingStatus: json['listingStatus'],
+      propertyPrice: (json['propertyPrice'] as num?)?.toInt(),
       isCommercial: json['isCommercial'] as bool?,
       propertyAgreementType: json['propertyAgreementType'],
       isNew: (json['isNew'] as num?)?.toInt(),
       dualAgent: json['dualAgent'],
       isDualAgent: json['isDualAgent'] as bool?,
       isShowPrice: json['isShowPrice'] as bool?,
-      showText: json['showText'] as String?,
+      showText: json['showText'],
       address: json['address'] as String?,
       propertyUId: json['propertyUId'] as String?,
       agentName: json['agentName'] as String?,
       dualAgentName: json['dualAgentName'] as String?,
       sListingStatus: json['sListingStatus'] as String?,
       sAgreementType: json['sAgreementType'] as String?,
-      rent: (json['rent'] as num?)?.toInt(),
-      dateAvailable: json['dateAvailable'] == null
-          ? null
-          : DateTime.parse(json['dateAvailable'] as String),
+      rent: json['rent'],
+      dateAvailable: json['dateAvailable'],
       listingAgentId: (json['listingAgentId'] as num?)?.toInt(),
       listingAgentName: json['listingAgentName'] as String?,
       enquiryCount: (json['enquiryCount'] as num?)?.toInt(),
-      createdAt: json['createdAt'] == null
-          ? null
-          : DateTime.parse(json['createdAt'] as String),
-      reaUploadedDate: json['reaUploadedDate'] == null
-          ? null
-          : DateTime.parse(json['reaUploadedDate'] as String),
+      createdAt: json['createdAt'] as String?,
+      reaUploadedDate: json['reaUploadedDate'],
       domainUploadedDate: json['domainUploadedDate'],
+      heading: json['heading'] as String?,
+      propertyPic: json['propertyPic'] as String?,
     );
+
+Map<String, dynamic> _$ListingDetailToJson(ListingDetail instance) =>
+    <String, dynamic>{
+      'listingId': instance.listingId,
+      'propertySaleRental': instance.propertySaleRental,
+      'propertyId': instance.propertyId,
+      'reaUploadId': instance.reaUploadId,
+      'domainUploadId': instance.domainUploadId,
+      'listingStatus': instance.listingStatus,
+      'propertyPrice': instance.propertyPrice,
+      'isCommercial': instance.isCommercial,
+      'propertyAgreementType': instance.propertyAgreementType,
+      'isNew': instance.isNew,
+      'dualAgent': instance.dualAgent,
+      'isDualAgent': instance.isDualAgent,
+      'isShowPrice': instance.isShowPrice,
+      'showText': instance.showText,
+      'address': instance.address,
+      'propertyUId': instance.propertyUId,
+      'agentName': instance.agentName,
+      'dualAgentName': instance.dualAgentName,
+      'sListingStatus': instance.sListingStatus,
+      'sAgreementType': instance.sAgreementType,
+      'rent': instance.rent,
+      'dateAvailable': instance.dateAvailable,
+      'listingAgentId': instance.listingAgentId,
+      'listingAgentName': instance.listingAgentName,
+      'enquiryCount': instance.enquiryCount,
+      'createdAt': instance.createdAt,
+      'reaUploadedDate': instance.reaUploadedDate,
+      'domainUploadedDate': instance.domainUploadedDate,
+      'heading': instance.heading,
+      'propertyPic': instance.propertyPic,
+    };
+
+OwnerFolioDetails _$OwnerFolioDetailsFromJson(Map<String, dynamic> json) =>
+    OwnerFolioDetails(
+      id: (json['id'] as num?)?.toInt(),
+      ownerAccountFolio: json['ownerAccountFolio'] as String?,
+      isActive: json['isActive'] as bool?,
+      propertyId: (json['propertyId'] as num?)?.toInt(),
+      withholdAmount: (json['withholdAmount'] as num?)?.toInt(),
+      withholdReason: json['withholdReason'],
+      disbursementIntervel: (json['disbursementIntervel'] as num?)?.toInt(),
+      totalMoneyLimit: json['totalMoneyLimit'],
+      balanceLimit: json['balanceLimit'],
+      lastPaymentDate: json['lastPaymentDate'],
+      nextDisbursementDate: json['nextDisbursementDate'],
+      clientAccess: json['clientAccess'] as bool?,
+      balance: (json['balance'] as num?)?.toInt(),
+      fees: json['fees'] as List<dynamic>?,
+      paymentMethods: json['paymentMethods'] as List<dynamic>?,
+    );
+
+Map<String, dynamic> _$OwnerFolioDetailsToJson(OwnerFolioDetails instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'ownerAccountFolio': instance.ownerAccountFolio,
+      'isActive': instance.isActive,
+      'propertyId': instance.propertyId,
+      'withholdAmount': instance.withholdAmount,
+      'withholdReason': instance.withholdReason,
+      'disbursementIntervel': instance.disbursementIntervel,
+      'totalMoneyLimit': instance.totalMoneyLimit,
+      'balanceLimit': instance.balanceLimit,
+      'lastPaymentDate': instance.lastPaymentDate,
+      'nextDisbursementDate': instance.nextDisbursementDate,
+      'clientAccess': instance.clientAccess,
+      'balance': instance.balance,
+      'fees': instance.fees,
+      'paymentMethods': instance.paymentMethods,
+    };
 
 PropertyBuildingTypeYearBuiltList _$PropertyBuildingTypeYearBuiltListFromJson(
         Map<String, dynamic> json) =>
@@ -359,25 +1058,21 @@ PropertyBuildingTypeYearBuiltList _$PropertyBuildingTypeYearBuiltListFromJson(
       value: json['value'] as String?,
     );
 
-PropertyErConvyencor _$PropertyErConvyencorFromJson(
-        Map<String, dynamic> json) =>
-    PropertyErConvyencor(
-      convyencorId: (json['convyencorId'] as num?)?.toInt(),
-      firmName: json['firmName'],
-      principalName: json['principalName'],
-      address: json['address'],
-      email: json['email'],
-      phone: json['phone'],
-      fax: json['fax'],
-    );
+Map<String, dynamic> _$PropertyBuildingTypeYearBuiltListToJson(
+        PropertyBuildingTypeYearBuiltList instance) =>
+    <String, dynamic>{
+      'disabled': instance.disabled,
+      'group': instance.group,
+      'selected': instance.selected,
+      'text': instance.text,
+      'value': instance.value,
+    };
 
 PropertyPicture _$PropertyPictureFromJson(Map<String, dynamic> json) =>
     PropertyPicture(
       picId: (json['picId'] as num?)?.toInt(),
       picPath: json['picPath'] as String?,
-      createdDate: json['createdDate'] == null
-          ? null
-          : DateTime.parse(json['createdDate'] as String),
+      createdDate: json['createdDate'] as String?,
       propertyId: (json['propertyId'] as num?)?.toInt(),
       isEnabled: json['isEnabled'],
       picName: json['picName'],
@@ -388,3 +1083,175 @@ PropertyPicture _$PropertyPictureFromJson(Map<String, dynamic> json) =>
       type: (json['type'] as num?)?.toInt(),
       picNum: (json['picNum'] as num?)?.toInt(),
     );
+
+Map<String, dynamic> _$PropertyPictureToJson(PropertyPicture instance) =>
+    <String, dynamic>{
+      'picId': instance.picId,
+      'picPath': instance.picPath,
+      'createdDate': instance.createdDate,
+      'propertyId': instance.propertyId,
+      'isEnabled': instance.isEnabled,
+      'picName': instance.picName,
+      'picDesc': instance.picDesc,
+      'picAltText': instance.picAltText,
+      'isDeleted': instance.isDeleted,
+      'deletedOn': instance.deletedOn,
+      'type': instance.type,
+      'picNum': instance.picNum,
+    };
+
+TenantDetail _$TenantDetailFromJson(Map<String, dynamic> json) => TenantDetail(
+      tenantId: (json['tenantId'] as num?)?.toInt(),
+      primaryTenant: json['primaryTenant'] as bool?,
+      userId: (json['userId'] as num?)?.toInt(),
+      applicantUniqueId: json['applicantUniqueId'],
+      rentApplicationId: json['rentApplicationId'],
+      propertyId: (json['propertyId'] as num?)?.toInt(),
+      contactId: (json['contactId'] as num?)?.toInt(),
+      isUserverified: json['isUserverified'] as bool?,
+      contactUId: json['contactUId'] as String?,
+      tenantFname: json['tenantFname'] as String?,
+      tenantLname: json['tenantLname'] as String?,
+      tenantAddress: json['tenantAddress'],
+      tenantMobile: json['tenantMobile'] as String?,
+      tenantEmail: json['tenantEmail'] as String?,
+      getFullName: json['getFullName'] as String?,
+      viewType: (json['viewType'] as num?)?.toInt(),
+      agencyId: json['agencyId'],
+      agentId: json['agentId'],
+      tenantFolioDetails: json['tenantFolioDetails'] == null
+          ? null
+          : TenantFolioDetails.fromJson(
+              json['tenantFolioDetails'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$TenantDetailToJson(TenantDetail instance) =>
+    <String, dynamic>{
+      'tenantId': instance.tenantId,
+      'primaryTenant': instance.primaryTenant,
+      'userId': instance.userId,
+      'applicantUniqueId': instance.applicantUniqueId,
+      'rentApplicationId': instance.rentApplicationId,
+      'propertyId': instance.propertyId,
+      'contactId': instance.contactId,
+      'isUserverified': instance.isUserverified,
+      'contactUId': instance.contactUId,
+      'tenantFname': instance.tenantFname,
+      'tenantLname': instance.tenantLname,
+      'tenantAddress': instance.tenantAddress,
+      'tenantMobile': instance.tenantMobile,
+      'tenantEmail': instance.tenantEmail,
+      'getFullName': instance.getFullName,
+      'viewType': instance.viewType,
+      'agencyId': instance.agencyId,
+      'agentId': instance.agentId,
+      'tenantFolioDetails': instance.tenantFolioDetails,
+    };
+
+TenantFolioDetails _$TenantFolioDetailsFromJson(Map<String, dynamic> json) =>
+    TenantFolioDetails(
+      id: (json['id'] as num?)?.toInt(),
+      propertyAddress: json['propertyAddress'],
+      propertyId: (json['propertyId'] as num?)?.toInt(),
+      tenantChecksum: (json['tenantChecksum'] as num?)?.toInt(),
+      rent: (json['rent'] as num?)?.toInt(),
+      period: json['period'],
+      rentIncludeTax: json['rentIncludeTax'] as bool?,
+      bondAmount: (json['bondAmount'] as num?)?.toInt(),
+      bondInTrust: (json['bondInTrust'] as num?)?.toInt(),
+      moveIn: json['moveIn'],
+      moveOut: json['moveOut'],
+      agreementStart: json['agreementStart'],
+      agreementEnd: json['agreementEnd'],
+      datePaidFrom: json['datePaidFrom'],
+      datePaidTo: json['datePaidTo'],
+      deposited: (json['deposited'] as num?)?.toInt(),
+      balance: (json['balance'] as num?)?.toInt(),
+      agreementTerm: json['agreementTerm'],
+      isExtenant: json['isExtenant'] as bool?,
+      vacatedDate: json['vacatedDate'],
+      rentReviewFrequency: json['rentReviewFrequency'],
+      isCommercial: json['isCommercial'] as bool?,
+      abn: json['abn'],
+      tenantAccountFolio: json['tenantAccountFolio'] as String?,
+      tenancyType: json['tenancyType'],
+      rentInvoice: json['rentInvoice'] as bool?,
+      invoiceDaysInAdvance: json['invoiceDaysInAdvance'],
+      partPayment: (json['partPayment'] as num?)?.toInt(),
+      newTenant: json['newTenant'],
+      nextRentDate: json['nextRentDate'],
+      nextRent: json['nextRent'],
+      nextRentNoticePeriod: json['nextRentNoticePeriod'],
+      getRentToVacate: json['getRentToVacate'],
+      paymentMethods: json['paymentMethods'] as List<dynamic>?,
+      nextPeriodList: json['nextPeriodList'],
+      getDailyRent: json['getDailyRent'],
+    );
+
+Map<String, dynamic> _$TenantFolioDetailsToJson(TenantFolioDetails instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'propertyAddress': instance.propertyAddress,
+      'propertyId': instance.propertyId,
+      'tenantChecksum': instance.tenantChecksum,
+      'rent': instance.rent,
+      'period': instance.period,
+      'rentIncludeTax': instance.rentIncludeTax,
+      'bondAmount': instance.bondAmount,
+      'bondInTrust': instance.bondInTrust,
+      'moveIn': instance.moveIn,
+      'moveOut': instance.moveOut,
+      'agreementStart': instance.agreementStart,
+      'agreementEnd': instance.agreementEnd,
+      'datePaidFrom': instance.datePaidFrom,
+      'datePaidTo': instance.datePaidTo,
+      'deposited': instance.deposited,
+      'balance': instance.balance,
+      'agreementTerm': instance.agreementTerm,
+      'isExtenant': instance.isExtenant,
+      'vacatedDate': instance.vacatedDate,
+      'rentReviewFrequency': instance.rentReviewFrequency,
+      'isCommercial': instance.isCommercial,
+      'abn': instance.abn,
+      'tenantAccountFolio': instance.tenantAccountFolio,
+      'tenancyType': instance.tenancyType,
+      'rentInvoice': instance.rentInvoice,
+      'invoiceDaysInAdvance': instance.invoiceDaysInAdvance,
+      'partPayment': instance.partPayment,
+      'newTenant': instance.newTenant,
+      'nextRentDate': instance.nextRentDate,
+      'nextRent': instance.nextRent,
+      'nextRentNoticePeriod': instance.nextRentNoticePeriod,
+      'getRentToVacate': instance.getRentToVacate,
+      'paymentMethods': instance.paymentMethods,
+      'nextPeriodList': instance.nextPeriodList,
+      'getDailyRent': instance.getDailyRent,
+    };
+
+UpdateHistory _$UpdateHistoryFromJson(Map<String, dynamic> json) =>
+    UpdateHistory(
+      userId: (json['userId'] as num?)?.toInt(),
+      createdOn: json['createdOn'] as String?,
+      recordType: (json['recordType'] as num?)?.toInt(),
+      referenceId: (json['referenceId'] as num?)?.toInt(),
+      fieldModified: json['fieldModified'] as String?,
+      beforeValue: json['beforeValue'] as String?,
+      afterValue: json['afterValue'] as String?,
+      displayName: json['displayName'] as String?,
+      dataTypes: json['dataTypes'],
+      userName: json['userName'] as String?,
+    );
+
+Map<String, dynamic> _$UpdateHistoryToJson(UpdateHistory instance) =>
+    <String, dynamic>{
+      'userId': instance.userId,
+      'createdOn': instance.createdOn,
+      'recordType': instance.recordType,
+      'referenceId': instance.referenceId,
+      'fieldModified': instance.fieldModified,
+      'beforeValue': instance.beforeValue,
+      'afterValue': instance.afterValue,
+      'displayName': instance.displayName,
+      'dataTypes': instance.dataTypes,
+      'userName': instance.userName,
+    };

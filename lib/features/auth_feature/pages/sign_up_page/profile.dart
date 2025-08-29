@@ -44,7 +44,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         body: Container(
       height: 1.sh,
       width: 1.sw,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
             image: AssetImage(
               'assets/images/Background.png',
@@ -52,7 +52,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             fit: BoxFit.cover),
       ),
       child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Form(
           key: _key,
           child: Column(
@@ -104,7 +104,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   hintStyle: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFFB9B9B9),
+                    color: const Color(0xFFB9B9B9),
                   ),
                   hintText: "Full name",
                 ),
@@ -123,7 +123,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   hintStyle: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFFB9B9B9),
+                    color: const Color(0xFFB9B9B9),
                   ),
                   hintText: "Email address",
                 ),
@@ -143,7 +143,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     hintStyle: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFFB9B9B9),
+                      color: const Color(0xFFB9B9B9),
                     ),
                     hintText: "Create Password",
                     suffixIcon: IconButton(
@@ -154,12 +154,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         },
                         icon: isPasswordObscure
                             ? Image.asset(
-                                'assets/images/password2.png',
+                                'assets/images/password.png',
                                 height: 24.h,
                                 width: 24.w,
                               )
                             : Image.asset(
-                                'assets/images/password.png',
+                                'assets/images/password2.png',
                                 height: 24.h,
                                 width: 24.w,
                               ))),
@@ -186,7 +186,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     hintStyle: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFFB9B9B9),
+                      color: const Color(0xFFB9B9B9),
                     ),
                     hintText: "Create Password",
                     suffixIcon: IconButton(
@@ -197,12 +197,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         },
                         icon: createPasssword
                             ? Image.asset(
-                                'assets/images/password2.png',
+                                'assets/images/password.png',
                                 height: 24.h,
                                 width: 24.w,
                               )
                             : Image.asset(
-                                'assets/images/password.png',
+                                'assets/images/password2.png',
                                 height: 24.h,
                                 width: 24.w,
                               ))),

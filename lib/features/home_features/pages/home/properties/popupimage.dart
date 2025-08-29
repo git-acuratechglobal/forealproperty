@@ -16,7 +16,7 @@ class _PopupimageState extends State<Popupimage> {
       width: 600.w,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
+          image: const DecorationImage(
             image: AssetImage('assets/images/properties.png'),
             fit: BoxFit.cover,
           )),
@@ -41,7 +41,7 @@ class _Popupimage2State extends State<Popupimage2> {
       width: 600.w,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
+          image: const DecorationImage(
             image: AssetImage('assets/images/homes.png'),
             fit: BoxFit.cover,
           )),
@@ -66,7 +66,7 @@ class _Popupimage3State extends State<Popupimage3> {
       width: 600.w,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
+          image: const DecorationImage(
             image: AssetImage('assets/images/homes2.png'),
             fit: BoxFit.cover,
           )),

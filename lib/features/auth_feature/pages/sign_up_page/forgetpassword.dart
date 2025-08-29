@@ -14,7 +14,7 @@ class _ForgetpasswordState extends ConsumerState<Forgetpassword> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -27,7 +27,7 @@ class _ForgetpasswordState extends ConsumerState<Forgetpassword> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -46,14 +46,14 @@ class _ForgetpasswordState extends ConsumerState<Forgetpassword> {
               Text(
                 'Forgot Password?',
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: Color(0xFF1A1B28),
+                      color: const Color(0xFF1A1B28),
                     ),
               ),
               16.verticalSpace,
               Text(
                 'Enter your email or phone number associated with your account and we’ll send an email with instructions to reset your password.',
                 style: TextStyle(
-                  color: Color(0xFF494D60),
+                  color: const Color(0xFF494D60),
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w400,
                 ),
@@ -64,7 +64,7 @@ class _ForgetpasswordState extends ConsumerState<Forgetpassword> {
                   hintStyle: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFFB9B9B9),
+                    color: const Color(0xFFB9B9B9),
                   ),
                   hintText: "Email address",
                 ),
@@ -73,11 +73,11 @@ class _ForgetpasswordState extends ConsumerState<Forgetpassword> {
               32.verticalSpace,
           ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF164C63),
+                      backgroundColor: const Color(0xFF164C63),
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () {
-                      context.navigateTo((Changepassword()));
+                      context.push((const Changepassword()));
                     },
                     child: Text(
                       'Reset Password',

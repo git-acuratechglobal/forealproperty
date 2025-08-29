@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foreal_property/features/home_features/pages/home/openhouse/current.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class Pastregistration extends ConsumerStatefulWidget {
@@ -17,14 +16,14 @@ class _PastregistrationState extends ConsumerState<Pastregistration> {
     return Scaffold(
       backgroundColor: const Color(0xFFEBF3F5),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             16.verticalSpace,
-            CurrentContainer(),
+          //  CurrentContainer(),
             16.verticalSpace,
-            PastContainer()
+            const PastContainer()
           ],
         ),
       ),
@@ -50,14 +49,14 @@ class _PastContainerState extends State<PastContainer> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 5,
             offset: const Offset(0, 3),
           ),
         ],
       ),
       child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -72,7 +71,7 @@ class _PastContainerState extends State<PastContainer> {
                   ),
                 ),
                 8.horizontalSpace,
-                Expanded(
+                const Expanded(
                   child: Divider(
                     thickness: 1,
                     color: Color(0xFF164C63),
@@ -81,8 +80,8 @@ class _PastContainerState extends State<PastContainer> {
               ],
             ),
             10.verticalSpace,
-            History(),
-            History(),
+            const History(),
+            const History(),
             20.verticalSpace,
              Row(
               children: [
@@ -95,7 +94,7 @@ class _PastContainerState extends State<PastContainer> {
                   ),
                 ),
                 8.horizontalSpace,
-                Expanded(
+                const Expanded(
                   child: Divider(
                     thickness: 1,
                     color: Color(0xFF164C63),
@@ -103,10 +102,7 @@ class _PastContainerState extends State<PastContainer> {
                 )
               ],
             ),
-            History(),
-            History(),
-            History(),
-            History()
+       
           ],
         ),
       ),
@@ -135,11 +131,11 @@ class _HistoryState extends State<History> {
           fontWeight: FontWeight.w400,
         ),
       ),
-      beforeLineStyle: LineStyle(thickness: 2, color: Color(0xFFE2E2E2)),
+      beforeLineStyle: const LineStyle(thickness: 2, color: Color(0xFFE2E2E2)),
       indicatorStyle:
-          IndicatorStyle(width: 10.w, height: 10.h, color: Color(0xFF164C63)),
+          IndicatorStyle(width: 10.w, height: 10.h, color: const Color(0xFF164C63)),
       endChild: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

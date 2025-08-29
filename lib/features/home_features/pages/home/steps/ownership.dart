@@ -1,16 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foreal_property/common/common_widgets.dart';
 import 'package:foreal_property/core/utils/appbutton.dart';
+import 'package:foreal_property/core/utils/searchbutton.dart';
 import 'package:foreal_property/core/validator/validator.dart';
+import 'package:foreal_property/core/widgets/asyncwidget.dart';
+import 'package:foreal_property/features/home_features/add_property_params/add_multiple_owner.dart';
 import 'package:foreal_property/features/home_features/add_property_params/ownership_params.dart';
 import 'package:foreal_property/features/home_features/add_property_provider/add_property.dart';
-import 'package:foreal_property/features/home_features/pages/home/steps/provider_steps/ownership_provider.dart';
+import 'package:foreal_property/features/home_features/models/contact_list_model.dart';
+import 'package:foreal_property/features/home_features/models/get_property_details.dart';
+import 'package:foreal_property/features/home_features/providers/get_contact_list.dart';
+import 'package:google_places_flutter/google_places_flutter.dart';
+import 'package:google_places_flutter/model/prediction.dart';
 
 class OwnershipWidget extends ConsumerStatefulWidget {
   final bool isEdit;
-  const OwnershipWidget({super.key, this.isEdit = false});
+  final String id;
+  final PropertyDetailModel? propertyData;
+  final String? propertyUniqueId;
+  final String? contactUniqueId;
+  final ContactlistModel? contactlistModel;
+  const OwnershipWidget(
+      {this.id = "",
+      super.key,
+      this.isEdit = false,
+      this.propertyData,
+      this.contactUniqueId,
+      this.contactlistModel,
+      this.propertyUniqueId});
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _OwnershipWidgetState();
@@ -19,46 +39,86 @@ class OwnershipWidget extends ConsumerStatefulWidget {
 class _OwnershipWidgetState extends ConsumerState<OwnershipWidget> {
   late List<Map<String, TextEditingController>> ownersControllers;
   final _formKey = GlobalKey<FormState>();
-  late bool isEdit;
+  late bool isEdit = widget.isEdit;
   late List<Map<String, String?>> ownerSelections;
+  final contactOptions = [
+    'Owner',
+    'Tenant',
+    'Buyer',
+    'Seller',
+    'Investor',
+    'Landlord',
+    'Supplier',
+    'Unknown'
+  ];
+  final contactOptions1 = ['Individual', 'Company'];
+
   @override
   void initState() {
     super.initState();
     isEdit = widget.isEdit;
-    final ownership = ref.read(ownershipProvider);
+
     ownersControllers = [
       {
-        'firstName': TextEditingController(text: ownership.firstName ?? ''),
-        'lastName': TextEditingController(text: ownership.lastName ?? ''),
-        'phone': TextEditingController(text: ownership.phone ?? ''),
-        'email': TextEditingController(text: ownership.email ?? ''),
-        'address': TextEditingController(text: ownership.address ?? ''),
-        'abn': TextEditingController(text: ownership.abn ?? ''),
-        'companyName': TextEditingController(text: ownership.companyName ?? ''),
+        'firstName': TextEditingController(),
+        'lastName': TextEditingController(),
+        'phone': TextEditingController(),
+        'email': TextEditingController(),
+        'address': TextEditingController(),
+        'abn': TextEditingController(),
+        'companyName': TextEditingController(),
       },
     ];
 
     ownerSelections = [
       {
-        'contact': ownership.contact.toString(),
-        'type': ownership.type,
-        'title': ownership.title,
+        'contact': null,
+        'type': null,
+        'title': null,
       },
     ];
-  }
 
-  @override
-  void dispose() {
-    for (var owner in ownersControllers) {
-      owner.forEach((key, controller) {
-        controller.dispose();
-      });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      if (widget.propertyData == null) {
+        print(widget.propertyData);
+        ref.invalidate(ownershipParamsDataProvider);
+      }
+
+      if (widget.propertyData?.propertyUniqueId != null) {
+        ref.read(ownershipParamsDataProvider.notifier).update(
+              (p) => p!.copyWith(propertyUniqueId: widget.propertyUniqueId),
+            );
+        ref.read(multipleContactDataProvider.notifier).update(
+              (p) => p.copyWith(propertyUniqueId: widget.propertyUniqueId),
+            );
+        ref.read(ownershipParamsDataProvider.notifier).update(
+              (p) => p!.copyWith(contactUniqueId: widget.contactUniqueId),
+            );
+      }
+
+      //   await ref
+      //       .read(getContactDetailProvider.notifier)
+      //       .getContactDetail(widget.id);
+    });
+
+    final ownershipData = ref.read(ownershipParamsDataProvider);
+
+    if (ownershipData.address != null) {
+      ownersControllers[0]['address']!.text = ownershipData.address!;
     }
-    super.dispose();
   }
 
-  bool isChecked = true;
-  String? selectedValue;
+  void updateContactInfo(ContactList contact) {
+    for (var owner in ownersControllers) {
+      owner['firstName']?.text = contact.firstName ?? '';
+      owner['lastName']?.text = contact.lastName ?? '';
+      owner['phone']?.text = contact.phone?.startsWith('04') == true
+          ? contact.phone!.substring(2).trim()
+          : contact.phone?.trim() ?? '';
+      owner['email']?.text = contact.email ?? '';
+      owner['address']?.text = contact.address ?? '';
+    }
+  }
 
   void addAnotherOwner() {
     setState(() {
@@ -80,671 +140,643 @@ class _OwnershipWidgetState extends ConsumerState<OwnershipWidget> {
     });
   }
 
-  final List<String> contactOptions = ['Agent', 'Owner'];
+  @override
+  void dispose() {
+    for (var owner in ownersControllers) {
+      owner.forEach((key, controller) {
+        controller.dispose();
+      });
+    }
+    super.dispose();
+  }
+
+  //bool _isInitialized = false;
+  bool isChecked = true;
+  String? selectedValue;
+
   final List<String> titleOptions = ['Mr.', 'Mrs.', 'Miss.'];
+  final FocusNode _focusNode = FocusNode();
+  TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
+  ContactList? selectedContact;
 
   @override
   Widget build(BuildContext context) {
-    //  final ownershipState = ref.watch(ownershipProvider);
+    // ref.invalidate(ownershipParamsDataProvider);
     final validator = ref.watch(validatorsProvider);
-
+    final ownerData = ref.watch(ownershipParamsDataProvider);
+    final allContacts = ref.watch(getContactListProvider);
     return Scaffold(
-        appBar: isEdit
+      appBar: isEdit
           ? AppBar(
-              title: Text('Contact Form'),
+              title: const Text('Contact Form'),
               centerTitle: true,
             )
           : null,
       body: SingleChildScrollView(
-         padding: EdgeInsets.symmetric(horizontal: 24),
-        child:
-        
-         Form(
+        //padding: EdgeInsets.symmetric(horizontal: 24),
+        child: Form(
           key: _formKey,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            16.verticalSpace,
-            ...List.generate(
-              ownersControllers.length,
-              (index) {
-                var owner = ownersControllers[index];
-                var selection = ownerSelections[index];
-                return Container(
-                  child: Column(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       16.verticalSpace,
-                      Text(
-                        'Contacts',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      16.verticalSpace,
-                      WidgetDropdown(
-                        propertyOptions: contactOptions,
-                        selectedValue: contactOptions.isNotEmpty
-                            ? 'select'
-                            : contactOptions[index],
-                        onChanged: (String? value) {
-                          final int index = contactOptions.indexOf(value ?? '');
-
-                          ref
-                              .read(ownershipProvider.notifier)
-                              .updateField('contact', index);
-
-                          ref.read(ownershipParamsDataProvider.notifier).update(
-                              (p) => p!.copyWith(
-                                  contactType: contactOptions.indexOf(value!)));
-
-                          print("Selected Contact: $value at index $index");
-                        },
-                        hintText: 'Select',
-                      ),
-
-                      16.verticalSpace,
-                      Text('OWNER ${index + 1}',
-                          style: TextStyle(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF164C63))),
-                      16.verticalSpace,
-                      Text(
-                        'Type',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      16.verticalSpace,
-                      WidgetDropdown(
-                        propertyOptions: ['Individual', 'Owner'],
-                        selectedValue: selection['type'],
-                        onChanged: (String? value) {
-                          ref
-                              .read(ownershipProvider.notifier)
-                              .updateField('type', value);
-                          print("Selected Property: $value");
-                        },
-                        hintText: 'Select',
-                      ),
-                      16.verticalSpace,
-                      Text(
-                        'Title',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      16.verticalSpace,
-                      WidgetDropdown(
-                        propertyOptions: titleOptions,
-                        selectedValue: titleOptions.isNotEmpty
-                            ? 'select'
-                            : titleOptions[index],
-                        onChanged: (String? value) {
-                          ref
-                              .read(ownershipProvider.notifier)
-                              .updateField('title', value);
-
-                          ref.read(ownershipParamsDataProvider.notifier).update(
-                              (p) => p!.copyWith(
-                                  title: titleOptions.indexOf(value!)));
-                          print("Selected Property: $value");
-                        },
-                        hintText: 'Select',
-                      ),
-                      16.verticalSpace,
-                      Text('First Name',
+                      Text('Choose Contact',
                           style: Theme.of(context).textTheme.bodyLarge),
                       16.verticalSpace,
-                      CommonTextField(
-                        validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'This field is required';
-                  }
-                  return null;
-                },
-                        label: 'First Name',
-                        controller: owner['firstName']!,
-                        onChanged: (val) => ref
-                            .read(ownershipProvider.notifier)
-                            .updateField('firstName', val),
-                        onSaved: (newValue) {
-                          ref
-                              .read(ownershipParamsDataProvider.notifier)
-                              .update((p) => p!.copyWith(firstName: newValue!));
-                        },
+                      SizedBox(
+                        height: 85,
+                        width: double.infinity,
+                        child: AsyncWidget(
+                          value: allContacts,
+                          data: (allContact) {
+                            if (allContact == null || allContact.isEmpty) {
+                              return const Text('No contacts found');
+                            }
+
+                            return DropdownSearchWidget<ContactList>(
+                              items: allContact,
+                              selectedValue: selectedContact,
+                              onChanged: (val) {
+                                if (val != null) {
+                                  final contactUniqueId = val.contactUniqueId;
+
+                                  // ✅ Update local selectedContact state
+                                  setState(() {
+                                    selectedContact = val;
+                                  });
+
+                                  updateContactInfo(val);
+
+                                  // ✅ Update provider
+                                  ref
+                                      .read(
+                                          ownershipParamsDataProvider.notifier)
+                                      .update((p) => p!.copyWith(
+                                          contactUniqueId: contactUniqueId));
+
+                                  debugPrint(
+                                      'Selected Contact Unique ID: $contactUniqueId');
+                                }
+                              },
+                              itemAsString: (item) {
+                                return item.firstName?.trim().isNotEmpty == true
+                                    ? item.firstName!
+                                    : 'No Name';
+                              },
+                              searchFilter: (item, query) {
+                                final name = item.firstName ?? '';
+                                return name;
+                              },
+                              hintText: 'Select a contact',
+                            );
+                          },
+                        ),
                       ),
-                      16.verticalSpace,
-                      Text('Last Name',
-                          style: Theme.of(context).textTheme.bodyLarge),
-                      16.verticalSpace,
-                      CommonTextField(
-                        label: 'Last Name',
-                        controller: owner['lastName']!,
-                        onChanged: (val) => ref
-                            .read(ownershipProvider.notifier)
-                            .updateField('lastName', val),
-                        onSaved: (newValue) {
-                          ref
-                              .read(ownershipParamsDataProvider.notifier)
-                              .update((p) => p!.copyWith(lastName: newValue!));
-                        },
-                      ),
-                      16.verticalSpace,
-                      Text('Phone',
-                          style: Theme.of(context).textTheme.bodyLarge),
-                      16.verticalSpace,
-                      CommonTextField(
-                        label: 'Phone number',
-                        validator: validator.validateMobile,
-                        controller: owner['phone']!,
-                        onChanged: (val) => ref
-                            .read(ownershipProvider.notifier)
-                            .updateField('phone', val),
-                        onSaved: (val) {
-                          ref
-                              .read(ownershipParamsDataProvider.notifier)
-                              .update((p) => p!.copyWith(mobileNumber: val!));
-                        },
-                      ),
-                      16.verticalSpace,
-                      Text('Email',
-                          style: Theme.of(context).textTheme.bodyLarge),
-                      16.verticalSpace,
-                      CommonTextField(
-                        validator: validator.validateEmail,
-                        label: 'Email address',
-                        controller: owner['email']!,
-                        onChanged: (val) => ref
-                            .read(ownershipProvider.notifier)
-                            .updateField('email', val),
-                        onSaved: (newValue) {
-                          ref
-                              .read(ownershipParamsDataProvider.notifier)
-                              .update((p) => p!.copyWith(email: newValue!));
-                        },
-                      ),
-                      16.verticalSpace,
-                      Text('Address',
-                          style: Theme.of(context).textTheme.bodyLarge),
-                      16.verticalSpace,
-                      CommonTextField(
-                        label: 'Search for address',
-                        controller: owner['address']!,
-                        onChanged: (val) => ref
-                            .read(ownershipProvider.notifier)
-                            .updateField('address', val),
-                        onSaved: (newValue) {
-                          ref
-                              .read(ownershipParamsDataProvider.notifier)
-                              .update((p) => p!.copyWith(address: newValue!));
-                        },
-                      ),
-                      // 16.verticalSpace,
-                      // Text('ABN', style: Theme.of(context).textTheme.bodyLarge),
-                      // 16.verticalSpace,
-                      // CommonTextField(
-                      //   label: 'ABN Number',
-                      //   controller: owner['abn']!,
-                      //   onChanged: (val) => ref
-                      //       .read(ownershipProvider.notifier)
-                      //       .updateField('abn', val),
-                      // ),
-                      16.verticalSpace,
-                      Text(
-                        'Company Name',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      12.verticalSpace,
-                      TextField(
-                        cursorColor: Colors.black,
-                        controller: owner['companyName'],
-                        onChanged: (val) => ref
-                            .read(ownershipProvider.notifier)
-                            .updateField('companyName', val),
-                        decoration: InputDecoration(
-                          fillColor: Color(0xFFEBF3F5),
-                          labelText: 'Company Name',
-                          labelStyle:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: Color(0xFFB9B9B9),
+
+                     
+                      ...List.generate(
+                        ownersControllers.length,
+                        (index) {
+                          var owner = ownersControllers[index];
+                          var selection = ownerSelections[index];
+                          return Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                16.verticalSpace,
+
+                                12.verticalSpace,
+                                Text(
+                                  'Contact Type',
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                16.verticalSpace,
+                                WidgetDropdown(
+                                  propertyOptions: contactOptions1,
+                                  selectedValue: ownerData.contactType != null
+                                      ? contactOptions1[
+                                          ownerData.contactType! - 1]
+                                      : ref
+                                          .watch(ownershipParamsDataProvider)
+                                          .contactType
+                                          .toString(),
+                                  onChanged: (String? value) {
+                                    final int index =
+                                        contactOptions1.indexOf(value ?? '');
+                                    if (index != -1) {
+                                      // ref
+                                      //     .read(ownershipProvider.notifier)
+                                      //     .updateField('contact', index + 1);
+                                      ref
+                                          .read(ownershipParamsDataProvider
+                                              .notifier)
+                                          .update(
+                                            (p) => p!.copyWith(
+                                                contactType: index + 1),
+                                          );
+                                      print(
+                                          "Selected Contact: $value at index (API): ${index + 1}");
+                                    } else {
+                                      print("Value not found in contactType");
+                                    }
+                                  },
+                                  hintText: 'Individual',
+                                ),
+
+                                16.verticalSpace,
+                                Text('OWNER ${index + 1}',
+                                    style: TextStyle(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w700,
+                                        color: const Color(0xFF164C63))),
+                                16.verticalSpace,
+                                Text(
+                                  'Contact',
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                16.verticalSpace,
+                                WidgetDropdown(
+                                  propertyOptions: contactOptions,
+                                  selectedValue: selection['type'],
+                                  onChanged: (String? value) {
+                                    if (value != null) {
+                                      final index =
+                                          contactOptions.indexOf(value);
+
+                                      if (index != -1) {
+                                        // ref
+                                        //     .read(ownershipProvider.notifier)
+                                        //     .updateField('type', value);
+                                        ref
+                                            .read(ownershipParamsDataProvider
+                                                .notifier)
+                                            .update(
+                                              (p) => p!
+                                                  .copyWith(typeIAM: index + 1),
+                                            );
+                                        print(
+                                            "Selected Property: $value (Index: ${index + 1})");
+                                      }
+                                    }
+                                  },
+                                  hintText: 'Owner',
+                                ),
+
+                                // WidgetDropdown(
+                                //   propertyOptions: ['Individual', 'Owner', 'Supplier', 'Tenant'],
+                                //   selectedValue: selection['type'],
+                                //   onChanged: (String? value) {
+                                //     ref
+                                //         .read(ownershipProvider.notifier)
+                                //         .updateField('type', value);
+                                //     print("Selected Property: $value");
+
+                                //         ref.read(ownershipParamsDataProvider.notifier).update(
+                                //         (p) => p!.copyWith(
+                                //             contactType: contactOptions.indexOf(value!)));
+                                //   },
+                                //   hintText: 'Select',
+                                // ),
+                                16.verticalSpace,
+                                Text(
+                                  'Title',
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                16.verticalSpace,
+                                WidgetDropdown(
+                                  propertyOptions: titleOptions,
+                                  selectedValue: ownerData.title != null
+                                      ? titleOptions[ownerData.title!]
+                                      : ref
+                                          .watch(ownershipParamsDataProvider)
+                                          .title
+                                          .toString(),
+                                  onChanged: (String? value) {
+                                    // ref
+                                    //     .read(ownershipProvider.notifier)
+                                    //     .updateField('title', value);
+
+                                    ref
+                                        .read(ownershipParamsDataProvider
+                                            .notifier)
+                                        .update((p) => p!.copyWith(
+                                            title:
+                                                titleOptions.indexOf(value!)));
+                                  },
+                                  hintText: 'Select',
+                                ),
+                                16.verticalSpace,
+                                Text('First Name',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge),
+                                16.verticalSpace,
+                                CommonTextField(
+                                  validator: (value) {
+                                    if (value == null || value.trim().isEmpty) {
+                                      return 'This field is required';
+                                    }
+                                    return null;
+                                  },
+                                  initialValue: index == 0 &&
+                                          ownerData.firstName != null &&
+                                          ownerData.firstName!.isNotEmpty
+                                      ? ownerData.firstName
+                                      : null,
+                                  label: 'First Name',
+                                  controller: owner['firstName']!,
+                                  // onChanged: (val) => ref
+                                  //     .read(ownershipProvider.notifier)
+                                  //     .updateField('firstName', val),
+                                  onSaved: (newValue) {
+                                    ref
+                                        .read(ownershipParamsDataProvider
+                                            .notifier)
+                                        .update((p) =>
+                                            p!.copyWith(firstName: newValue!));
+                                  },
+                                ),
+                                16.verticalSpace,
+                                Text('Last Name',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge),
+                                16.verticalSpace,
+                                CommonTextField(
+                                  label: 'Last Name',
+                                  initialValue: index == 0 &&
+                                          ownerData.lastName != null &&
+                                          ownerData.lastName!.isNotEmpty
+                                      ? ownerData.lastName
+                                      : null,
+                                  controller: owner['lastName']!,
+                                  // onChanged: (val) => ref
+                                  //     .read(ownershipProvider.notifier)
+                                  //     .updateField('lastName', val),
+                                  onSaved: (newValue) {
+                                    ref
+                                        .read(ownershipParamsDataProvider
+                                            .notifier)
+                                        .update((p) =>
+                                            p!.copyWith(lastName: newValue!));
+                                  },
+                                ),
+                                16.verticalSpace,
+                                Text('Phone',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge),
+                                16.verticalSpace,
+                                CommonTextField(
+                                  initialValue: index == 0 &&
+                                          ownerData.mobileNumber != null &&
+                                          ownerData.mobileNumber!.isNotEmpty
+                                      ? ownerData.mobileNumber!.startsWith('04')
+                                          ? ownerData.mobileNumber!
+                                              .substring(2) // remove '04'
+                                          : ownerData.mobileNumber
+                                      : null,
+
+                                  label: 'Phone number',
+                                  controller: owner['phone']!,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    LengthLimitingTextInputFormatter(
+                                        8), // only 8 digits allowed
+                                  ],
+                                  validator: validator.validateMobile,
+                                  prefixText:
+                                      '04', // shown visually but not typed
+                                  onSaved: (val) {
+                                    final fullMobile =
+                                        '04${val ?? ''}'; // attach 04 before saving
+                                    ref
+                                        .read(ownershipParamsDataProvider
+                                            .notifier)
+                                        .update(
+                                          (p) => p!.copyWith(
+                                              mobileNumber: fullMobile),
+                                        );
+                                  },
+                                ),
+
+                                16.verticalSpace,
+                                Text('Email',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge),
+                                16.verticalSpace,
+                                CommonTextField(
+                                  validator: validator.validateEmail,
+                                  label: 'Email address',
+                                  initialValue: index == 0 &&
+                                          ownerData.email != null &&
+                                          ownerData.email!.isNotEmpty
+                                      ? ownerData.email
+                                      : null,
+                                  controller: owner['email']!,
+                                  // onChanged: (val) => ref
+                                  //     .read(ownershipProvider.notifier)
+                                  //     .updateField('email', val),
+                                  onSaved: (newValue) {
+                                    ref
+                                        .read(ownershipParamsDataProvider
+                                            .notifier)
+                                        .update((p) =>
+                                            p!.copyWith(email: newValue!));
+                                  },
+                                ),
+                                16.verticalSpace,
+                                Text('Address',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge),
+                                16.verticalSpace,
+
+                                GooglePlaceAutoCompleteTextField(
+                                  focusNode: _focusNode,
+                                  inputDecoration: InputDecoration(
+                                    hintText: 'address',
+                                    hintStyle: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                          color: const Color(0xFFB9B9B9),
+                                        ),
+                                    border: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFE2E2E2)),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(12)),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: const BorderSide(
+                                          color: Color(0xFFE2E2E2)),
+                                    ),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFE2E2E2)),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(12)),
+                                    ),
+                                    errorBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.red),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(12)),
+                                    ),
+                                    focusedErrorBorder:
+                                        const OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.red),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(12)),
+                                    ),
                                   ),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFE2E2E2)),
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                                  textEditingController: owner['address']!,
+                                  isLatLngRequired: true,
+                                  countries: const ["au"],
+                                  debounceTime: 600,
+                                  googleAPIKey:
+                                      'AIzaSyBNA6taSRhBuugfKk7MyQQdCVfcz2fJ4tI',
+                                  itemClick: (Prediction prediction) {
+                                    owner['address']!.text =
+                                        prediction.description!;
+                                    _focusNode.unfocus();
+
+                                    ref
+                                        .read(ownershipParamsDataProvider
+                                            .notifier)
+                                        .update(
+                                          (p) => p!.copyWith(
+                                              address: prediction.description!),
+                                        );
+                                  },
+                                ),
+                                // CommonTextField(
+                                //   label: 'Search for address',
+                                //   controller: owner['address']!,
+                                //   onChanged: (val) => ref
+                                //       .read(ownershipProvider.notifier)
+                                //       .updateField('address', val),
+                                //   onSaved: (newValue) {
+                                //     ref
+                                //         .read(ownershipParamsDataProvider.notifier)
+                                //         .update((p) => p!.copyWith(address: newValue!));
+                                //   },
+                                // ),
+                                // 16.verticalSpace,
+                                // Text('ABN', style: Theme.of(context).textTheme.bodyLarge),
+                                // 16.verticalSpace,
+                                // CommonTextField(
+                                //   label: 'ABN Number',
+                                //   controller: owner['abn']!,
+                                //   onChanged: (val) => ref
+                                //       .read(ownershipProvider.notifier)
+                                //       .updateField('abn', val),
+                                // ),
+                                16.verticalSpace,
+                                Text(
+                                  'Company Name',
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                12.verticalSpace,
+                                TextField(
+                                  cursorColor: Colors.black,
+                                  controller: owner['companyName'],
+                                  onChanged: (val) {
+                                    // ref
+                                    //     .read(ownershipProvider.notifier)
+                                    //     .updateField('companyName', val);
+
+                                    //ref.read(ownershipParamsDataProvider.notifier).update((p) => p!.copyWith(c));
+                                  },
+                                  decoration: InputDecoration(
+                                    fillColor: const Color(0xFFEBF3F5),
+                                    labelText: 'Company Name',
+                                    labelStyle: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                          color: const Color(0xFFB9B9B9),
+                                        ),
+                                    border: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFE2E2E2)),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(12)),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                            color: Color(0xFFE2E2E2))),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFE2E2E2)),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(12)),
+                                    ),
+                                    errorBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.red),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(12)),
+                                    ),
+                                    focusedErrorBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.red),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(12)),
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Checkbox(
+                                      activeColor: const Color(0xFF164C63),
+                                      value: isChecked,
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          isChecked = newValue!;
+                                        });
+                                      },
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          isChecked = !isChecked;
+                                        });
+                                      },
+                                      child: Text(
+                                        'Set as  primary',
+                                        style: TextStyle(
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w400,
+                                          color: const Color(0xFF1A1B28),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                24.verticalSpace,
+                                const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      24.verticalSpace,
+                      Container(
+                        height: 56,
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            side: const BorderSide(
+                                width: 1, color: Color(0xFF164C63)),
+                            borderRadius: BorderRadius.circular(38),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Color(0xFFE2E2E2))),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFE2E2E2)),
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                        ),
+                        child: GestureDetector(
+                          onTap: addAnotherOwner,
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/images/add-circle.png',
+                                    height: 20.h, width: 20.w),
+                                Text(
+                                  'Add Another Owner',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(color: const Color(0xFF164C63)),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Checkbox(
-                            activeColor: Color(0xFF164C63),
-                            value: isChecked,
-                            onChanged: (newValue) {
-                              setState(() {
-                                isChecked = newValue!;
-                              });
-                            },
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isChecked = !isChecked;
-                              });
-                            },
-                            child: Text(
-                              'Set as  primary',
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFF1A1B28),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      24.verticalSpace,
-                      Divider(height: 1, color: Color(0xFFE2E2E2)),
-                    ],
-                  ),
-                );
-              },
-            ),
-            24.verticalSpace,
-            Container(
-              height: 56,
-              decoration: ShapeDecoration(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(width: 1, color: const Color(0xFF164C63)),
-                  borderRadius: BorderRadius.circular(38),
-                ),
+                      30.verticalSpace,
+                    ]),
               ),
-              child: GestureDetector(
-                onTap:
-                    addAnotherOwner, // This will trigger adding another owner
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset('assets/images/add-circle.png',
-                          height: 20.h, width: 20.w),
-                      Text(
-                        'Add Another Owner',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(color: Color(0xFF164C63)),
-                      ),
-                    ],
-                  ),
+              Container(
+                padding: const EdgeInsets.only(top: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                      offset: const Offset(0, -3),
+                    ),
+                  ],
                 ),
-              ),
-            ),
-            60.verticalSpace,
-          ]),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(top: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              spreadRadius: 2,
-              offset: Offset(0, -3),
-            ),
-          ],
-        ),
-        child: BottomAppBar(
-          color: Colors.white,
-          child: PrimaryButton(
-            isLoading: ref.watch(propertyNotifierProvider).isLoading,
-            title: isEdit ? 'Save' : 'Next',
-            onClick: () {
+                child: BottomAppBar(
+                  color: Colors.white,
+                  child: PrimaryButton(
+                      isLoading: ref.watch(propertyNotifierProvider).isLoading,
+                      title: isEdit ? 'Save' : 'Next',
+                      onClick: () {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
 
-       if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
-                ref
-                    .read(propertyNotifierProvider.notifier)
-                    .addPropertyContact();
-              }
-            },
+                          final contactUniqueId = ref
+                              .read(ownershipParamsDataProvider)
+                              .contactUniqueId;
+
+                          if (contactUniqueId != null &&
+                              contactUniqueId.trim().isNotEmpty) {
+                            ref
+                                .read(propertyNotifierProvider.notifier)
+                                .updateContact();
+                          } else {
+                            if (ownersControllers.length > 1) {
+                              /// Multiple owners — second UI section rendered
+                              ref
+                                  .read(propertyNotifierProvider.notifier)
+                                  .addMultipleOwners();
+                            } else {
+                              /// Only one owner
+                              ref
+                                  .read(propertyNotifierProvider.notifier)
+                                  .addPropertyContact();
+                            }
+                          }
+                        }
+                      }),
+                ),
+              ),
+            ],
           ),
         ),
       ),
+      // bottomNavigationBar: Container(
+      //   padding: EdgeInsets.only(top: 10),
+      //   decoration: BoxDecoration(
+      //     color: Colors.white,
+      //     boxShadow: [
+      //       BoxShadow(
+      //         color: Colors.black.withOpacity(0.1),
+      //         blurRadius: 10,
+      //         spreadRadius: 2,
+      //         offset: Offset(0, -3),
+      //       ),
+      //     ],
+      //   ),
+      //   child: BottomAppBar(
+      //     color: Colors.white,
+      //     child: PrimaryButton(
+      //       isLoading: ref.watch(propertyNotifierProvider).isLoading,
+      //       title: isEdit ? 'Save' : 'Next',
+      //       onClick: () {
+      //         if (_formKey.currentState!.validate()) {
+      //           _formKey.currentState!.save();
+      //           ref
+      //               .read(propertyNotifierProvider.notifier)
+      //               .addPropertyContact();
+      //         }
+      //       },
+      //     ),
+      //   ),
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// class _OwnershipWidgetState extends ConsumerState<OwnershipWidget> {
-//   late TextEditingController firstNameController;
-//   late TextEditingController lastNameController;
-//   late TextEditingController phoneController;
-//   late TextEditingController emailController;
-//   late TextEditingController addressController;
-//   late TextEditingController abnController;
-//   late TextEditingController companyNameController;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     final ownership = ref.read(ownershipProvider);
-//     firstNameController =
-//         TextEditingController(text: ownership.firstName ?? '');
-//     lastNameController = TextEditingController(text: ownership.lastName ?? '');
-//     phoneController = TextEditingController(text: ownership.phone ?? '');
-//     emailController = TextEditingController(text: ownership.email ?? '');
-//     addressController = TextEditingController(text: ownership.address ?? '');
-//     abnController = TextEditingController(text: ownership.abn ?? '');
-//     companyNameController =
-//         TextEditingController(text: ownership.companyName ?? '');
-//   }
-
-//   @override
-//   void dispose() {
-//     firstNameController.dispose();
-//     lastNameController.dispose();
-//     phoneController.dispose();
-//     emailController.dispose();
-//     addressController.dispose();
-//     abnController.dispose();
-//     companyNameController.dispose();
-//     super.dispose();
-//   }
-
-//   bool isChecked = true;
-//   String? selectedValue;
-//   @override
-//   Widget build(BuildContext context) {
-//     final ownershipState = ref.watch(ownershipProvider);
-//     return Scaffold(
-//       body: SingleChildScrollView(
-//         child: Column(
-//           children: [
-//             ListView.builder(
-//               physics: NeverScrollableScrollPhysics(),
-//               shrinkWrap: true,
-//   itemCount: 1, // You can change this based on how many items you want to display
-//   itemBuilder: (context, index) {
-//     return Container(
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           16.verticalSpace,
-//           Text(
-//             'Contacts',
-//             style: Theme.of(context).textTheme.bodyLarge,
-//           ),
-//           16.verticalSpace,
-//           WidgetDropdown(
-//             propertyOptions: ['Agent', 'Owner'],
-//             selectedValue: ownershipState.contact,
-//             onChanged: (String? value) {
-//               ref
-//                   .read(ownershipProvider.notifier)
-//                   .updateField('contact', value);
-//               print("Selected Property: $value");
-//             },
-//             hintText: 'Select',
-//           ),
-//           16.verticalSpace,
-//           Text(
-//             'OWNER 1',
-//             style: TextStyle(
-//               color: Color(0xFF164C63),
-//               fontSize: 12.sp,
-//               fontWeight: FontWeight.w700,
-//             ),
-//           ),
-//           16.verticalSpace,
-//           Text(
-//             'Type',
-//             style: Theme.of(context).textTheme.bodyLarge,
-//           ),
-//           16.verticalSpace,
-//           WidgetDropdown(
-//             propertyOptions: ['Individual', 'Owner'],
-//             selectedValue: ownershipState.type,
-//             onChanged: (String? value) {
-//               ref.read(ownershipProvider.notifier).updateField('type', value);
-//               print("Selected Property: $value");
-//             },
-//             hintText: 'Select',
-//           ),
-//           16.verticalSpace,
-//           Text(
-//             'Title',
-//             style: Theme.of(context).textTheme.bodyLarge,
-//           ),
-//           16.verticalSpace,
-//           WidgetDropdown(
-//             propertyOptions: ['Mr.', 'Mrs.', 'Miss.'],
-//             selectedValue: ownershipState.title,
-//             onChanged: (String? value) {
-//               ref
-//                   .read(ownershipProvider.notifier)
-//                   .updateField('title', value);
-//               print("Selected Property: $value");
-//             },
-//             hintText: 'Select',
-//           ),
-//           16.verticalSpace,
-//           Text(
-//             'First Name',
-//             style: Theme.of(context).textTheme.bodyLarge,
-//           ),
-//           16.verticalSpace,
-//           CommonTextField(
-//             label: 'First Name',
-//             controller: firstNameController,
-//             onChanged: (val) => ref
-//                 .read(ownershipProvider.notifier)
-//                 .updateField('firstName', val),
-//           ),
-//           16.verticalSpace,
-//           Text(
-//             'Last Name',
-//             style: Theme.of(context).textTheme.bodyLarge,
-//           ),
-//           16.verticalSpace,
-//           CommonTextField(
-//             label: 'Last Name',
-//             controller: lastNameController,
-//             onChanged: (val) => ref
-//                 .read(ownershipProvider.notifier)
-//                 .updateField('lastName', val),
-//           ),
-//           16.verticalSpace,
-//           Text(
-//             'Phone',
-//             style: Theme.of(context).textTheme.bodyLarge,
-//           ),
-//           16.verticalSpace,
-//           CommonTextField(
-//             label: 'Phone number',
-//             controller: phoneController,
-//             onChanged: (val) => ref
-//                 .read(ownershipProvider.notifier)
-//                 .updateField('phone', val),
-//           ),
-//           16.verticalSpace,
-//           Text(
-//             'Email',
-//             style: Theme.of(context).textTheme.bodyLarge,
-//           ),
-//           16.verticalSpace,
-//           CommonTextField(
-//             label: 'Email address',
-//             controller: emailController,
-//             onChanged: (val) => ref
-//                 .read(ownershipProvider.notifier)
-//                 .updateField('email', val),
-//           ),
-//           16.verticalSpace,
-//           Text(
-//             'Address',
-//             style: Theme.of(context).textTheme.bodyLarge,
-//           ),
-//           16.verticalSpace,
-//           CommonTextField(label: 'Search for address',controller: addressController,
-//             onChanged: (val) => ref
-//                 .read(ownershipProvider.notifier)
-//                 .updateField('address', val),),
-//           16.verticalSpace,
-//           Text(
-//             'ABN',
-//             style: Theme.of(context).textTheme.bodyLarge,
-//           ),
-//           16.verticalSpace,
-//           CommonTextField(label: 'ABN Number', controller: abnController,
-//             onChanged: (val) => ref
-//                 .read(ownershipProvider.notifier)
-//                 .updateField('abn', val),),
-//           16.verticalSpace,
-//           Text(
-//             'Company Name',
-//             style: Theme.of(context).textTheme.bodyLarge,
-//           ),
-//           12.verticalSpace,
-//           TextField(
-//             cursorColor: Colors.black,
-//             controller: companyNameController,
-//             onChanged: (val) => ref
-//                 .read(ownershipProvider.notifier)
-//                 .updateField('companyName', val),
-//             decoration: InputDecoration(
-//               fillColor: Color(0xFFEBF3F5),
-//               labelText: 'Company Name',
-//               labelStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
-//                     color: Color(0xFFB9B9B9),
-//                   ),
-//               border: OutlineInputBorder(
-//                 borderSide: BorderSide(color: Color(0xFFE2E2E2)),
-//                 borderRadius: BorderRadius.all(Radius.circular(12)),
-//               ),
-//               enabledBorder: OutlineInputBorder(
-//                   borderRadius: BorderRadius.circular(12),
-//                   borderSide: BorderSide(color: Color(0xFFE2E2E2))),
-//               focusedBorder: OutlineInputBorder(
-//                 borderSide: BorderSide(color: Color(0xFFE2E2E2)),
-//                 borderRadius: BorderRadius.all(Radius.circular(12)),
-//               ),
-//               errorBorder: OutlineInputBorder(
-//                 borderSide: BorderSide(color: Colors.red),
-//                 borderRadius: BorderRadius.all(Radius.circular(12)),
-//               ),
-//               focusedErrorBorder: OutlineInputBorder(
-//                 borderSide: BorderSide(color: Colors.red),
-//                 borderRadius: BorderRadius.all(Radius.circular(12)),
-//               ),
-//             ),
-//           ),
-//           Row(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               Checkbox(
-//                 activeColor: Color(0xFF164C63),
-//                 value: isChecked,
-//                 onChanged: (newValue) {
-//                   setState(() {
-//                     isChecked = newValue!;
-//                   });
-//                 },
-//               ),
-//               GestureDetector(
-//                 onTap: () {
-//                   setState(() {
-//                     isChecked = !isChecked;
-//                   });
-//                 },
-//                 child: Text(
-//                   'Set as  primary',
-//                   style: TextStyle(
-//                     fontSize: 14.sp,
-//                     fontWeight: FontWeight.w400,
-//                     color: Color(0xFF1A1B28),
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//           24.verticalSpace,
-//           Divider(
-//             height: 1,
-//             color: Color(0xFFE2E2E2),
-//           ),
-//           60.verticalSpace,
-//         ],
-//       ),
-//     );
-//   },
-// ),
-
-
-//               Container(
-//                 // width: 328.sp,
-//                 height: 56,
-//                 decoration: ShapeDecoration(
-//                   color: Colors.white,
-//                   shape: RoundedRectangleBorder(
-//                     side: BorderSide(
-//                       width: 1,
-//                       color: const Color(0xFF164C63),
-//                     ),
-//                     borderRadius: BorderRadius.circular(38),
-//                   ),
-//                 ),
-//                 child: Center(
-//                     child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     Image.asset(
-//                       'assets/images/add-circle.png',
-//                       height: 20.h,
-//                       width: 20.w,
-//                     ),
-//                     Text(
-//                       'Add Another Owner',
-//                       style: Theme.of(context)
-//                           .textTheme
-//                           .titleLarge
-//                           ?.copyWith(color: Color(0xFF164C63)),
-//                     ),
-//                   ],
-//                 )),
-//               ),
-//           ],
-//         ),
-
-//       ),
-//     );
-//   }
-// }
