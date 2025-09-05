@@ -219,6 +219,7 @@ class InspectionCardWidget extends StatelessWidget {
                     onPressed: () {
                       context.push(PropertyInspectionDetails(
                         inspectionId: obj.inspectionId ?? 0,
+                        inspectionUniqueId: obj.inspectionUniqueId ?? "",
                       ));
                     },
                     child: AutoSizeText(

@@ -75,7 +75,11 @@ class EditTemplateScreen extends HookConsumerWidget {
                       Undermanaged: data.unDamage,
                       Working: data.working,
                       AddUpdatePictures:
-                          data.images.map((e) => e.path).toList(),
+                          data.images.map((e) => {
+                            'id':0,
+                            'PicturePath':e.path
+                          }).toList(),
+
                       AgentComment: data.comments);
                   updateParam
                       .update((e) => e.copyWith(SelectedAttributeList: [obj]));

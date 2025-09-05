@@ -16,14 +16,15 @@ class EditTemplateScreen2 extends HookConsumerWidget {
       {super.key, required this.templatesDetail, required this.inspectionId});
   final TemplatesDetail templatesDetail;
   final int inspectionId;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final updateParam = ref.read(updateInspectionParamProvider.notifier);
     final initialData =
-    useState<PropertyInspectionViewModel>(PropertyInspectionViewModel(
+        useState<PropertyInspectionViewModel>(PropertyInspectionViewModel(
       initialImages: templatesDetail.templateDetailsPictures
-          ?.map((e) => e.fileName ?? "")
-          .toList() ??
+              ?.map((e) => e.fileName ?? "")
+              .toList() ??
           [],
       comments: templatesDetail.agentComment,
       images: [],
@@ -34,23 +35,10 @@ class EditTemplateScreen2 extends HookConsumerWidget {
     ));
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.listenManual(inspectionNotifierProvider, (_, next) {
-          switch (next) {
-            case AsyncData<String?> data when data.value != null:
-              ref.invalidate(
-                  getInspectionDetailsProvider(inspectionId: inspectionId));
-              context.pop();
-              Utils.showSnackBar(context, data.value!);
-              break;
-            case AsyncError error:
-              Utils.showSnackBar(context, error.error.toString());
-              break;
-          }
-        });
         updateParam.update((e) => e.copyWith(
-          InspectionId: inspectionId,
-          TemplateId: templatesDetail.inspectionTemplateId ?? 0,
-        ));
+              InspectionId: inspectionId,
+              TemplateId: templatesDetail.inspectionTemplateId ?? 0,
+            ));
       });
       return null;
     }, const []);
@@ -62,22 +50,16 @@ class EditTemplateScreen2 extends HookConsumerWidget {
             Cleaned: data.clean,
             Undermanaged: data.unDamage,
             Working: data.working,
-            AddUpdatePictures:
-            data.images.map((e) => e.path).toList(),
+            AddUpdatePictures: data.images
+                .map((e) => {'id': 0, 'PicturePath': e.path})
+                .toList(),
             AgentComment: data.comments);
-        updateParam
-            .update((e) => e.copyWith(SelectedAttributeList: [obj]));
+        updateParam.update((e) => e.copyWith(SelectedAttributeList: [obj]));
       },
       onNext: () {
-
-
-          ref
-              .read(inspectionNotifierProvider.notifier)
-              .updateInspection();
-
+        ref.read(inspectionNotifierProvider.notifier).updateInspection();
       },
       isLoading: ref.watch(inspectionNotifierProvider).isLoading,
     );
   }
 }
-

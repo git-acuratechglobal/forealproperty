@@ -42,7 +42,7 @@ _$SelectedAttributeImpl _$$SelectedAttributeImplFromJson(
       WorkingByTenant: json['WorkingByTenant'],
       UndermanagedByTenant: json['UndermanagedByTenant'],
       AddUpdatePictures: (json['AddUpdatePictures'] as List<dynamic>)
-          .map((e) => e as String)
+          .map((e) => e as Map<String, dynamic>)
           .toList(),
     );
 

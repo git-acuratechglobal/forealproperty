@@ -12,6 +12,7 @@ class AsyncWidget<T> extends StatelessWidget {
   final bool skipLoadingOnReload;
   final bool skipLoadingOnRefresh;
   final bool skipError;
+  final bool showLoading;
   const AsyncWidget({
     super.key,
     required this.value,
@@ -21,6 +22,7 @@ class AsyncWidget<T> extends StatelessWidget {
     this.skipLoadingOnRefresh = true,
     this.skipError = false,
     this.height = 200,
+    this.showLoading=true
   });
 
   @override

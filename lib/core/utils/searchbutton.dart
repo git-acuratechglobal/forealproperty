@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // class DropdoenWidget extends ConsumerStatefulWidget {
 //   final List<String>? items;
@@ -178,16 +182,18 @@ class DropdownSearchWidget<T> extends StatefulWidget {
   final String Function(T) itemAsString;
   final String? hintText;
   final String Function(T, String) searchFilter;
+  final void Function(String)? onSearch;
 
-  const DropdownSearchWidget({
-    Key? key,
-    required this.items,
-    required this.itemAsString,
-    required this.searchFilter,
-    this.selectedValue,
-    this.onChanged,
-    this.hintText,
-  }) : super(key: key);
+  const DropdownSearchWidget(
+      {Key? key,
+      required this.items,
+      required this.itemAsString,
+      required this.searchFilter,
+      this.selectedValue,
+      this.onChanged,
+      this.hintText,
+      this.onSearch})
+      : super(key: key);
 
   @override
   State<DropdownSearchWidget<T>> createState() =>
@@ -205,12 +211,7 @@ class _DropdownSearchWidgetState<T> extends State<DropdownSearchWidget<T>> {
 
   void _filterItems(String query) {
     final trimmedQuery = query.trim().toLowerCase();
-    final results = widget.items
-        .where((item) => widget
-            .searchFilter(item, trimmedQuery)
-            .toLowerCase()
-            .contains(trimmedQuery))
-        .toList();
+    final results = widget.items;
 
     setState(() {
       filteredItems = results;
@@ -303,6 +304,7 @@ class _DropdownSearchWidgetState<T> extends State<DropdownSearchWidget<T>> {
     return CompositedTransformTarget(
         link: _layerLink,
         child: TextFormField(
+          onChanged: widget.onSearch,
           controller: searchController,
           focusNode: focusNode,
           decoration: InputDecoration(
@@ -350,5 +352,321 @@ class _DropdownSearchWidgetState<T> extends State<DropdownSearchWidget<T>> {
                 : null,
           ),
         ));
+  }
+}
+
+// class DropdownSearchWidget2<T> extends StatefulWidget {
+//   final List<T> items;
+//   final T? selectedValue;
+//   final void Function(T?)? onChanged;
+//   final String Function(T) itemAsString;
+//   final String? hintText;
+//   final String Function(T, String) searchFilter;
+//   final void Function(String)? onSearch;
+//
+//   const DropdownSearchWidget2(
+//       {Key? key,
+//       required this.items,
+//       required this.itemAsString,
+//       required this.searchFilter,
+//       this.selectedValue,
+//       this.onChanged,
+//       this.hintText,
+//       this.onSearch})
+//       : super(key: key);
+//
+//   @override
+//   State<DropdownSearchWidget2<T>> createState() =>
+//       _DropdownSearchWidget2State<T>();
+// }
+
+class DropdownSearchHookWidget<T> extends HookWidget {
+  final List<T> items;
+  final T? selectedValue;
+  final void Function(T?)? onChanged;
+  final String Function(T) itemAsString;
+  final String? hintText;
+  final void Function(String)? onSearch;
+
+  const DropdownSearchHookWidget({
+    Key? key,
+    required this.items,
+    required this.itemAsString,
+    this.selectedValue,
+    this.onChanged,
+    this.hintText,
+    this.onSearch,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final searchController = useTextEditingController();
+    final focusNode = useFocusNode();
+    final layerLink = useMemoized(() => LayerLink());
+    final overlayEntry = useRef<OverlayEntry?>(null);
+
+    final selectedItem = useState<T?>(selectedValue);
+    final showDropdown = useState(false);
+    final lastSearchTerm = useState('');
+    final debounceTimer = useRef<Timer?>(null);
+
+    /// Hide overlay dropdown
+    void hideOverlay() {
+      overlayEntry.value?.remove();
+      overlayEntry.value = null;
+      showDropdown.value = false;
+    }
+
+    /// Show overlay dropdown
+    void showOverlay() {
+      if (overlayEntry.value != null || items.isEmpty) return;
+      final overlay = Overlay.of(context);
+
+      overlayEntry.value = OverlayEntry(
+        builder: (context) => Positioned(
+          width: MediaQuery.of(context).size.width - 32,
+          child: CompositedTransformFollower(
+            link: layerLink,
+            showWhenUnlinked: false,
+            offset: const Offset(0, 60),
+            child: Material(
+              elevation: 4,
+              borderRadius: BorderRadius.circular(4),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 250),
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return ListTile(
+                      title: Text(itemAsString(item)),
+                      onTap: () {
+                        selectedItem.value = item;
+                        searchController.text = itemAsString(item);
+                        showDropdown.value = false;
+                        onChanged?.call(item);
+                        focusNode.unfocus();
+                        hideOverlay();
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      overlay.insert(overlayEntry.value!);
+      showDropdown.value = true;
+    }
+
+    /// Handle search text changes
+    void onSearchChanged(String value) {
+      debounceTimer.value?.cancel();
+
+      debounceTimer.value = Timer(const Duration(milliseconds: 300), () {
+        if (value.trim().isNotEmpty && value != lastSearchTerm.value) {
+          lastSearchTerm.value = value;
+          onSearch?.call(value);
+        } else if (value.trim().isEmpty) {
+          hideOverlay();
+        }
+      });
+    }
+
+    /// Effects
+    useEffect(() {
+      if (selectedItem.value != null) {
+        searchController.text = itemAsString(selectedItem.value as T);
+      }
+
+      focusNode.addListener(() {
+        if (!focusNode.hasFocus) {
+          hideOverlay();
+          // restore text if user didn’t select new
+          if (selectedItem.value != null &&
+              searchController.text != itemAsString(selectedItem.value as T)) {
+            searchController.text = itemAsString(selectedItem.value as T);
+          }
+        }
+      });
+
+      return () {
+        debounceTimer.value?.cancel();
+        hideOverlay();
+      };
+    }, []);
+
+    /// When new data comes from parent API
+    useEffect(() {
+      if (items.isNotEmpty &&
+          focusNode.hasFocus &&
+          searchController.text.trim().isNotEmpty) {
+        showOverlay();
+      }
+      return null;
+    }, [items]);
+
+    /// Update selectedValue externally
+    useEffect(() {
+      if (selectedValue != null && selectedValue != selectedItem.value) {
+        selectedItem.value = selectedValue;
+        searchController.text = itemAsString(selectedValue!);
+      }
+      return null;
+    }, [selectedValue]);
+
+    return CompositedTransformTarget(
+      link: layerLink,
+      child: TextFormField(
+        onChanged: onSearchChanged,
+        controller: searchController,
+        focusNode: focusNode,
+        decoration: InputDecoration(
+          hintText: hintText ?? 'Search',
+          hintStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: const Color(0XFFa0a4b0),
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+              ),
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
+          border: const OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xFFE2E2E2)),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xFFE2E2E2)),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xFFE2E2E2)),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
+          suffixIcon: searchController.text.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    searchController.clear();
+                    selectedItem.value = null;
+                    hideOverlay();
+                    onChanged?.call(null);
+                  },
+                )
+              : null,
+        ),
+      ),
+    );
+  }
+}
+
+class CustomSearchFiled<T> extends HookConsumerWidget {
+  const CustomSearchFiled(
+      {super.key,
+      required this.items,
+      required this.displayString,
+      required this.onSelected,
+      this.onSearch,
+      this.controller,
+      this.showList = false,
+      this.onClear,
+      this.isLoading = false});
+  final List<T> items;
+  final String Function(T item) displayString;
+  final void Function(T? selected) onSelected;
+  final void Function(String)? onSearch;
+  final TextEditingController? controller;
+  final bool showList;
+  final void Function()? onClear;
+  final bool isLoading;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textController = controller ?? useTextEditingController();
+
+    return Column(
+      children: [
+        TextFormField(
+          onChanged: (val) {
+            onSearch?.call(val);
+          },
+          controller: textController,
+          decoration: InputDecoration(
+            hintText: 'Search Property',
+            hintStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: const Color(0XFFa0a4b0),
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w800),
+            filled: true,
+            fillColor: Colors.white,
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
+            border: const OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFE2E2E2)),
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFE2E2E2)),
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFE2E2E2)),
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            errorBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            focusedErrorBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            suffixIcon: textController.text.isNotEmpty
+                ? IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      textController.clear();
+                      onClear?.call();
+                    },
+                  )
+                : null,
+          ),
+        ),
+        if (isLoading)
+          Center(
+            child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+        if (items.isNotEmpty && showList)
+          Container(
+            constraints: const BoxConstraints(maxHeight: 200),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+            ),
+            child: ListView.builder(
+              itemCount: items.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                final item = items[index];
+                return ListTile(
+                  title: Text(displayString(item)),
+                  onTap: () {
+                    onSelected(item);
+                    textController.text = displayString(item);
+                    onClear?.call();
+                  },
+                );
+              },
+            ),
+          ),
+      ],
+    );
   }
 }

@@ -19,6 +19,8 @@ class ApiEndPoints{
 
   static const String getPropertyListing = "property/getPropertyListingList";
 
+  static const String searchPropertyForInspection='property/searchenlistPropertyForSelect2';
+
   static const String addImage = "property/addpropertyImages";
 
   static const String addPropertyAttributes = "property/addpropertyAttributes";
@@ -60,6 +62,8 @@ class ApiEndPoints{
   static String addTemplate="inspection/submitupdatedtemplatedetails";
 
   static String deleteTemplate="inspection/removetemplatefrominspection";
+
+  static String shareInspection="inspection/finaliseinspection";
 
 }
 

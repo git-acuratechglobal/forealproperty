@@ -56,13 +56,15 @@ class InspectionTab extends HookConsumerWidget {
                 ),
                 SliverToBoxAdapter(
                   child: PaginationWidgetC(
-                    retry: ()=>ref.refresh(inspectionListNotifierProvider),
+                      retry: () => ref.refresh(inspectionListNotifierProvider),
                       value: ref.watch(inspectionListNotifierProvider),
                       itemBuilder: (index, InspectionListModel data) =>
                           GestureDetector(
                               onTap: () {
                                 context.push(PropertyInspectionDetails(
                                   inspectionId: data.inspectionId ?? 0,
+                                  inspectionUniqueId:
+                                      data.inspectionUniqueId ?? "",
                                 ));
                               },
                               child: InspectionCardWidget(obj: data)),

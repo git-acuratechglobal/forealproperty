@@ -176,5 +176,24 @@ class _GetPropertyListingProviderElement
   @override
   int get propertyType => (origin as GetPropertyListingProvider).propertyType;
 }
+
+String _$searchPropertyForInspectionHash() =>
+    r'1e467712c46d1538e3ad906636a35ea6d33bb120';
+
+/// See also [SearchPropertyForInspection].
+@ProviderFor(SearchPropertyForInspection)
+final searchPropertyForInspectionProvider = AutoDisposeAsyncNotifierProvider<
+    SearchPropertyForInspection, List<PropertyForInspection>>.internal(
+  SearchPropertyForInspection.new,
+  name: r'searchPropertyForInspectionProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$searchPropertyForInspectionHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$SearchPropertyForInspection
+    = AutoDisposeAsyncNotifier<List<PropertyForInspection>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -37,7 +37,7 @@ abstract class SelectedAttribute with _$SelectedAttribute {
      dynamic CleanedByTenant,
      dynamic WorkingByTenant,
      dynamic UndermanagedByTenant,
-    required List<String> AddUpdatePictures,
+    required List<Map<String,dynamic>> AddUpdatePictures,
   }) = _SelectedAttribute;
 
   factory SelectedAttribute.fromJson(Map<String, dynamic> json) => _$SelectedAttributeFromJson(json);

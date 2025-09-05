@@ -15,6 +15,8 @@ import 'package:foreal_property/features/home_features/models/sale_and_lease_mod
 import 'package:foreal_property/features/home_features/models/searchforpropertylisting.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../features/inspection_feature/model/property_for_inspection.dart';
+
 final homeServiceProvider = Provider<HomeServices>((ref) {
   final apiClient = ref.watch(apiClientProvider);
   final localStorageService = ref.watch(localStorageServiceProvider);
@@ -92,6 +94,26 @@ class HomeServices {
           response.data['object']['propertyListingList']; // yeh sei trika hai
 
       return jsonList.map((e) => PropertyListingList.fromJson(e)).toList();
+    });
+  }
+
+  Future<List<PropertyForInspection>> searchPropertyForInspection({
+ String?search=""
+  }) async {
+    final bodyData = {
+      "Search": search, "RecordsPerPage": 10, "PageNo": 1
+    };
+
+    return asyncGuard(() async {
+      final response = await _client.post(
+        ApiEndPoints.searchPropertyForInspection,
+        data: bodyData,
+      );
+
+      final List<dynamic> jsonList =
+      response.data['list']??[];
+
+      return jsonList.map((e) => PropertyForInspection.fromJson(e)).toList();
     });
   }
 

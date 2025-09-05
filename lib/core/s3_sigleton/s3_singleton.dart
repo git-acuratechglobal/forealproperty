@@ -25,7 +25,7 @@ class UploadResult {
   }
 }
 
-final miniServiceProvider=Provider<MinioService>((ref)=>MinioService());
+final miniServiceProvider = Provider<MinioService>((ref) => MinioService());
 
 class MinioService {
   // Private constructor
@@ -81,7 +81,7 @@ class MinioService {
     required String folderPath,
     required String filePrefix,
     int urlExpirySeconds = 3600,
-    Function(double progress)? onProgress,
+    Function(int progress)? onProgress,
   }) async {
     try {
       _ensureInitialized();
@@ -133,29 +133,25 @@ class MinioService {
       // Create stream with progress tracking
       final stream = Stream.fromIterable([fileBytes]).map((chunk) {
         uploadedSize += chunk.length;
-        final progress = uploadedSize / totalSize;
-        onProgress?.call(progress);
         return chunk;
       });
 
       // Upload to S3
-      await _minio.putObject(
-        _bucketName,
-        folderPath,
-        stream,
-        size: fileBytes.length,
-        metadata: {
-          'Content-Type': contentType,
-          'Content-Disposition': 'inline',
-          'Cache-Control': 'max-age=31536000',
-        },
-      );
 
+      final result = await _minio.putObject(_bucketName, "${filePrefix}${folderPath}", stream,
+          size: fileBytes.length,
+          metadata: {
+            'Content-Type': contentType,
+            'Content-Disposition': 'inline',
+            'Cache-Control': 'max-age=31536000',
+          }, onProgress: (val) {
+            onProgress?.call(val);
+      });
       return UploadResult(
-        key: folderPath,
+        key: "${filePrefix}${folderPath}",
         status: UploadStatus.success,
         message: "Image uploaded successfully",
-        presignedUrl: "",
+        presignedUrl: result,
       );
     } catch (e) {
       return UploadResult(
@@ -175,7 +171,7 @@ class MinioService {
       _ensureInitialized();
 
       final presignedUrl = await _minio.presignedGetObject(
-       bucketName?? _bucketName,
+        bucketName ?? _bucketName,
         key,
         expires: expirySeconds,
       );
@@ -185,12 +181,6 @@ class MinioService {
       throw Exception('Failed to generate presigned URL: ${e.toString()}');
     }
   }
-
-
-
-
-
-
 
   /// Helper method to validate image extensions
   bool _isValidImageExtension(String extension) {
@@ -228,8 +218,6 @@ class MinioService {
     }
   }
 
-
-
   /// Dispose method (optional, for cleanup if needed)
   void dispose() {
     // Cleanup if needed
@@ -248,24 +236,23 @@ extension MinioServiceExtensions on MinioService {
     );
   }
 
-  Future<UploadResult> uploadInspectionPropertyImage(File imageFile, imagePath) {
+  Future<UploadResult> uploadInspectionPropertyImage(
+      File imageFile, imagePath,) {
     return uploadImage(
-      imageFile: imageFile,
-      folderPath: imagePath,
-      filePrefix: 'inspection/',
-    );
+        imageFile: imageFile,
+        folderPath: imagePath,
+        filePrefix: 'inspection/',
+       );
   }
 
   /// Quick upload for profile images
   Future<UploadResult> uploadProfileImage(File imageFile,
-      {Function(double)? onProgress}) {
+      ) {
     return uploadImage(
       imageFile: imageFile,
       folderPath: 'profiles',
       filePrefix: 'profile_img',
-      onProgress: onProgress,
+
     );
   }
 }
-
-

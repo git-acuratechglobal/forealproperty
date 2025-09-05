@@ -13,6 +13,7 @@ import '../../../features/inspection_feature/params/add_template_param.dart';
 import '../../../features/inspection_feature/params/update_inspection_params.dart';
 import '../../network/dio_client.dart';
 import '../auth_service/auth_service.dart';
+import 'package:path/path.dart' as path;
 
 final inspectionServiceProvider = Provider<InspectionService>((ref) {
   final dio = ref.watch(dioProvider);
@@ -65,34 +66,48 @@ class InspectionService {
   Future<String> updateInspection(
       {required UpdateInspectionParams param}) async {
     return asyncGuard(() async {
-      // if (param.SelectedAttributeList[0].AddUpdatePictures.isNotEmpty) {
-      //   final timestamp = DateTime.now().millisecondsSinceEpoch;
-      //   final customPaths = List.generate(
-      //     param.SelectedAttributeList[0].AddUpdatePictures.length,
-      //     (i) => 'inspection/${timestamp + i}.jpg',
-      //   );
-      //   for (var i = 0; i < customPaths.length; i++) {
-      //     await minioService.uploadInspectionPropertyImage(
-      //       File(param.SelectedAttributeList[0].AddUpdatePictures[i]),
-      //       customPaths[i],
-      //     );
-      //   }
-      //   final updatedAttributes = param.SelectedAttributeList
-      //       .asMap()
-      //       .map((index, attr) {
-      //     if (index == 0) {
-      //       return MapEntry(
-      //         index,
-      //         attr.copyWith(AddUpdatePictures: []),
-      //       );
-      //     }
-      //     return MapEntry(index, attr);
-      //   })
-      //       .values
-      //       .toList();
-      //
-      //   param = param.copyWith(SelectedAttributeList: updatedAttributes);
-      // }
+      if (param.SelectedAttributeList[0].AddUpdatePictures.isNotEmpty) {
+        final timestamp = DateTime.now().millisecondsSinceEpoch;
+        final customPaths = List.generate(
+          param.SelectedAttributeList[0].AddUpdatePictures.length,
+          (i) {
+            final filePath =
+                param.SelectedAttributeList[0].AddUpdatePictures[i]['PicturePath'];
+            final extension = path.extension(filePath).toLowerCase();
+
+            final safeExt = extension.isNotEmpty ? extension : ".jpg";
+
+            return 'inspection${timestamp + i}$safeExt';
+          },
+        );
+        final result = await Future.wait([
+          for (var i = 0; i < customPaths.length; i++)
+            minioService.uploadInspectionPropertyImage(
+              File(param.SelectedAttributeList[0].AddUpdatePictures[i]['PicturePath']),
+              customPaths[i],
+            )
+        ]);
+        print(result.map((e) => e.key));
+        final updatedAttributes = param.SelectedAttributeList.asMap()
+            .map((index, attr) {
+              if (index == 0) {
+                return MapEntry(
+                  index,
+                  attr.copyWith(
+                      AddUpdatePictures:result.map((e) => {
+                        "id":0,
+                        "PicturePath":e.key
+                      } ).toList()
+                          ),
+                );
+              }
+              return MapEntry(index, attr);
+            })
+            .values
+            .toList();
+
+        param = param.copyWith(SelectedAttributeList: updatedAttributes);
+      }
       final response =
           await _dio.post(ApiEndPoints.updateInspection, data: param.toJson());
       return response.data['message'];
@@ -139,6 +154,21 @@ class InspectionService {
           data: {"TemplateId": templateId, "InspectionId": inspectionId});
       final jsonObj = response.data['message'];
 
+      return jsonObj;
+    });
+  }
+
+  Future<String> shareInspection(
+      {required String inspectionId,
+      required int userType,
+      required int userId}) async {
+    return asyncGuard(() async {
+      final response = await _dio.post(ApiEndPoints.shareInspection, data: {
+        "InspectionUniqueId": inspectionId,
+        "UserType": userType,
+        "LoggedUserId": userId
+      });
+      final jsonObj = response.data['message'];
       return jsonObj;
     });
   }

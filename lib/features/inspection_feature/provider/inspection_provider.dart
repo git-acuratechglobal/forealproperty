@@ -34,7 +34,19 @@ class InspectionNotifier extends _$InspectionNotifier {
     });
   }
 
-
+  Future<void> shareInspection(
+      {required String inspectionId,
+      required int userType,
+      required int userId}) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final response = await ref
+          .read(inspectionServiceProvider)
+          .shareInspection(
+              inspectionId: inspectionId, userType: userType, userId: userId);
+      return response;
+    });
+  }
 }
 
 @Riverpod(keepAlive: true)

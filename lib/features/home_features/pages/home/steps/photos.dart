@@ -193,7 +193,7 @@ class _PhotosState extends ConsumerState<Photos> {
                                 newValue.map((e) => File(e.path)).toList();
                             final customPaths = List.generate(
                               newImages.length,
-                              (i) => 'property/${timestamp + i}.jpg',
+                              (i) => 'property${timestamp + i}.jpg',
                             );
 
                             ref
@@ -224,7 +224,7 @@ class _PhotosState extends ConsumerState<Photos> {
                             newValue.map((e) => File(e.path)).toList();
                         final customPaths = List.generate(
                           newImages.length,
-                          (i) => 'property/${timestamp + i}.jpg',
+                          (i) => 'property${timestamp + i}.jpg',
                         );
 
                         ref

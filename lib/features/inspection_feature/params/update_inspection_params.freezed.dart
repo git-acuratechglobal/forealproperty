@@ -297,7 +297,8 @@ mixin _$SelectedAttribute {
   dynamic get CleanedByTenant => throw _privateConstructorUsedError;
   dynamic get WorkingByTenant => throw _privateConstructorUsedError;
   dynamic get UndermanagedByTenant => throw _privateConstructorUsedError;
-  List<String> get AddUpdatePictures => throw _privateConstructorUsedError;
+  List<Map<String, dynamic>> get AddUpdatePictures =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this SelectedAttribute to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -326,7 +327,7 @@ abstract class $SelectedAttributeCopyWith<$Res> {
       dynamic CleanedByTenant,
       dynamic WorkingByTenant,
       dynamic UndermanagedByTenant,
-      List<String> AddUpdatePictures});
+      List<Map<String, dynamic>> AddUpdatePictures});
 }
 
 /// @nodoc
@@ -400,7 +401,7 @@ class _$SelectedAttributeCopyWithImpl<$Res, $Val extends SelectedAttribute>
       AddUpdatePictures: null == AddUpdatePictures
           ? _value.AddUpdatePictures
           : AddUpdatePictures // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<Map<String, dynamic>>,
     ) as $Val);
   }
 }
@@ -424,7 +425,7 @@ abstract class _$$SelectedAttributeImplCopyWith<$Res>
       dynamic CleanedByTenant,
       dynamic WorkingByTenant,
       dynamic UndermanagedByTenant,
-      List<String> AddUpdatePictures});
+      List<Map<String, dynamic>> AddUpdatePictures});
 }
 
 /// @nodoc
@@ -496,7 +497,7 @@ class __$$SelectedAttributeImplCopyWithImpl<$Res>
       AddUpdatePictures: null == AddUpdatePictures
           ? _value._AddUpdatePictures
           : AddUpdatePictures // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<Map<String, dynamic>>,
     ));
   }
 }
@@ -515,7 +516,7 @@ class _$SelectedAttributeImpl implements _SelectedAttribute {
       this.CleanedByTenant,
       this.WorkingByTenant,
       this.UndermanagedByTenant,
-      required final List<String> AddUpdatePictures})
+      required final List<Map<String, dynamic>> AddUpdatePictures})
       : _AddUpdatePictures = AddUpdatePictures;
 
   factory _$SelectedAttributeImpl.fromJson(Map<String, dynamic> json) =>
@@ -541,9 +542,9 @@ class _$SelectedAttributeImpl implements _SelectedAttribute {
   final dynamic WorkingByTenant;
   @override
   final dynamic UndermanagedByTenant;
-  final List<String> _AddUpdatePictures;
+  final List<Map<String, dynamic>> _AddUpdatePictures;
   @override
-  List<String> get AddUpdatePictures {
+  List<Map<String, dynamic>> get AddUpdatePictures {
     if (_AddUpdatePictures is EqualUnmodifiableListView)
       return _AddUpdatePictures;
     // ignore: implicit_dynamic_type
@@ -616,17 +617,18 @@ class _$SelectedAttributeImpl implements _SelectedAttribute {
 
 abstract class _SelectedAttribute implements SelectedAttribute {
   const factory _SelectedAttribute(
-      {required final int Id,
-      required final bool Cleaned,
-      required final bool Undermanaged,
-      required final bool Working,
-      final dynamic AgentComment,
-      final dynamic TenantComment,
-      final dynamic IsTenantAgree,
-      final dynamic CleanedByTenant,
-      final dynamic WorkingByTenant,
-      final dynamic UndermanagedByTenant,
-      required final List<String> AddUpdatePictures}) = _$SelectedAttributeImpl;
+          {required final int Id,
+          required final bool Cleaned,
+          required final bool Undermanaged,
+          required final bool Working,
+          final dynamic AgentComment,
+          final dynamic TenantComment,
+          final dynamic IsTenantAgree,
+          final dynamic CleanedByTenant,
+          final dynamic WorkingByTenant,
+          final dynamic UndermanagedByTenant,
+          required final List<Map<String, dynamic>> AddUpdatePictures}) =
+      _$SelectedAttributeImpl;
 
   factory _SelectedAttribute.fromJson(Map<String, dynamic> json) =
       _$SelectedAttributeImpl.fromJson;
@@ -652,7 +654,7 @@ abstract class _SelectedAttribute implements SelectedAttribute {
   @override
   dynamic get UndermanagedByTenant;
   @override
-  List<String> get AddUpdatePictures;
+  List<Map<String, dynamic>> get AddUpdatePictures;
 
   /// Create a copy of SelectedAttribute
   /// with the given fields replaced by the non-null parameter values.

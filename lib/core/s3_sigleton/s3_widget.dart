@@ -3,10 +3,10 @@ import 'package:foreal_property/core/s3_sigleton/s3_singleton.dart';
 import 'package:foreal_property/core/utils/network_image_widget.dart';
 
 class S3ImageDisplayWidget extends StatefulWidget {
-  const S3ImageDisplayWidget({super.key, required this.imagePath});
+  const S3ImageDisplayWidget({super.key, required this.imagePath,this.bucketName=""});
 
   final String imagePath;
-
+   final String bucketName;
   @override
   State<S3ImageDisplayWidget> createState() => _S3ImageDisplayWidgetState();
 }
@@ -57,7 +57,7 @@ class _S3ImageDisplayWidgetState extends State<S3ImageDisplayWidget>
         return;
       }
 
-      final url = await _minioService.getPresignedUrl(key: widget.imagePath);
+      final url = await _minioService.getPresignedUrl(key: widget.imagePath,);
 
       _urlCache[widget.imagePath] = url;
       _cacheTimestamps[widget.imagePath] = DateTime.now();
