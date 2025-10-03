@@ -40,7 +40,7 @@ class _OpenhomeState extends ConsumerState<Openhome> {
             padding: const EdgeInsets.only(right: 24, bottom: 4, left: 16),
             child: InkWell(
               onTap: () {
-                context.push(CurrentRegistration(
+                context.navPush(CurrentRegistration(
                   openHomeUniqueId: widget.openHomeUniqueId,
                 ));
               },
@@ -693,7 +693,7 @@ class _OpenhomeState extends ConsumerState<Openhome> {
                               backgroundColor: Colors.white,
                               side: const BorderSide(color: Color(0xFF164C63))),
                           onPressed: () {
-                            context.push(CurrentRegistration(
+                            context.navPush(CurrentRegistration(
                                 openHomeUniqueId: widget.openHomeUniqueId));
                           },
                           child: Row(

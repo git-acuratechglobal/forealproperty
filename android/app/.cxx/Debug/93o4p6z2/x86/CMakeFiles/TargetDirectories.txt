@@ -1,0 +1,2 @@
+/Users/acuratechglobal/Documents/Github Projects/forealproperty/android/app/.cxx/Debug/93o4p6z2/x86/CMakeFiles/edit_cache.dir
+/Users/acuratechglobal/Documents/Github Projects/forealproperty/android/app/.cxx/Debug/93o4p6z2/x86/CMakeFiles/rebuild_cache.dir

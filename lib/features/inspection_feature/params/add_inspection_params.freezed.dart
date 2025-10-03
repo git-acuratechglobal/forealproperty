@@ -30,6 +30,7 @@ mixin _$AddInspectionParams {
   int get AssignedAgent => throw _privateConstructorUsedError;
   int get AgencyId => throw _privateConstructorUsedError;
   int? get LoggedUserId => throw _privateConstructorUsedError;
+  String get AssignedTo => throw _privateConstructorUsedError;
 
   /// Serializes this AddInspectionParams to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -57,7 +58,8 @@ abstract class $AddInspectionParamsCopyWith<$Res> {
       String Summary,
       int AssignedAgent,
       int AgencyId,
-      int? LoggedUserId});
+      int? LoggedUserId,
+      String AssignedTo});
 }
 
 /// @nodoc
@@ -85,6 +87,7 @@ class _$AddInspectionParamsCopyWithImpl<$Res, $Val extends AddInspectionParams>
     Object? AssignedAgent = null,
     Object? AgencyId = null,
     Object? LoggedUserId = freezed,
+    Object? AssignedTo = null,
   }) {
     return _then(_value.copyWith(
       CreatedBy: null == CreatedBy
@@ -127,6 +130,10 @@ class _$AddInspectionParamsCopyWithImpl<$Res, $Val extends AddInspectionParams>
           ? _value.LoggedUserId
           : LoggedUserId // ignore: cast_nullable_to_non_nullable
               as int?,
+      AssignedTo: null == AssignedTo
+          ? _value.AssignedTo
+          : AssignedTo // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -149,7 +156,8 @@ abstract class _$$AddInspectionParamsImplCopyWith<$Res>
       String Summary,
       int AssignedAgent,
       int AgencyId,
-      int? LoggedUserId});
+      int? LoggedUserId,
+      String AssignedTo});
 }
 
 /// @nodoc
@@ -175,6 +183,7 @@ class __$$AddInspectionParamsImplCopyWithImpl<$Res>
     Object? AssignedAgent = null,
     Object? AgencyId = null,
     Object? LoggedUserId = freezed,
+    Object? AssignedTo = null,
   }) {
     return _then(_$AddInspectionParamsImpl(
       CreatedBy: null == CreatedBy
@@ -217,6 +226,10 @@ class __$$AddInspectionParamsImplCopyWithImpl<$Res>
           ? _value.LoggedUserId
           : LoggedUserId // ignore: cast_nullable_to_non_nullable
               as int?,
+      AssignedTo: null == AssignedTo
+          ? _value.AssignedTo
+          : AssignedTo // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -234,7 +247,8 @@ class _$AddInspectionParamsImpl implements _AddInspectionParams {
       required this.Summary,
       this.AssignedAgent = 1,
       required this.AgencyId,
-      required this.LoggedUserId});
+      required this.LoggedUserId,
+      this.AssignedTo = ""});
 
   factory _$AddInspectionParamsImpl.fromJson(Map<String, dynamic> json) =>
       _$$AddInspectionParamsImplFromJson(json);
@@ -260,10 +274,13 @@ class _$AddInspectionParamsImpl implements _AddInspectionParams {
   final int AgencyId;
   @override
   final int? LoggedUserId;
+  @override
+  @JsonKey()
+  final String AssignedTo;
 
   @override
   String toString() {
-    return 'AddInspectionParams(CreatedBy: $CreatedBy, InspectionType: $InspectionType, PropertyId: $PropertyId, InspectionDate: $InspectionDate, StartTime: $StartTime, EndTime: $EndTime, Summary: $Summary, AssignedAgent: $AssignedAgent, AgencyId: $AgencyId, LoggedUserId: $LoggedUserId)';
+    return 'AddInspectionParams(CreatedBy: $CreatedBy, InspectionType: $InspectionType, PropertyId: $PropertyId, InspectionDate: $InspectionDate, StartTime: $StartTime, EndTime: $EndTime, Summary: $Summary, AssignedAgent: $AssignedAgent, AgencyId: $AgencyId, LoggedUserId: $LoggedUserId, AssignedTo: $AssignedTo)';
   }
 
   @override
@@ -288,7 +305,9 @@ class _$AddInspectionParamsImpl implements _AddInspectionParams {
             (identical(other.AgencyId, AgencyId) ||
                 other.AgencyId == AgencyId) &&
             (identical(other.LoggedUserId, LoggedUserId) ||
-                other.LoggedUserId == LoggedUserId));
+                other.LoggedUserId == LoggedUserId) &&
+            (identical(other.AssignedTo, AssignedTo) ||
+                other.AssignedTo == AssignedTo));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -304,7 +323,8 @@ class _$AddInspectionParamsImpl implements _AddInspectionParams {
       Summary,
       AssignedAgent,
       AgencyId,
-      LoggedUserId);
+      LoggedUserId,
+      AssignedTo);
 
   /// Create a copy of AddInspectionParams
   /// with the given fields replaced by the non-null parameter values.
@@ -334,7 +354,8 @@ abstract class _AddInspectionParams implements AddInspectionParams {
       required final String Summary,
       final int AssignedAgent,
       required final int AgencyId,
-      required final int? LoggedUserId}) = _$AddInspectionParamsImpl;
+      required final int? LoggedUserId,
+      final String AssignedTo}) = _$AddInspectionParamsImpl;
 
   factory _AddInspectionParams.fromJson(Map<String, dynamic> json) =
       _$AddInspectionParamsImpl.fromJson;
@@ -359,6 +380,8 @@ abstract class _AddInspectionParams implements AddInspectionParams {
   int get AgencyId;
   @override
   int? get LoggedUserId;
+  @override
+  String get AssignedTo;
 
   /// Create a copy of AddInspectionParams
   /// with the given fields replaced by the non-null parameter values.

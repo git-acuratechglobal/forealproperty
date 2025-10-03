@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:foreal_property/core/services/home_services/home_services.dart';
 import 'package:foreal_property/features/home_features/models/get_property_listing_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

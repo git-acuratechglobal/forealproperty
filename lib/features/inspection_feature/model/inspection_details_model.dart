@@ -1,4 +1,7 @@
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import 'inspection_toggle_model.dart';
 
 part 'inspection_details_model.g.dart';
 
@@ -90,7 +93,7 @@ class InspectionComplianceUtilitiesDetails {
   final bool? ventilation;
   final bool? elctrcityOutletsSockt;
   final bool? plumbingandDrainage;
-  final dynamic waterMeterReading;
+  final num? waterMeterReading;
   final bool? suppliedElectricty;
   final bool? suppliedGas;
   final bool? connectdToWaterSupply;
@@ -103,11 +106,11 @@ class InspectionComplianceUtilitiesDetails {
   final bool? listedLooseFill;
   final bool? smokeAlarmInstalled;
   final bool? smokeAlarmWorking;
-  final dynamic smokeAlaramLastChecked;
+  final DateTime? smokeAlaramLastChecked;
   final bool? smokeAlarmBttryReplaced;
-  final dynamic battryChangedDate;
+  final DateTime? battryChangedDate;
   final bool? haveRemovableBattry;
-  final dynamic removableBattryChangedDate;
+  final DateTime? removableBattryChangedDate;
   final bool? visibleSIgnDamage;
   final bool? visibleElectricityHazard;
   final bool? visibleGasHazard;
@@ -120,19 +123,19 @@ class InspectionComplianceUtilitiesDetails {
   final bool? dualFlushToilet;
   final bool? coldWatrTapsMaximumFlow;
   final bool? checkedWaterLeakage;
-  final dynamic waterEfficiencyDateChecked;
-  final dynamic watermeterReadingStart;
-  final dynamic dateofWaterMeterReadingStart;
-  final dynamic watermeterReadingEnd;
-  final dynamic dateOdWaterMeterReadingEnd;
+  final DateTime? waterEfficiencyDateChecked;
+  final num? watermeterReadingStart;
+  final DateTime? dateofWaterMeterReadingStart;
+  final num? watermeterReadingEnd;
+  final DateTime? dateOdWaterMeterReadingEnd;
   final String? additionalComments;
-  final dynamic lastDatePaintingExternal;
-  final dynamic lastDatePaintingInternal;
-  final dynamic lastDateInstalledSmokeAlarms;
-  final dynamic lastDateFloorCleaned;
+  final DateTime? lastDatePaintingExternal;
+  final DateTime? lastDatePaintingInternal;
+  final DateTime? lastDateInstalledSmokeAlarms;
+  final DateTime? lastDateFloorCleaned;
   final String? landlordAgreeToUndrtakeWork;
-  final List<dynamic>? landLordWorkDoneBy;
-  final List<dynamic>? landLordWorkDoneNote;
+  final List<String>? landLordWorkDoneBy;
+  final List<String>? landLordWorkDoneNote;
   final DateTime? tenantReceivedOn;
   final dynamic isAutoSubmitted;
   final bool? isSubmited;
@@ -140,6 +143,210 @@ class InspectionComplianceUtilitiesDetails {
   factory InspectionComplianceUtilitiesDetails.fromJson(
           Map<String, dynamic> json) =>
       _$InspectionComplianceUtilitiesDetailsFromJson(json);
+
+  List<InspectionToggleModel> get healthIssuesList {
+    return [
+      InspectionToggleModel(
+        title: 'Signs of mould and dampness',
+        initialValue: signsMuds ?? false,
+      ),
+      InspectionToggleModel(
+        title: 'Pest and Vermin',
+        initialValue: pestsVermin ?? false,
+      ),
+      InspectionToggleModel(
+        title: 'Rubbish been left on premises',
+        initialValue: rubbish ?? false,
+      ),
+      InspectionToggleModel(
+        title: 'Premises listed on the loose-Fill Asbestos Insulation Register',
+        initialValue: listedLooseFill ?? false,
+      ),
+    ];
+  }
+
+  List<InspectionToggleModel> get getMinimumStandardList {
+    return [
+      InspectionToggleModel(
+          title: 'Premises structurally sound',
+          initialValue: premisesStrctlySound ?? false),
+      InspectionToggleModel(
+          title:
+              'Adequate natural or artificial lighting in each room(excluding storage rooms or garages)',
+          initialValue: lightingInRoom ?? false),
+      InspectionToggleModel(
+          title: 'Adequate Ventilation', initialValue: ventilation ?? false),
+      InspectionToggleModel(
+          title: 'Adequate electricity outlet sockets or gas outlet sockets',
+          initialValue: elctrcityOutletsSockt ?? false),
+      InspectionToggleModel(
+          title: 'Adequate plumbing and drainage',
+          initialValue: plumbingandDrainage ?? false),
+      InspectionToggleModel(
+          title: 'Supplied with electricity',
+          initialValue: suppliedElectricty ?? false),
+      InspectionToggleModel(
+          title: 'Supplied with gas', initialValue: suppliedGas ?? false),
+      InspectionToggleModel(
+          title: 'Connected to a water supply',
+          initialValue: connectdToWaterSupply ?? false),
+      InspectionToggleModel(
+          title:
+              'Contains Bathroom facilities, including toilet and washing facilities ',
+          initialValue: containBathrm ?? false),
+    ];
+  }
+
+  List<InspectionToggleModel> get smokeAlarmList {
+    return [
+      InspectionToggleModel(
+          title: 'Smoke Alarm been installed in the residential premises',
+          initialValue: smokeAlarmInstalled ?? false),
+      InspectionToggleModel(
+          title: 'Smoke alarms been checked and found in working order',
+          initialValue: smokeAlarmWorking ?? false),
+      InspectionToggleModel(
+          title: 'Date last checked',
+          initialValue: false,
+          fieldType: FieldType.date,
+          initialDateValue: smokeAlaramLastChecked != null
+              ? DateFormat('dd-MM-yyyy').format(smokeAlaramLastChecked!)
+              : 'Select a date'),
+      InspectionToggleModel(
+          title:
+              'Batteries in the all smoke alarms been replaced within the last 12 months, except for removable lithium batteries',
+          initialValue: smokeAlarmBttryReplaced ?? false),
+      InspectionToggleModel(
+          title: 'Date batteries were last changed',
+          initialValue: false,
+          fieldType: FieldType.date,
+          initialDateValue: battryChangedDate != null
+              ? DateFormat('dd-MM-yyyy').format(battryChangedDate!)
+              : "Select a date"),
+      InspectionToggleModel(
+          title:
+              'Batteries in all the smoke alarms with removable lithium battery have been replaced in the period specified by the manufacturer',
+          initialValue: haveRemovableBattry ?? false),
+      InspectionToggleModel(
+          title: 'Removable batteries last changed Date',
+          initialValue: false,
+          fieldType: FieldType.date,
+          initialDateValue: removableBattryChangedDate != null
+              ? DateFormat('dd-MM-yyyy').format(removableBattryChangedDate!)
+              : "Select a date"),
+    ];
+  }
+
+  List<InspectionToggleModel> get otherList {
+    return [
+      InspectionToggleModel(
+          title: 'Any Visible Signs of damage appliances',
+          initialValue: visibleSIgnDamage ?? false),
+      InspectionToggleModel(
+          title: 'Any visible hazards relating to electricity',
+          initialValue: visibleElectricityHazard ?? false),
+      InspectionToggleModel(
+          title: 'Any visible hazards relating to gas',
+          initialValue: visibleGasHazard ?? false),
+      InspectionToggleModel(
+          title: 'Tenant agrees with above?',
+          initialValue: tenantAgreeSafetyIssues ?? false),
+      InspectionToggleModel(
+          title: 'If no, specify which items:',
+          initialValue: additionalTermSafetyIssues == "true" ? true : false),
+    ];
+  }
+
+  List<InspectionToggleModel> get communicationList {
+    return [
+      InspectionToggleModel(
+          title: 'Telephone line is connected to the residential premises',
+          initialValue: telephoneConnectd ?? false),
+      InspectionToggleModel(
+          title: 'Internet line is connected to the residential premises',
+          initialValue: internetConnected ?? false),
+    ];
+  }
+
+  List<InspectionToggleModel> get waterEfficiencyList {
+    return [
+      InspectionToggleModel(
+          title: 'Residential premises separately metered ',
+          initialValue: seperatedMetered ?? false),
+      InspectionToggleModel(
+          title: 'Showerheads have a maximum flow rate of 9 liters per minute',
+          initialValue: showerheadMaximumFlow ?? false),
+      InspectionToggleModel(
+          title:
+              'On and from 23 March 2025, all toilets are dual flush toilets with a minimum 3 star rating in accordance the WELS scheme',
+          initialValue: dualFlushToilet ?? false),
+      InspectionToggleModel(
+          title:
+              'Internal cold water taps and single mixer taps in kitchen or bathroom hand basins have a maximum flow rate of 9 liters per minute',
+          initialValue: coldWatrTapsMaximumFlow ?? false),
+      InspectionToggleModel(
+          title: 'No leaking taps', initialValue: checkedWaterLeakage ?? false),
+      // InspectionToggleModel(title:  'Last checked to see if it is compliant with the water efficiency measures',
+      InspectionToggleModel(
+          title: "Water Meter Reading(Start of the Tenancy)",
+          fieldType: FieldType.input,
+          initialInputValue:
+              waterMeterReading != null ? waterMeterReading.toString() : ""),
+      InspectionToggleModel(
+          title: "Date of reading",
+          fieldType: FieldType.date,
+          initialDateValue: dateofWaterMeterReadingStart != null
+              ? DateFormat('dd-MM-yyyy').format(dateofWaterMeterReadingStart!)
+              : "Select a date"),
+      InspectionToggleModel(
+          title: "Water Meter Reading(End of the Tenancy)",
+          fieldType: FieldType.input,
+          initialInputValue: watermeterReadingEnd != null
+              ? watermeterReadingEnd.toString()
+              : ""),
+      InspectionToggleModel(
+          title: "Date of reading",
+          fieldType: FieldType.date,
+          initialDateValue: dateOdWaterMeterReadingEnd != null
+              ? DateFormat('dd-MM-yyyy').format(dateOdWaterMeterReadingEnd!)
+              : "Select a date")
+    ];
+  }
+
+  String get smokeAlaramLastDate {
+    if (lastDateInstalledSmokeAlarms == null) {
+      return "";
+    }
+    return DateFormat('dd-MM-yyyy').format(lastDateInstalledSmokeAlarms!);
+  }
+
+  String get lastDatePaintingExternalDate {
+    if (lastDatePaintingExternal == null) {
+      return "";
+    }
+    return DateFormat('dd-MM-yyyy').format(lastDatePaintingExternal!);
+  }
+
+  String get lastDatePaintingInternalDate {
+    if (lastDatePaintingInternal == null) {
+      return "";
+    }
+    return DateFormat('dd-MM-yyyy').format(lastDatePaintingInternal!);
+  }
+
+  String get lastDateFloorCleanedDate {
+    if (lastDateFloorCleaned == null) {
+      return "";
+    }
+    return DateFormat('dd-MM-yyyy').format(lastDateFloorCleaned!);
+  }
+
+  String get tenantReceivedOnDate {
+    if (landLordWorkDoneBy?.isEmpty ?? true) {
+      return "";
+    }
+    return landLordWorkDoneBy!.first;
+  }
 }
 
 @JsonSerializable(createToJson: false)

@@ -158,7 +158,7 @@ class _UpdateprofileState extends ConsumerState<Updateprofile> {
                       4.horizontalSpace,
                       InkWell(
                         onTap: () {
-                          context.push(const Changepassword());
+                          context.navPush(const Changepassword());
                         },
                         child: Text(
                           'Change Password',

@@ -121,7 +121,7 @@ class _DashboardState extends ConsumerState<Dashboard> with AutomaticKeepAliveCl
                                   height: 28.h,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      context.push(const AdressWidget(
+                                      context.navPush(const AdressWidget(
                                         isEdit: true,
                                       ));
                                     },
@@ -204,7 +204,7 @@ class _DashboardState extends ConsumerState<Dashboard> with AutomaticKeepAliveCl
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              context.push(const House());
+                              context.navPush(const House());
                          //     widget.onOpenHomesTap?.call();
                             },
                             child: Text('See all',

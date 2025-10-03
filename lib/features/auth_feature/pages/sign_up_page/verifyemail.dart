@@ -35,7 +35,7 @@ class _VerifyemailState extends ConsumerState<Verifyemail> {
               60.verticalSpace,
               InkWell(
                 onTap: (){
-                  context.pop();
+                  context.navPop();
                 },
                 child: Image.asset(
                   'assets/images/arrow-left.png',

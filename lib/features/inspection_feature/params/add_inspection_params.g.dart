@@ -19,6 +19,7 @@ _$AddInspectionParamsImpl _$$AddInspectionParamsImplFromJson(
       AssignedAgent: (json['AssignedAgent'] as num?)?.toInt() ?? 1,
       AgencyId: (json['AgencyId'] as num).toInt(),
       LoggedUserId: (json['LoggedUserId'] as num?)?.toInt(),
+      AssignedTo: json['AssignedTo'] as String? ?? "",
     );
 
 Map<String, dynamic> _$$AddInspectionParamsImplToJson(
@@ -34,4 +35,5 @@ Map<String, dynamic> _$$AddInspectionParamsImplToJson(
       'AssignedAgent': instance.AssignedAgent,
       'AgencyId': instance.AgencyId,
       'LoggedUserId': instance.LoggedUserId,
+      'AssignedTo': instance.AssignedTo,
     };

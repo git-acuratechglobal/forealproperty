@@ -9,7 +9,8 @@ abstract class AddTemplateParams with _$AddTemplateParams {
     required String AttributeLabel,
   }) = _AddTemplateParams;
 
-  factory AddTemplateParams.fromJson(Map<String, dynamic> json) => _$AddTemplateParamsFromJson(json);
+  factory AddTemplateParams.fromJson(Map<String, dynamic> json) =>
+      _$AddTemplateParamsFromJson(json);
 
   factory AddTemplateParams.empty() => const AddTemplateParams(
         Attribute: "",
@@ -20,16 +21,19 @@ abstract class AddTemplateParams with _$AddTemplateParams {
 @freezed
 abstract class TemplateState with _$TemplateState {
   const factory TemplateState({
-     String ?response,
+    String? response,
     required TemplateEvent event,
   }) = _TemplateState;
-
-
-
-
 }
 
-enum TemplateEvent{
-  add,
-  delete
+enum TemplateEvent { add, delete }
+
+@freezed
+abstract class SubTemplateState with _$SubTemplateState {
+  const factory SubTemplateState({
+    String? response,
+    required SubTemplateEvent event,
+  }) = _SubTemplateState;
 }
+
+enum SubTemplateEvent { add, delete }

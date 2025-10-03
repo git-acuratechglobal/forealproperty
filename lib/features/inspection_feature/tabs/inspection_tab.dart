@@ -3,20 +3,23 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foreal_property/Theme/navigation.dart';
 import 'package:foreal_property/core/widgets/asyncwidget.dart';
-import 'package:foreal_property/features/inspection_feature/pages/property_inspection_details/inspection_details.dart';
+import 'package:foreal_property/features/inspection_feature/pages/property_inspection_details/edit_report.dart';
 import 'package:foreal_property/features/inspection_feature/provider/inspection_list_provider.dart';
 import 'package:foreal_property/features/inspection_feature/tabs/widgets/inspection_card_widget.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/utils/custom_refreshIndicator.dart';
 import '../model/inspection_list_model.dart';
+import '../pages/property_inspection_details/inspection_details_tab.dart';
 
 class InspectionTab extends HookConsumerWidget {
-  const InspectionTab({super.key});
-
+  const InspectionTab({super.key, required this.tabId});
+  final int tabId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print("tabId: $tabId");
     final inspectionNotifier =
-        ref.read(inspectionListNotifierProvider.notifier);
+        ref.read(inspectionListNotifierProvider().notifier);
 
     final scrollController = useMemoized(() => ScrollController(), []);
 
@@ -25,7 +28,7 @@ class InspectionTab extends HookConsumerWidget {
         if (inspectionNotifier.canLoadMore() &&
             scrollController.position.pixels >=
                 scrollController.position.maxScrollExtent) {
-          inspectionNotifier.loadMoreData();
+          inspectionNotifier.loadMoreData(tabId: tabId);
         }
       }
 
@@ -39,7 +42,8 @@ class InspectionTab extends HookConsumerWidget {
           horizontal: 24,
         ),
         child: CustomRefreshIndicator(
-          onRefresh: () async => ref.refresh(inspectionListNotifierProvider),
+          onRefresh: () async =>
+              ref.refresh(inspectionListNotifierProvider(tabId: tabId)),
           child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
               controller: scrollController,
@@ -56,16 +60,20 @@ class InspectionTab extends HookConsumerWidget {
                 ),
                 SliverToBoxAdapter(
                   child: PaginationWidgetC(
-                      retry: () => ref.refresh(inspectionListNotifierProvider),
-                      value: ref.watch(inspectionListNotifierProvider),
+                      retry: () => ref.refresh(
+                          inspectionListNotifierProvider(tabId: tabId)),
+                      value: ref
+                          .watch(inspectionListNotifierProvider(tabId: tabId)),
                       itemBuilder: (index, InspectionListModel data) =>
                           GestureDetector(
                               onTap: () {
-                                context.push(PropertyInspectionDetails(
-                                  inspectionId: data.inspectionId ?? 0,
-                                  inspectionUniqueId:
-                                      data.inspectionUniqueId ?? "",
-                                ));
+                                context.pushNamed('inspection-details',
+                                    pathParameters: {
+                                      'inspectionId':
+                                          data.inspectionId.toString(),
+                                      'inspectionUniqueId':
+                                          data.inspectionUniqueId ?? ""
+                                    });
                               },
                               child: InspectionCardWidget(obj: data)),
                       onLoadMore: inspectionNotifier.loadMoreData,

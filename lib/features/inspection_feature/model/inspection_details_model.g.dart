@@ -44,7 +44,7 @@ InspectionComplianceUtilitiesDetails
           ventilation: json['ventilation'] as bool?,
           elctrcityOutletsSockt: json['elctrcityOutletsSockt'] as bool?,
           plumbingandDrainage: json['plumbingandDrainage'] as bool?,
-          waterMeterReading: json['waterMeterReading'],
+          waterMeterReading: json['waterMeterReading'] as num?,
           suppliedElectricty: json['suppliedElectricty'] as bool?,
           suppliedGas: json['suppliedGas'] as bool?,
           connectdToWaterSupply: json['connectdToWaterSupply'] as bool?,
@@ -57,11 +57,17 @@ InspectionComplianceUtilitiesDetails
           listedLooseFill: json['listedLooseFill'] as bool?,
           smokeAlarmInstalled: json['smokeAlarmInstalled'] as bool?,
           smokeAlarmWorking: json['smokeAlarmWorking'] as bool?,
-          smokeAlaramLastChecked: json['smokeAlaramLastChecked'],
+          smokeAlaramLastChecked: json['smokeAlaramLastChecked'] == null
+              ? null
+              : DateTime.parse(json['smokeAlaramLastChecked'] as String),
           smokeAlarmBttryReplaced: json['smokeAlarmBttryReplaced'] as bool?,
-          battryChangedDate: json['battryChangedDate'],
+          battryChangedDate: json['battryChangedDate'] == null
+              ? null
+              : DateTime.parse(json['battryChangedDate'] as String),
           haveRemovableBattry: json['haveRemovableBattry'] as bool?,
-          removableBattryChangedDate: json['removableBattryChangedDate'],
+          removableBattryChangedDate: json['removableBattryChangedDate'] == null
+              ? null
+              : DateTime.parse(json['removableBattryChangedDate'] as String),
           visibleSIgnDamage: json['visibleSIgnDamage'] as bool?,
           visibleElectricityHazard: json['visibleElectricityHazard'] as bool?,
           visibleGasHazard: json['visibleGasHazard'] as bool?,
@@ -75,20 +81,40 @@ InspectionComplianceUtilitiesDetails
           dualFlushToilet: json['dualFlushToilet'] as bool?,
           coldWatrTapsMaximumFlow: json['coldWatrTapsMaximumFlow'] as bool?,
           checkedWaterLeakage: json['checkedWaterLeakage'] as bool?,
-          waterEfficiencyDateChecked: json['waterEfficiencyDateChecked'],
-          watermeterReadingStart: json['watermeterReadingStart'],
-          dateofWaterMeterReadingStart: json['dateofWaterMeterReadingStart'],
-          watermeterReadingEnd: json['watermeterReadingEnd'],
-          dateOdWaterMeterReadingEnd: json['dateOdWaterMeterReadingEnd'],
+          waterEfficiencyDateChecked: json['waterEfficiencyDateChecked'] == null
+              ? null
+              : DateTime.parse(json['waterEfficiencyDateChecked'] as String),
+          watermeterReadingStart: json['watermeterReadingStart'] as num?,
+          dateofWaterMeterReadingStart: json['dateofWaterMeterReadingStart'] ==
+                  null
+              ? null
+              : DateTime.parse(json['dateofWaterMeterReadingStart'] as String),
+          watermeterReadingEnd: json['watermeterReadingEnd'] as num?,
+          dateOdWaterMeterReadingEnd: json['dateOdWaterMeterReadingEnd'] == null
+              ? null
+              : DateTime.parse(json['dateOdWaterMeterReadingEnd'] as String),
           additionalComments: json['additionalComments'] as String?,
-          lastDatePaintingExternal: json['lastDatePaintingExternal'],
-          lastDatePaintingInternal: json['lastDatePaintingInternal'],
-          lastDateInstalledSmokeAlarms: json['lastDateInstalledSmokeAlarms'],
-          lastDateFloorCleaned: json['lastDateFloorCleaned'],
+          lastDatePaintingExternal: json['lastDatePaintingExternal'] == null
+              ? null
+              : DateTime.parse(json['lastDatePaintingExternal'] as String),
+          lastDatePaintingInternal: json['lastDatePaintingInternal'] == null
+              ? null
+              : DateTime.parse(json['lastDatePaintingInternal'] as String),
+          lastDateInstalledSmokeAlarms: json['lastDateInstalledSmokeAlarms'] ==
+                  null
+              ? null
+              : DateTime.parse(json['lastDateInstalledSmokeAlarms'] as String),
+          lastDateFloorCleaned: json['lastDateFloorCleaned'] == null
+              ? null
+              : DateTime.parse(json['lastDateFloorCleaned'] as String),
           landlordAgreeToUndrtakeWork:
               json['landlordAgreeToUndrtakeWork'] as String?,
-          landLordWorkDoneBy: json['landLordWorkDoneBy'] as List<dynamic>?,
-          landLordWorkDoneNote: json['landLordWorkDoneNote'] as List<dynamic>?,
+          landLordWorkDoneBy: (json['landLordWorkDoneBy'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList(),
+          landLordWorkDoneNote: (json['landLordWorkDoneNote'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList(),
           tenantReceivedOn: json['tenantReceivedOn'] == null
               ? null
               : DateTime.parse(json['tenantReceivedOn'] as String),

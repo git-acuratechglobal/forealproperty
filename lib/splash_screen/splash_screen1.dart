@@ -9,6 +9,7 @@ import 'package:foreal_property/features/auth_feature/pages/login_page/login_scr
 import 'package:foreal_property/features/auth_feature/provider/auth_provider.dart';
 import 'package:foreal_property/features/home_features/pages/home/bottomnavbar.dart';
 import 'package:foreal_property/onboarding/welcome_screeen1.dart';
+import 'package:go_router/go_router.dart';
 
 class SplashScreen1 extends ConsumerStatefulWidget {
   const SplashScreen1({super.key});
@@ -34,15 +35,28 @@ class _SplashScreen1State extends ConsumerState<SplashScreen1> {
         final isOnBoadingComplete =
             ref.read(localStorageServiceProvider).getOnBoardingComplete() ??
                 false;
+        // if (!isOnBoadingComplete) {
+        //   context.navPushReplacement(const WelcomeScreen1());
+        // }
+        // if (user == null) {
+        //   context.pushAndRemoveUntil(const LoginScreen());
+        //   return;
+        // }
+        // ref.read(userProvider.notifier).update((_) => user);
+        // context.pushAndRemoveUntil(const HomeScreen());
         if (!isOnBoadingComplete) {
-          context.pushReplacement(const WelcomeScreen1());
-        }
-        if (user == null) {
-          context.pushAndRemoveUntil(const LoginScreen());
+          context.go('/welcome');
           return;
         }
+
+        if (user == null) {
+          context.go('/login');
+          return;
+        }
+
         ref.read(userProvider.notifier).update((_) => user);
-        context.pushAndRemoveUntil(const HomeScreen());
+        context.go('/home');
+
       });
     });
   }

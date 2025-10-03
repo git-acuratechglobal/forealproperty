@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foreal_property/Theme/navigation.dart';
 import 'package:foreal_property/common/common_widgets.dart';
 import 'package:foreal_property/core/utils/appbutton.dart';
 import 'package:foreal_property/core/utils/searchbutton.dart';
-import 'package:foreal_property/core/widgets/asyncwidget.dart';
 import 'package:foreal_property/features/aggrement_feature/sales_agency_agreement/widgets/sub_heading_text.dart';
-import 'package:foreal_property/features/auth_feature/provider/auth_provider.dart';
-import 'package:foreal_property/features/home_features/models/get_property_listing_model.dart';
 import 'package:foreal_property/features/home_features/pages/home/openhouse/addopenhomes.dart';
 import 'package:foreal_property/features/home_features/providers/get_property_listing.dart';
 import 'package:foreal_property/features/inspection_feature/provider/inspection_list_provider.dart';
 import 'package:foreal_property/features/inspection_feature/provider/inspection_provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/utils/appsnackbar.dart';
 import '../../model/property_for_inspection.dart';
@@ -26,6 +24,7 @@ class AddInspection extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final List<String> propertyOptions = ['Routine', 'Entry', 'Exit'];
     final formKey = useRef(GlobalKey<FormState>());
+    final propertyId = useState<int?>(null);
     final selectedValue = useState<String?>(null);
     final selectedDate = useState<String?>(null);
     final selectedStartTime = useState<String?>(null);
@@ -61,6 +60,21 @@ class AddInspection extends HookConsumerWidget {
       });
       return null;
     }, []);
+
+    // ref.listen(inspectionListNotifierProvider(tabId: 1),
+    //         (_, next) {
+    //       next.whenData((data) {
+    //         final inspectionData = data.data
+    //             .firstWhere((e) => e.propertyId == propertyId.value);
+    //         context.pushReplacementNamed('inspection-details',
+    //             pathParameters: {
+    //               'inspectionId': inspectionData.inspectionId.toString(),
+    //               'inspectionUniqueId':
+    //               inspectionData.inspectionUniqueId ?? ''
+    //             });
+    //       });
+    //     });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Inspection'),
@@ -90,12 +104,12 @@ class AddInspection extends HookConsumerWidget {
                 },
                 onSelected: (val) {
                   if (val != null) {
-                    final propertyId = val.id;
+                    propertyId.value = val.id;
                     final listingId = val.listingId;
                     debugPrint('Selected Property ID: $propertyId');
                     debugPrint('Selected Listing ID: $listingId');
                     addInspectionParam.update((e) => e.copyWith(
-                          PropertyId: propertyId!,
+                          PropertyId: propertyId.value!,
                           LoggedUserId: 2,
                           CreatedBy: 2,
                           Summary: "Inspection for entry",
@@ -139,9 +153,11 @@ class AddInspection extends HookConsumerWidget {
                 onDateSelected: (date) {
                   selectedDate.value = date;
                   print("Selected Date: $date");
-
-                  addInspectionParam.update(
-                      (e) => e.copyWith(InspectionDate: selectedDate.value!));
+                  final dateTime = DateFormat("dd-MM-yyyy").parse(date!);
+                  final formattedDate =
+                      DateFormat('yyyy-MM-dd').format(dateTime);
+                  addInspectionParam
+                      .update((e) => e.copyWith(InspectionDate: formattedDate));
                 },
                 hintText: 'mm-dd-yyyy',
               ),

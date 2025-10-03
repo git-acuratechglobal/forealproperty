@@ -12,6 +12,7 @@ import 'package:foreal_property/features/auth_feature/pages/sign_up_page/profile
 import 'package:foreal_property/features/auth_feature/provider/auth_provider.dart';
 import 'package:foreal_property/features/auth_feature/pages/sign_up_page/forgetpassword.dart';
 import 'package:foreal_property/features/home_features/pages/home/bottomnavbar.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -36,14 +37,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             final authState=data.value;
             if (authState?.user != null) {
               ref.read(userProvider.notifier).update((_) => data.value?.user);
-              context.push(const HomeScreen());
+              context.go('/home');
             }
 
             Utils.showSnackBar(context, authState?.response??"");
           }
 
           if (data.value?.authEvent == AuthEvent.register) {
-            context.push(const LoginScreen());
+            context.go('/login');
             Utils.showSnackBar(context, "User Register Sucessfully");
           }
         case AsyncError error:
@@ -194,7 +195,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       45.horizontalSpace,
                       InkWell(
                         onTap: () {
-                          context.push(const Forgetpassword());
+                          context.navPush(const Forgetpassword());
                         },
                         child: AutoSizeText(
                           softWrap: true,
@@ -237,7 +238,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         padding: const EdgeInsets.symmetric(vertical: 30),
         child: InkWell(
           onTap: () {
-            context.push(const ProfileScreen());
+            context.navPush(const ProfileScreen());
           },
           child: Text.rich(
             TextSpan(

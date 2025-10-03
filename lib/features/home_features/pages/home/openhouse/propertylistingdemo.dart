@@ -205,7 +205,7 @@ class _CurrentListingState extends ConsumerState<CurrentListing> {
                               padding: const EdgeInsets.symmetric(vertical: 8),
                               child: InkWell(
                                 onTap: () {
-                                  context.push(Propertydetails2(
+                                  context.navPush(Propertydetails2(
                                     item.propertyUId.toString(),
                                     propertyId,
                                   ));
@@ -213,7 +213,7 @@ class _CurrentListingState extends ConsumerState<CurrentListing> {
                                 child: InkWell(
                                   onTap: () {
                                     //  context.navigateTo(Openhome());
-                                    context.push(Propertydetails2(
+                                    context.navPush(Propertydetails2(
                                         listingData[index]
                                             .propertyUId
                                             .toString(),

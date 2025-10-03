@@ -48,7 +48,7 @@ class _UploadpropertState extends ConsumerState<Uploadpropert> {
                     const Spacer(),
                     InkWell(
                       onTap: () {
-                        context.pop();
+                        context.navPop();
                       },
                       child: Image.asset(
                         'assets/images/exit.png',

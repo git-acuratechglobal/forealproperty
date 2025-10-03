@@ -246,7 +246,7 @@ class _CurrentListingState extends ConsumerState<CurrentListing> {
                           child: InkWell(
                             onTap: () {
                               //  context.navigateTo(Openhome());
-                              context.push(Propertydetails2(
+                              context.navPush(Propertydetails2(
                                   listingData[index].propertyUId.toString(),
                                   propertyId));
                             },

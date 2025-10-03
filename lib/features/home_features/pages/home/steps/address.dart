@@ -98,7 +98,7 @@ class _AdressWidgetState extends ConsumerState<AdressWidget> {
               AddPropertyEvent.addAddress) {
             //  ref.invalidate(addressProvider);
 
-            context.pop();
+            context.navPop();
           }
         case AsyncError error:
           Utils.showSnackBar(context, error.error.toString());

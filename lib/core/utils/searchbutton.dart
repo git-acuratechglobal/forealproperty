@@ -587,10 +587,14 @@ class CustomSearchFiled<T> extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textController = controller ?? useTextEditingController();
-
+    final _focus=useFocusNode();
     return Column(
       children: [
         TextFormField(
+          focusNode: _focus,
+          onTapOutside: (val){
+            _focus.unfocus();
+          },
           onChanged: (val) {
             onSearch?.call(val);
           },
@@ -636,10 +640,10 @@ class CustomSearchFiled<T> extends HookConsumerWidget {
                 : null,
           ),
         ),
-        if (isLoading)
+        if (isLoading&&showList)
           Center(
             child: CircularProgressIndicator(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         if (items.isNotEmpty && showList)

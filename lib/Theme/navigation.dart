@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 extension NavigationPageExtension on BuildContext {
-  void push(Widget page) {
+  void navPush(Widget page) {
     Navigator.push(
       this,
       MaterialPageRoute(builder: (context) => page),
     );
   }
 
-  void pushReplacement(Widget page) {
+  void navPushReplacement(Widget page) {
     Navigator.pushReplacement(
       this,
       MaterialPageRoute(builder: (context) => page),
@@ -16,7 +16,7 @@ extension NavigationPageExtension on BuildContext {
   }
 
 
-  void pop() {
+  void navPop() {
     Navigator.of(this).pop();
   }
 
@@ -26,6 +26,14 @@ extension NavigationPageExtension on BuildContext {
       this,
       MaterialPageRoute(builder: (context) => page),
       (Route<dynamic> route) => false,
+    );
+  }
+
+
+  void popUntilPage<T>() {
+    Navigator.popUntil(
+      this,
+          (route) => route.settings.name == T.toString(),
     );
   }
 }

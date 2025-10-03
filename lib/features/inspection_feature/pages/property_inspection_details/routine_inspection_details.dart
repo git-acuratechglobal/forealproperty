@@ -37,7 +37,7 @@ class RoutineInspectionDetails extends HookConsumerWidget {
             PrimaryButton(
                 title: 'Next',
                 onClick: () {
-                  context.pop();
+                  context.navPop();
                 })
           ],
         ),

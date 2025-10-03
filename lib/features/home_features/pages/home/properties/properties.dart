@@ -174,7 +174,7 @@ class Customappbar extends StatelessWidget {
               8.horizontalSpace,
                 InkWell(
             onTap: () {
-              context.push( const AdressWidget(
+              context.navPush( const AdressWidget(
                     isEdit: true,
                   ));
             },

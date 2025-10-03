@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foreal_property/Theme/navigation.dart';
 import 'package:foreal_property/core/widgets/asyncwidget.dart';
 import 'package:foreal_property/features/aggrement_feature/sales_agency_agreement/widgets/text_field.dart';
 import 'package:foreal_property/features/inspection_feature/provider/inspection_provider.dart';
@@ -10,7 +9,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../common/common_widgets.dart';
 import '../../../../core/utils/appbutton.dart';
-import '../../../../core/utils/appsnackbar.dart';
 import '../../provider/inspection_details_provider.dart';
 
 class AddNewTemplates extends HookConsumerWidget {

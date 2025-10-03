@@ -63,22 +63,33 @@ class AddPropertyService {
           imageForm.propertyImages.isNotEmpty &&
           params.propertyImages!.isNotEmpty &&
           imageForm.propertyImages.length == params.propertyImages!.length) {
-        for (var i = 0; i < params.propertyImages!.length; i++) {
-          await minioService.uploadPropertyImage(
-            imageForm.propertyImages[i],
-            params.propertyImages![i],
-          );
-        }
+        final result = await Future.wait([
+          for (var i = 0; i < params.propertyImages!.length; i++)
+            minioService.uploadPropertyImage(
+              imageForm.propertyImages[i],
+              params.propertyImages![i],
+            )
+        ]);
+        params = params.copyWith(
+          propertyImages: result.map((e) => e.key ?? '').toList(),
+        );
       }
 
       if (params.floorImages != null &&
           imageForm.floorImages.isNotEmpty &&
           params.floorImages!.isNotEmpty &&
           imageForm.floorImages.length == params.floorImages!.length) {
-        for (var i = 0; i < params.floorImages!.length; i++) {
-          await minioService.uploadPropertyImage(
-              imageForm.floorImages[i], params.floorImages![i]);
-        }
+        final result = await Future.wait([
+          for (var i = 0; i < params.floorImages!.length; i++)
+            minioService.uploadPropertyImage(
+              imageForm.floorImages[i],
+              params.floorImages![i],
+            )
+        ]);
+
+        params = params.copyWith(
+          floorImages: result.map((e) => e.key ?? '').toList(),
+        );
       }
 
       final response =
@@ -120,7 +131,7 @@ class AddPropertyService {
 
   Future<String> deleteOpenHome(String openHomeUniqueId) async {
     return asyncGuard(() async {
-    await _client.delete(
+      await _client.delete(
         ApiEndPoints.deleteOpenHome(openHomeUniqueId),
       );
       return 'Open Home deleted successfully';
@@ -134,12 +145,15 @@ class AddPropertyService {
       return response.data['message'];
     });
   }
-Future<String> addMultipleOwners({required dynamic params}) async{
-  return asyncGuard(() async{
-  final response = await _client.post(ApiEndPoints.addMultipleOwners, data: params.toJson());
-  return response.data['message'];
-  });
-}
+
+  Future<String> addMultipleOwners({required dynamic params}) async {
+    return asyncGuard(() async {
+      final response = await _client.post(ApiEndPoints.addMultipleOwners,
+          data: params.toJson());
+      return response.data['message'];
+    });
+  }
+
   Future<Response> asyncGuard<Response>(
       Future<Response> Function() apiCall) async {
     try {

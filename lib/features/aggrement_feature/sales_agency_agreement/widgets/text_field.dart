@@ -11,16 +11,34 @@ class AppTextFiled extends HookConsumerWidget {
       this.onChanged,
       this.prefixIcon,
       this.suffixIcon,
-      this.controller,this.maxLines=1});
+      this.controller,
+      this.maxLines = 1,
+      this.initialValue,
+      this.isEditable = true,
+      this.onSaved,
+      this.maxLength,
+      this.validator,
+      this.inputType=TextInputType.text
+      });
   final String? lable;
   final String hintText;
   final void Function(String)? onChanged;
+  final void Function(String?)? onSaved;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final TextEditingController? controller;
   final int maxLines;
+  final String? initialValue;
+  final bool? isEditable;
+  final int? maxLength;
+  final String? Function(String?)? validator;
+  final TextInputType inputType;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final internalController =
+        controller ?? useTextEditingController(text: initialValue);
+    final _focusNode = useFocusNode();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,14 +51,24 @@ class AppTextFiled extends HookConsumerWidget {
                   ?.copyWith(color: Colors.grey.shade700, fontSize: 13.sp)),
         if (lable != null) 8.verticalSpace,
         TextFormField(
+          keyboardType: inputType,
+          validator: validator,
+          onTapOutside: (val) {
+            _focusNode.unfocus();
+          },
+          focusNode: _focusNode,
+          maxLength: maxLength,
+          onSaved: onSaved,
+          enabled: isEditable,
           maxLines: maxLines,
           style: Theme.of(context)
               .textTheme
               .bodyMedium
               ?.copyWith(fontSize: 14.sp, fontWeight: FontWeight.w800),
-          controller: controller,
+          controller: internalController,
           onChanged: onChanged,
           decoration: InputDecoration(
+            counterText: '',
             suffixIcon: suffixIcon,
             prefixIcon: prefixIcon,
             hintText: hintText,

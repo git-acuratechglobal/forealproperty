@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:expansion_tile_list/expansion_tile_list.dart';
 
+import '../../../../../common/common_widgets.dart';
 import '../../../../../core/utils/appsnackbar.dart';
 import '../../../model/inspection_details_model.dart';
 import '../../../provider/inspection_details_provider.dart';
@@ -11,27 +12,31 @@ import '../../../provider/inspection_provider.dart';
 import '../edit_template_screen2.dart';
 
 class ExpansionTileWidget extends HookConsumerWidget {
-  const ExpansionTileWidget(
-      {super.key, required this.templatesDetails, required this.inspectionId});
+  const ExpansionTileWidget({
+    super.key,
+    required this.templatesDetails,
+    required this.inspectionId,
+  });
 
   final List<TemplatesDetail> templatesDetails;
   final int inspectionId;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activeStep = useState(-1);
+    final targetStep = useRef(-1);
     final controller = useRef(ExpansionTileListController());
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.listenManual(inspectionNotifierProvider, (_, next) {
           switch (next) {
             case AsyncData<String?> data when data.value != null:
-              ref.invalidate(
-                  getInspectionDetailsProvider(inspectionId: inspectionId));
-              if (activeStep.value >= 0) {
-                controller.value.expand(activeStep.value + 1);
+
+              if (targetStep.value >= 0) {
+                controller.value.expand(targetStep.value);
+                activeStep.value = targetStep.value;
+                targetStep.value = -1; // Reset after expansion
               }
-              Utils.showSnackBar(context, data.value!);
+              // Utils.showSnackBar(context, data.value!);
               break;
             case AsyncError error:
               Utils.showSnackBar(context, error.error.toString());
@@ -42,7 +47,7 @@ class ExpansionTileWidget extends HookConsumerWidget {
       return null;
     }, const []);
     return ExpansionTileList(
-      padding: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(top: 20, bottom: 40),
       expansionMode: ExpansionMode.atMostOne,
       controller: controller.value,
       shrinkWrap: true,
@@ -59,10 +64,24 @@ class ExpansionTileWidget extends HookConsumerWidget {
             left: 30,
           ),
           onExpansionChanged: (isExpanded) {
-            activeStep.value = isExpanded ? index : -1;
+            if (isExpanded) {
+              activeStep.value = index;
+              if (index + 1 < templatesDetails.length) {
+                targetStep.value = index + 1;
+              } else {
+                targetStep.value = -1;
+              }
+            } else {
+              if (activeStep.value == index) {
+                activeStep.value = -1;
+              }
+            }
           },
           title: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 30,
+            ),
             decoration: ShapeDecoration(
               color: Colors.white,
               shape: RoundedRectangleBorder(
@@ -74,15 +93,44 @@ class ExpansionTileWidget extends HookConsumerWidget {
                 Expanded(
                   child: Text(
                     detail.facilityName ?? "",
-                    style:
-                        TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 10.horizontalSpace,
+                // AgreeStatusWidget(
+                //   imageItems: ImageWithLetter(
+                //     path: isSubmit
+                //         ? 'assets/images/blue.png'
+                //         : 'assets/images/orange.png',
+                //     letter: 'A',
+                //   ),
+                // ),
+                if(detail.isTenantAgree!=null)
+                AgreeStatusWidget(
+                  imageItems: ImageWithLetter(
+                    path: detail.isTenantAgree == true
+                        ? 'assets/images/blue.png'
+                        : 'assets/images/orange.png',
+                    letter: 'T',
+                  ),
+                ),
+
+                // ImageWithLetter(
+                //     path: 'assets/images/blue.png',
+                //     letter: 'A')
+                // else
+                //   ImageWithLetter(
+                //       path: 'assets/images/orange.png',
+                //       letter: 'A'),
                 AnimatedSwitcher(
                   duration: const Duration(microseconds: 800),
-                  transitionBuilder: (child, animation) =>
-                      RotationTransition(turns: animation, child: child),
+                  transitionBuilder: (child, animation) => RotationTransition(
+                    turns: animation,
+                    child: child,
+                  ),
                   child: activeStep.value != index
                       ? const Icon(
                           Icons.keyboard_arrow_down,
@@ -92,7 +140,7 @@ class ExpansionTileWidget extends HookConsumerWidget {
                           Icons.keyboard_arrow_up_outlined,
                           color: Colors.black,
                         ),
-                )
+                ),
               ],
             ),
           ),
@@ -107,6 +155,31 @@ class ExpansionTileWidget extends HookConsumerWidget {
           ],
         );
       }).toList(),
+    );
+  }
+}
+
+class AgreeStatusWidget extends StatelessWidget {
+  const AgreeStatusWidget({super.key, required this.imageItems});
+  final ImageWithLetter imageItems;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0),
+      child: Column(
+        children: [
+          Image.asset(
+            imageItems.path,
+            height: 20.h,
+            width: 20.w,
+          ),
+          SizedBox(height: 4),
+          Text(
+            imageItems.letter,
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+          ),
+        ],
+      ),
     );
   }
 }

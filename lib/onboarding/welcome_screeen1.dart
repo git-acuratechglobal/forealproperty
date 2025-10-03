@@ -136,7 +136,7 @@ class _WelcomeScreen1State extends ConsumerState<WelcomeScreen1> {
                       onPressed: () {
                         if (currentPageIndex == 2) {
                           ref.read(localStorageServiceProvider).setOnBoardingComplete();
-                          context.push(const LoginScreen());
+                          context.navPush(const LoginScreen());
                         } else {
                           setState(() {
                             currentPageIndex++;

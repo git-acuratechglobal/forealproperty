@@ -162,7 +162,7 @@ class _AppPropertiesListState extends ConsumerState<AppPropertiesList> {
                         // print(allproperties[index].propertyUniqueId);
                         return InkWell(
                           onTap: () {
-                            context.push(Propertydetails2(
+                            context.navPush(Propertydetails2(
                               property.propertyUniqueId.toString(),
                               propertyId,
                             ));

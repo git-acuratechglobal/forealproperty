@@ -259,7 +259,7 @@ class _AddPropertyState extends ConsumerState<AddProperty>
                   curve: Curves.easeInOut,
                 );
               } else {
-                context.pop();
+                context.navPop();
               }
             },
             child: Image.asset(

@@ -44,7 +44,7 @@ class _ContactDetailScreenState extends ConsumerState<ContactDetailScreen> {
                       padding: const EdgeInsets.all(12.0),
                       child: InkWell(
                         onTap: () {
-                          context.pop();
+                          context.navPop();
                         },
                         child: Image.asset(
                           'assets/images/arrow-left.png',

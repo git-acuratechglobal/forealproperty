@@ -34,7 +34,7 @@ class _ForgetpasswordState extends ConsumerState<Forgetpassword> {
               60.verticalSpace,
               InkWell(
                 onTap: () {
-                  context.pop();
+                  context.navPop();
                 },
                 child: Image.asset(
                   'assets/images/arrow-left.png',
@@ -77,7 +77,7 @@ class _ForgetpasswordState extends ConsumerState<Forgetpassword> {
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () {
-                      context.push((const Changepassword()));
+                      context.navPush((const Changepassword()));
                     },
                     child: Text(
                       'Reset Password',

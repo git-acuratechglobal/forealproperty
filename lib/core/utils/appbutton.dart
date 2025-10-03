@@ -15,7 +15,7 @@ class PrimaryButton extends StatelessWidget {
       required this.onClick,
       this.fixedSize,
       this.safeArea = true,
-      this.radius = 30});
+      this.radius = 12});
 
   @override
   Widget build(BuildContext context) {

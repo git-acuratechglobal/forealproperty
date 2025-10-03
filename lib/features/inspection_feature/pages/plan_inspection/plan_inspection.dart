@@ -1,18 +1,27 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foreal_property/Theme/navigation.dart';
 import 'package:foreal_property/common/common_widgets.dart';
 import 'package:foreal_property/core/utils/appbutton.dart';
-import 'package:foreal_property/core/utils/searchbutton.dart';
+import 'package:foreal_property/core/utils/appsnackbar.dart';
 import 'package:foreal_property/core/widgets/asyncwidget.dart';
 import 'package:foreal_property/features/aggrement_feature/sales_agency_agreement/widgets/sub_heading_text.dart';
+import 'package:foreal_property/features/aggrement_feature/sales_agency_agreement/widgets/text_field.dart';
 import 'package:foreal_property/features/home_features/models/get_property_listing_model.dart';
 import 'package:foreal_property/features/home_features/pages/home/openhouse/addopenhomes.dart';
-import 'package:foreal_property/features/home_features/providers/get_property_listing.dart';
+import 'package:foreal_property/features/inspection_feature/pages/plan_inspection/plan_inspection_time_duration.dart';
+import 'package:foreal_property/features/inspection_feature/provider/get_property_for_plan_inspection.dart';
+import 'package:foreal_property/features/inspection_feature/provider/inspection_details_provider.dart';
+import 'package:foreal_property/features/inspection_feature/provider/inspection_provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+
+import '../../model/active_agent_model.dart';
+import '../../model/property_address_model.dart';
 
 class PlanInspection extends ConsumerStatefulWidget {
   const PlanInspection({super.key});
@@ -22,221 +31,262 @@ class PlanInspection extends ConsumerStatefulWidget {
 
 class _PlanInspectionState extends ConsumerState<PlanInspection> {
   PropertyListingList? selectedProperty;
-  int _propertyType = 1;
+
   static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(48.2082, 16.3738),
-    zoom: 14.4746,
+    target: LatLng(-33.8688, 151.2093),
+    zoom: 10.4746,
   );
+
   final List<String> propertyOptions = ['Routine', 'Entry', 'Exit'];
-  final List<String> agents = [
-    'Kawalpreet Washwa',
-    'Ravinder Singh',
-    'Sandeep Singh'
-  ];
+
   String? startDate;
   String? endDate;
   String? startDate1;
   String? endDate1;
   String? selectedValue;
+  ActiveAgentModel? selectedAgent;
   String? selectedDate;
+  late GoogleMapController mapController;
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  List<PlanInspectionModel> addedProperty = [];
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final propertyData = ref.watch(getPropertyListingProvider(_propertyType));
+    final propertyList = ref.watch(getPropertyForInspectionProvider);
+    final updateParam = ref.read(planInspectionParamProvider.notifier);
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Plan Inspection'),
-        centerTitle: true,
-        automaticallyImplyLeading: true,
-      ),
-      backgroundColor: const Color(0XFFf2f6f7),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SubHeadingText(
-              text: 'Report Type',
-            ),
-            12.verticalSpace,
-            WidgetDropdown(
-              propertyOptions: propertyOptions,
-              selectedValue: selectedValue,
-              onChanged: (String? value) {
-                if (value != null) {
-                  final index = propertyOptions.indexOf(value);
-                  if (index != -1) {
-                    setState(() {
-                      selectedValue = value;
-                    });
-
-                    // // Example: update Riverpod state (uncomment if needed)
-                    // ref.read(ownershipParamsDataProvider.notifier).update(
-                    //       (p) => p!.copyWith(typeIAM: index + 1),
-                    //     );
-
-                    print("Selected Property: $value (Index: ${index + 1})");
-                  }
-                }
-              },
-              hintText: 'Select Property Type',
-            ),
-            16.verticalSpace,
-            const SubHeadingText(
-              text: 'Ispection Due Between',
-            ),
-            12.verticalSpace,
-            DatePickerDropdown(
-              validator: (value) => value == null || value.trim().isEmpty
-                  ? 'This field is required'
-                  : null,
-              selectedDate: selectedDate,
-              onDateSelected: (date) {
-                setState(() {
-                  selectedDate = date;
-                  print("Selected Date: $date");
-                });
-                // ref
-                //     .read(openHomeParamsDataProvider.notifier)
-                //     .update((p) => p.copyWith(eventDate: date));
-              },
-              hintText: 'mm-dd-yyyy',
-            ),
-            16.verticalSpace,
-            const SubHeadingText(
-              text: 'Property Manager or Team',
-            ),
-            12.verticalSpace,
-            WidgetDropdown(
-              propertyOptions: agents,
-              selectedValue: selectedValue,
-              onChanged: (String? value) {
-                if (value != null) {
-                  final index = agents.indexOf(value);
-                  if (index != -1) {
-                    setState(() {
-                      selectedValue = value;
-                    });
-
-                    // // Example: update Riverpod state (uncomment if needed)
-                    // ref.read(ownershipParamsDataProvider.notifier).update(
-                    //       (p) => p!.copyWith(typeIAM: index + 1),
-                    //     );
-
-                    print("Selected Property: $value (Index: ${index + 1})");
-                  }
-                }
-              },
-              hintText: 'Assigned To',
-            ),
-            16.verticalSpace,
-            const SubHeadingText(
-              text: 'Inspection Due Between',
-            ),
-            12.verticalSpace,
-            SizedBox(
-              // height: 50.h,
-              // width: 324.w,
-              child: DateRangePicker(
-                startDate: startDate,
-                endDate: endDate,
-                onRangeSelected: (start, end) {
-                  setState(() {
-                    startDate = start;
-                    endDate = end;
-                  });
-                },
-              ),
-            ),
-            16.verticalSpace,
-            const SubHeadingText(
-              text: 'Aggrement Ending Between',
-            ),
-            12.verticalSpace,
-            SizedBox(
-              // height: 50.h,
-              // width: 324.w,
-              child: DateRangePicker(
-                startDate: startDate1,
-                endDate: endDate1,
-                onRangeSelected: (start, end) {
-                  setState(() {
-                    startDate1 = start;
-                    endDate1 = end;
-                  });
-                },
-              ),
-            ),
-            16.verticalSpace,
-            Text('Click Properties on map to select them',
-              style: TextStyle(
-                  color: const Color(0XFF7d8089),
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w400),
-            ),
-            12.verticalSpace,
-            const SizedBox(
-              height: 500,
-              width: 500,
-              child: GoogleMap(
-                initialCameraPosition: _kGooglePlex,
-                mapType: MapType.normal,
-              ),
-            ),
-            16.verticalSpace,
-            const SubHeadingText(text: 'Select Property',),
-            12.verticalSpace,
-            AsyncWidget(
-              value: propertyData,
-              data: (propertydata) {
-                if (propertydata == null || propertydata.isEmpty) {
-                  return const Text('No property found');
-                }
-
-                return DropdownSearchWidget<PropertyListingList>(
-                  items: propertydata,
-                  selectedValue: selectedProperty,
-                  onChanged: (val) {
-                    if (val != null) {
-                      final propertyId = val.propertyId;
-                      final listingId = val.listingId;
-                      // final propertylistingStatus =
-                      //     val.propertySaleRental;
-
-                      debugPrint('Selected Property ID: $propertyId');
-                      debugPrint('Selected Listing ID: $listingId');
-                      // ref
-                      //     .read(openHomeParamsDataProvider.notifier)
-                      //     .update(
-                      //       (p) => p.copyWith(propertyId: propertyId),
-                      //     );
-                      // ref
-                      //     .read(openHomeParamsDataProvider.notifier)
-                      //     .update(
-                      //       (p) => p.copyWith(listingId: listingId),
-                      //     );
-
-                      setState(() {
-                        selectedProperty = val;
-                      });
-                    }
-                  },
-                  itemAsString: (item) => item.address ?? 'No Name',
-                  searchFilter: (item, query) => item.address ?? '',
-                  hintText: 'Search',
-                );
-              },
-            ),
-            24.verticalSpace,
-            PrimaryButton(
-                title: 'Start Planing',
-                onClick: () {
-                  context.pop();
-                })
-          ],
+        appBar: AppBar(
+          title: const Text('Plan Inspection'),
+          centerTitle: true,
+          automaticallyImplyLeading: true,
         ),
-      ),
-    );
+        backgroundColor: const Color(0XFFf2f6f7),
+        body: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            padding:
+            const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+            child: AsyncWidget(
+                value: propertyList,
+                data: (data) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SubHeadingText(
+                        text: 'Report Type',
+                      ),
+                      12.verticalSpace,
+                      WidgetDropdown(
+                        propertyOptions: propertyOptions,
+                        selectedValue: selectedValue,
+                        onChanged: (String? value) {
+                          if (value != null) {
+                            final index = propertyOptions.indexOf(value);
+                            if (index != -1) {
+                              // setState(() {
+                              selectedValue = value;
+                              // });
+                              updateParam.updateParam(
+                                  (e) => e.copyWith(InspectionType: index + 1));
+                            }
+                          }
+                        },
+                        hintText: 'Select Report Type',
+                        validator: (val){
+                          if(val==null||val.isEmpty){
+                            return 'Field is required';
+                          }
+                          return null;
+                        },
+                      ),
+                      16.verticalSpace,
+                      const SubHeadingText(
+                        text: 'Ispection Due Between',
+                      ),
+                      12.verticalSpace,
+                      DatePickerDropdown(
+                        validator: (value) =>
+                            value == null || value.trim().isEmpty
+                                ? 'Field is required'
+                                : null,
+                        selectedDate: selectedDate,
+                        onDateSelected: (date) {
+                          selectedDate = date;
+                          print("Selected Date: $date");
+                          if (selectedDate != null) {
+                            DateFormat format = DateFormat("dd-MM-yyyy");
+                            final dateTime = format.parse(selectedDate!);
+                            updateParam.updateParam(
+                                (e) => e.copyWith(InspectionDate: dateTime));
+                          }
+                        },
+                        hintText: 'mm-dd-yyyy',
+                      ),
+                      16.verticalSpace,
+                      const SubHeadingText(
+                        text: 'Property Manager or Team',
+                      ),
+                      12.verticalSpace,
+                      AsyncWidget(
+                          value: ref.watch(
+                              getActiveAgentProvider(agencyId: "ba137a8612994")),
+                          data: (agentList) {
+                            return DynamicWidgetDropdown<ActiveAgentModel>(
+                              propertyOptions: agentList,
+                              selectedValue: selectedAgent,
+                              onChanged: (ActiveAgentModel? value) {
+                                if (value != null) {
+                                  selectedAgent = value;
+                                  updateParam.updateParam((e) => e.copyWith(
+                                      AssignedAgent:
+                                          int.parse(value.value ?? '')));
+                                }
+                              },
+                              hintText: 'Assigned To',
+                              displayText: (ActiveAgentModel value) =>
+                                  value.text ?? '',
+                              validator: (val){
+                                if(val==null){
+                                  return 'Field is required';
+                                }
+                                return null;
+                              },
+                            );
+                          }),
+                      16.verticalSpace,
+                      const SubHeadingText(
+                        text: 'Inspection Due Between',
+                      ),
+                      12.verticalSpace,
+                      DateRangePicker(
+                        startDate: startDate,
+                        endDate: endDate,
+                        onRangeSelected: (start, end) {
+                          setState(() {
+                            startDate = start;
+                            endDate = end;
+                          });
+                        },
+                        // validator: (val){
+                        //   if(val==null||val.isEmpty){
+                        //     return 'Field is required';
+                        //   }
+                        //   return null;
+                        // },
+                      ),
+                      16.verticalSpace,
+                      const SubHeadingText(
+                        text: 'Aggrement Ending Between',
+                      ),
+                      12.verticalSpace,
+                      DateRangePicker(
+                        startDate: startDate1,
+                        endDate: endDate1,
+                        onRangeSelected: (start, end) {
+                          setState(() {
+                            startDate1 = start;
+                            endDate1 = end;
+                          });
+                        },
+                        // validator: (val){
+                        //   if(val==null||val.isEmpty){
+                        //     return 'Field is required';
+                        //   }
+                        //   return null;
+                        // },
+                      ),
+                      16.verticalSpace,
+                      Text(
+                        'Click Properties on map to select them',
+                        style: TextStyle(
+                            color: const Color(0XFF7d8089),
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      12.verticalSpace,
+                      SizedBox(
+                        height: 500,
+                        child: GoogleMap(
+                      myLocationButtonEnabled: false,
+                          initialCameraPosition: _kGooglePlex,
+                          mapType: MapType.normal,
+                          onMapCreated: _onMapCreated,
+                          markers: data
+                              .where((p) => p.lat != null && p.lng != null)
+                              .map(
+                                (p) => Marker(
+                                    markerId: MarkerId(p.id.toString()),
+                                    position: LatLng(p.lat!, p.lng!),
+                                    infoWindow: InfoWindow(title: p.address),
+                                    onTap: () {
+                                      if (!addedProperty.contains(p)) {
+                                       setState(() {
+                                         addedProperty.add(p);
+                                       });
+                                      }
+                                    }),
+                              )
+                              .toSet(),
+                          gestureRecognizers: <Factory<
+                              OneSequenceGestureRecognizer>>{
+                            Factory<PanGestureRecognizer>(
+                                () => PanGestureRecognizer()),
+                            Factory<VerticalDragGestureRecognizer>(
+                                () => VerticalDragGestureRecognizer()),
+                            Factory<HorizontalDragGestureRecognizer>(
+                                () => HorizontalDragGestureRecognizer()),
+                            Factory<ScaleGestureRecognizer>(
+                                () => ScaleGestureRecognizer()),
+                          },
+                        ),
+                      ),
+                      16.verticalSpace,
+                      const SubHeadingText(
+                        text: 'Selected Properties',
+                      ),
+                      AppTextFiled(
+                        isEditable: false,
+                          initialValue:
+                              addedProperty.map((e) => e.address).join(', '),
+                          hintText: 'Selected Properties',
+                        onSaved: (val){
+                          print(val);
+                        },
+                        // validator: (val){
+                        //   if(val==null||val.isEmpty){
+                        //     return 'Field is required';
+                        //   }
+                        //   return null;
+                        // },
+                      ),
+                      12.verticalSpace,
+                      24.verticalSpace,
+                      PrimaryButton(
+                          title: 'Start Planing',
+                          onClick: () {
+                            if(_formKey.currentState!.validate()){
+                              _formKey.currentState!.save();
+                              if(addedProperty.isEmpty){
+                                Utils.showSnackBar(context, "Please select property");
+                                return;
+                              }
+                              context.navPush(PlanInspectionTimeDuration(
+                                planInspectionList: addedProperty,
+                              ));
+                            }
+
+                          }),
+                      60.verticalSpace,
+                    ],
+                  );
+                }),
+          ),
+        ));
   }
 }
 
@@ -329,9 +379,9 @@ class _DateRangePickerState extends State<DateRangePicker> {
                       monthViewSettings: DateRangePickerMonthViewSettings(
                         viewHeaderStyle: DateRangePickerViewHeaderStyle(
                           textStyle: TextStyle(
-                            fontSize: 14.sp, // Font size for weekdays
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
-                            color: const Color(0xFF164C63), // Same theme color
+                            color: const Color(0xFF164C63),
                           ),
                         ),
                       ),
@@ -339,7 +389,7 @@ class _DateRangePickerState extends State<DateRangePicker> {
                         todayTextStyle: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black, // Text color for today
+                          color: Colors.black,
                         ),
                         textStyle: TextStyle(
                           fontSize: 14.sp,

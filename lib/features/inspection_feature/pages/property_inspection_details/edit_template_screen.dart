@@ -3,7 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:foreal_property/Theme/navigation.dart';
 import 'package:foreal_property/features/inspection_feature/pages/property_inspection_details/widgets/edit_template_from_widget.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../../../../core/utils/appbutton.dart';
 import '../../../../core/utils/appsnackbar.dart';
 import '../../model/inspection_details_model.dart';
 import '../../model/property_inspection_view_model.dart';
@@ -28,7 +27,6 @@ class EditTemplateScreen extends HookConsumerWidget {
           [],
       comments: templatesDetail.agentComment,
       images: [],
-      available: true,
       clean: templatesDetail.cleaned ?? false,
       unDamage: templatesDetail.undermanaged ?? false,
       working: templatesDetail.working ?? false,
@@ -40,7 +38,7 @@ class EditTemplateScreen extends HookConsumerWidget {
             case AsyncData<String?> data when data.value != null:
               ref.invalidate(
                   getInspectionDetailsProvider(inspectionId: inspectionId));
-              context.pop();
+              context.navPop();
               Utils.showSnackBar(context, data.value!);
               break;
             case AsyncError error:

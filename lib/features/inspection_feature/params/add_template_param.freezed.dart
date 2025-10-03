@@ -331,3 +331,151 @@ abstract class _TemplateState implements TemplateState {
   _$$TemplateStateImplCopyWith<_$TemplateStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$SubTemplateState {
+  String? get response => throw _privateConstructorUsedError;
+  SubTemplateEvent get event => throw _privateConstructorUsedError;
+
+  /// Create a copy of SubTemplateState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SubTemplateStateCopyWith<SubTemplateState> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SubTemplateStateCopyWith<$Res> {
+  factory $SubTemplateStateCopyWith(
+          SubTemplateState value, $Res Function(SubTemplateState) then) =
+      _$SubTemplateStateCopyWithImpl<$Res, SubTemplateState>;
+  @useResult
+  $Res call({String? response, SubTemplateEvent event});
+}
+
+/// @nodoc
+class _$SubTemplateStateCopyWithImpl<$Res, $Val extends SubTemplateState>
+    implements $SubTemplateStateCopyWith<$Res> {
+  _$SubTemplateStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SubTemplateState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? response = freezed,
+    Object? event = null,
+  }) {
+    return _then(_value.copyWith(
+      response: freezed == response
+          ? _value.response
+          : response // ignore: cast_nullable_to_non_nullable
+              as String?,
+      event: null == event
+          ? _value.event
+          : event // ignore: cast_nullable_to_non_nullable
+              as SubTemplateEvent,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SubTemplateStateImplCopyWith<$Res>
+    implements $SubTemplateStateCopyWith<$Res> {
+  factory _$$SubTemplateStateImplCopyWith(_$SubTemplateStateImpl value,
+          $Res Function(_$SubTemplateStateImpl) then) =
+      __$$SubTemplateStateImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String? response, SubTemplateEvent event});
+}
+
+/// @nodoc
+class __$$SubTemplateStateImplCopyWithImpl<$Res>
+    extends _$SubTemplateStateCopyWithImpl<$Res, _$SubTemplateStateImpl>
+    implements _$$SubTemplateStateImplCopyWith<$Res> {
+  __$$SubTemplateStateImplCopyWithImpl(_$SubTemplateStateImpl _value,
+      $Res Function(_$SubTemplateStateImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of SubTemplateState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? response = freezed,
+    Object? event = null,
+  }) {
+    return _then(_$SubTemplateStateImpl(
+      response: freezed == response
+          ? _value.response
+          : response // ignore: cast_nullable_to_non_nullable
+              as String?,
+      event: null == event
+          ? _value.event
+          : event // ignore: cast_nullable_to_non_nullable
+              as SubTemplateEvent,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SubTemplateStateImpl implements _SubTemplateState {
+  const _$SubTemplateStateImpl({this.response, required this.event});
+
+  @override
+  final String? response;
+  @override
+  final SubTemplateEvent event;
+
+  @override
+  String toString() {
+    return 'SubTemplateState(response: $response, event: $event)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SubTemplateStateImpl &&
+            (identical(other.response, response) ||
+                other.response == response) &&
+            (identical(other.event, event) || other.event == event));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, response, event);
+
+  /// Create a copy of SubTemplateState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SubTemplateStateImplCopyWith<_$SubTemplateStateImpl> get copyWith =>
+      __$$SubTemplateStateImplCopyWithImpl<_$SubTemplateStateImpl>(
+          this, _$identity);
+}
+
+abstract class _SubTemplateState implements SubTemplateState {
+  const factory _SubTemplateState(
+      {final String? response,
+      required final SubTemplateEvent event}) = _$SubTemplateStateImpl;
+
+  @override
+  String? get response;
+  @override
+  SubTemplateEvent get event;
+
+  /// Create a copy of SubTemplateState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SubTemplateStateImplCopyWith<_$SubTemplateStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

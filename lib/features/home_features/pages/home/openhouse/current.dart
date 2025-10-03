@@ -402,7 +402,7 @@ class _CurrentState extends ConsumerState<Current> {
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: InkWell(
                               onTap: () {
-                                context.push(Openhome(dataToShow[index]
+                                context.navPush(Openhome(dataToShow[index]
                                     .openHomeuniqueId
                                     .toString()));
 

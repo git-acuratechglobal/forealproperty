@@ -15,6 +15,7 @@ abstract class AddInspectionParams with _$AddInspectionParams {
     @Default(1)  int AssignedAgent,
     required int AgencyId,
     required int? LoggedUserId,
+    @Default("") String AssignedTo,
   }) = _AddInspectionParams;
 
   factory AddInspectionParams.fromJson(Map<String, dynamic> json) =>

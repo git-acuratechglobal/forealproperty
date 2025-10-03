@@ -5,7 +5,7 @@ import 'package:foreal_property/Theme/extension.dart';
 class Themes {
   static final lightTheme = ThemeData(
     chipTheme: ChipThemeData(
-      backgroundColor: Color(0xFF75CBCD),
+      backgroundColor: const Color(0xFF75CBCD),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(35),
       ),

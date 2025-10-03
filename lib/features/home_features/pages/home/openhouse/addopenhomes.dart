@@ -320,13 +320,14 @@ class _AddopenhomesState extends ConsumerState<Addopenhomes> {
 }
 
 class DatePickerDropdown extends StatefulWidget {
-  final String? selectedDate; // Format: yyyy-MM-dd
+  final String? selectedDate;
   final void Function(String?) onDateSelected;
   final void Function(String)? onChanged;
   final void Function(String?)? onSaved;
   final String hintText;
   final String? Function(String?)? validator;
-
+  final bool isSelectAnyDate;
+  final isfromAgreement;
   const DatePickerDropdown({
     Key? key,
     this.selectedDate,
@@ -335,6 +336,8 @@ class DatePickerDropdown extends StatefulWidget {
     this.onSaved,
     this.validator,
     this.hintText = 'Choose Date',
+    this.isSelectAnyDate = false,
+    this.isfromAgreement=false
   }) : super(key: key);
 
   @override
@@ -348,10 +351,7 @@ class _DatePickerDropdownState extends State<DatePickerDropdown> {
   void initState() {
     super.initState();
     _controller = TextEditingController(
-      text: widget.selectedDate != null
-          ? DateFormat('MM-dd-yyyy')
-              .format(DateFormat('yyyy-MM-dd').parse(widget.selectedDate!))
-          : '',
+      text: widget.selectedDate,
     );
   }
 
@@ -359,13 +359,10 @@ class _DatePickerDropdownState extends State<DatePickerDropdown> {
   void didUpdateWidget(covariant DatePickerDropdown oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.selectedDate != widget.selectedDate) {
-      // 👇 FIX: Update text after current build completes
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        _controller.text = widget.selectedDate != null
-            ? DateFormat('MM-dd-yyyy')
-                .format(DateFormat('yyyy-MM-dd').parse(widget.selectedDate!))
-            : '';
+        _controller.text =
+            widget.selectedDate != null ? widget.selectedDate! : '';
       });
     }
   }
@@ -384,20 +381,127 @@ class _DatePickerDropdownState extends State<DatePickerDropdown> {
       onTap: () async {
         DateTime now = DateTime.now();
         DateTime initialDate = widget.selectedDate != null
-            ? DateFormat('yyyy-MM-dd').parse(widget.selectedDate!)
+            ? DateFormat('dd-MM-yyyy')
+                .parse(widget.selectedDate!)
             : now;
 
         DateTime? pickedDate = await showDatePicker(
           context: context,
           initialDate: initialDate,
-          firstDate: DateTime(now.year, now.month, now.day),
+          firstDate: widget.isSelectAnyDate
+              ? DateTime(1900)
+              : DateTime(now.year, now.month, now.day),
           lastDate: DateTime(2100),
         );
 
         if (pickedDate != null) {
-          final formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+          final formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
           widget.onDateSelected(formattedDate);
           widget.onChanged?.call(formattedDate);
+          _controller.text = formattedDate;
+        }
+      },
+      controller: _controller,
+      decoration: InputDecoration(
+        hintText: widget.hintText,
+        hintStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: const Color(0XFFa0a4b0),
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w800),
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFE2E2E2)),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFFE2E2E2)),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFE2E2E2)),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        errorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        focusedErrorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+      ),
+      style: Theme.of(context)
+          .textTheme
+          .bodyMedium
+          ?.copyWith(fontSize: 14.sp, fontWeight: FontWeight.w800),
+      onSaved: widget.onSaved,
+    );
+  }
+}
+
+class DatePickerDropdown2 extends StatefulWidget {
+  final String? selectedDate; // Format: yyyy-MM-dd
+  final void Function(DateTime?) onDateSelected;
+  final void Function(String)? onChanged;
+  final void Function(String?)? onSaved;
+  final String hintText;
+  final String? Function(String?)? validator;
+
+  const DatePickerDropdown2({
+    Key? key,
+    this.selectedDate,
+    required this.onDateSelected,
+    this.onChanged,
+    this.onSaved,
+    this.validator,
+    this.hintText = 'Choose Date',
+  }) : super(key: key);
+
+  @override
+  State<DatePickerDropdown2> createState() => _DatePickerDropdown2State();
+}
+
+class _DatePickerDropdown2State extends State<DatePickerDropdown2> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(
+      text: widget.selectedDate,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      validator: widget.validator,
+      readOnly: true,
+      onTap: () async {
+        DateTime now = DateTime.now();
+        DateTime initialDate = widget.selectedDate != null
+            ? DateFormat('dd-MM-yyyy').parse(widget.selectedDate!)
+            : now;
+
+        DateTime? pickedDate = await showDatePicker(
+          context: context,
+          initialDate: initialDate.isAfter(now) ? now : initialDate,
+          firstDate: DateTime(2000),
+          lastDate: now,
+        );
+
+        if (pickedDate != null) {
+          final formattedDate = DateFormat('dd-MM-yyyy').format(pickedDate);
+          widget.onDateSelected(pickedDate);
+          widget.onChanged?.call(formattedDate);
+          _controller.text = formattedDate;
         }
       },
       controller: _controller,

@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../common/common_widgets.dart';
+import '../../../../../core/s3_sigleton/s3_widget.dart';
 import '../../../../../core/utils/appbutton.dart';
 import '../../../../../core/utils/imagepicker.dart';
 import '../../../model/property_inspection_view_model.dart';
@@ -168,31 +171,31 @@ class EditTemplateFromWidget extends HookWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Available',
-                style: TextStyle(
-                  color: const Color(0xFF1A1B28),
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              SizedBox(
-                width: 48,
-                height: 28,
-                child: CustomCupertinoToggle(
-                  initialValue: formData.value.available,
-                  trueLabel: 'Y',
-                  falseLabel: 'N',
-                  onChanged: (val) =>
-                      _update(formData.value.copyWith(available: val)),
-                ),
-              ),
-            ],
-          ),
-          24.verticalSpace,
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text(
+          //       'Available',
+          //       style: TextStyle(
+          //         color: const Color(0xFF1A1B28),
+          //         fontSize: 15.sp,
+          //         fontWeight: FontWeight.w700,
+          //       ),
+          //     ),
+          //     SizedBox(
+          //       width: 48,
+          //       height: 28,
+          //       child: CustomCupertinoToggle(
+          //         initialValue: formData.value.available,
+          //         trueLabel: 'Y',
+          //         falseLabel: 'N',
+          //         onChanged: (val) =>
+          //             _update(formData.value.copyWith(available: val)),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          // 24.verticalSpace,
 
           Row(
             children: [
@@ -226,7 +229,7 @@ class EditTemplateFromWidget extends HookWidget {
             style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
           ),
           16.verticalSpace,
-          ImagePickerForm2(
+          ImagePickerForm3(
             context: context,
             initialImages: formData.value.initialImages,
             onSaved: (newImages) {
@@ -237,7 +240,7 @@ class EditTemplateFromWidget extends HookWidget {
 
           // Comment Box
           Text(
-            'Comments',
+            'Agent Comments',
             style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
           ),
           12.verticalSpace,
@@ -249,6 +252,97 @@ class EditTemplateFromWidget extends HookWidget {
                 _update(formData.value.copyWith(comments: val)),
           ),
           24.verticalSpace,
+
+          if (formData.value.isTenantAgree != null &&
+              !formData.value.isTenantAgree!) ...[
+            Row(
+              children: [
+                IgnorePointer(
+                  child: ToggleContainer2(
+                    label: 'Clean',
+                    initialValue: formData.value.cleanByTenant,
+                  ),
+                ),
+                15.horizontalSpace,
+                IgnorePointer(
+                  child: ToggleContainer2(
+                    label: 'Undamage',
+                    initialValue: formData.value.unDamageByTenant,
+                  ),
+                ),
+                15.horizontalSpace,
+                IgnorePointer(
+                  child: ToggleContainer2(
+                    label: 'Working',
+                    initialValue: formData.value.workingByTenant,
+                  ),
+                ),
+              ],
+            ),
+            if (formData.value.tenantImages.isNotEmpty ||
+                formData.value.images.isNotEmpty) ...[
+              24.verticalSpace,
+              Text(
+                'Tenant Images',
+                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
+              ),
+              16.verticalSpace,
+              Wrap(
+                spacing: 10.w,
+                runSpacing: 10.h,
+                children: [
+                  ...formData.value.tenantImages
+                      .map(
+                        (e) => Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10.sp),
+                          child: SizedBox(
+                            width: 100.w,
+                            height: 100.h,
+                            child: S3ImageDisplayWidget(imagePath: e),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                      .toList(),
+                ],
+              ),
+            ],
+            16.verticalSpace,
+            if (formData.value.tenantComment != null &&
+                formData.value.tenantComment!.isNotEmpty) ...[
+              Text(
+                'Tenant Comments',
+                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
+              ),
+              12.verticalSpace,
+
+              Container(
+                padding: const EdgeInsets.all(10),
+                height: 150,
+                width: 1.sw,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: const Color(0xFFE2E2E2)),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(formData.value.tenantComment ?? ""),
+              ),
+
+              // CommonTextField(
+              //   isEnabled: false,
+              //   label: 'Enter comment...',
+              //   maxLines: 5,
+              //   initialValue: formData.value.tenantComment,
+              // ),
+              24.verticalSpace,
+            ],
+          ],
+
+
 
           // Next Button
           PrimaryButton(

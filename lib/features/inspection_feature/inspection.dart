@@ -16,7 +16,7 @@ class _InspectionState extends State<InspectionScreen> {
   @override
   Widget build(BuildContext context) {
     return const DefaultTabController(
-      length: 4,
+      length: 6,
       child: Scaffold(
         backgroundColor: Color(0xFFEBF3F5),
         appBar: PreferredSize(
@@ -25,10 +25,24 @@ class _InspectionState extends State<InspectionScreen> {
         ),
         body: TabBarView(
           children: [
-            InspectionTab(),
-            InspectionTab(),
-            InspectionTab(),
-            InspectionTab()
+            InspectionTab(
+              tabId: 1,
+            ),
+            InspectionTab(
+              tabId: 2,
+            ),
+            InspectionTab(
+              tabId: 3,
+            ),
+            InspectionTab(
+              tabId: 4,
+            ),
+            InspectionTab(
+              tabId: 5,
+            ),
+            InspectionTab(
+              tabId: 6,
+            )
           ],
         ),
       ),
@@ -83,14 +97,14 @@ class _CustomappbarState extends State<Customappbar> {
                       value: 1,
                       child: const Text('Add Inspection'),
                       onTap: () {
-                        context.push(const AddInspection());
+                        context.navPush(const AddInspection());
                       },
                     ),
                     PopupMenuItem(
                       value: 2,
                       child: const Text('Plan Inspection'),
                       onTap: () {
-                        context.push(const PlanInspection());
+                        context.navPush(const PlanInspection());
                       },
                     ),
                   ],
@@ -110,7 +124,10 @@ class _CustomappbarState extends State<Customappbar> {
         ),
       ],
       bottom: TabBar(
-        indicatorSize: TabBarIndicatorSize.tab,
+        isScrollable: true,
+        tabAlignment: TabAlignment.start,
+        // physics: AlwaysScrollableScrollPhysics(),
+        // indicatorSize: TabBarIndicatorSize.tab,
         labelColor: const Color(0xFF164C63),
         unselectedLabelColor: const Color(0xFF494D60),
         indicatorColor: const Color(0xFF75CBCD),
@@ -120,14 +137,21 @@ class _CustomappbarState extends State<Customappbar> {
             TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400),
         tabs: const [
           Tab(
-            child: Text('Planned'),
+            child: Text('Scheduled'),
           ),
           Tab(
-            child: Text('Today'),
+            child: Text('Unscheduled'),
           ),
           Tab(
             child: Text('Inspected'),
           ),
+          Tab(
+            child: Text('Assigned'),
+          ),
+          Tab(
+              child: Text(
+            'Returned',
+          )),
           Tab(
               child: Text(
             'Closed',

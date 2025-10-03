@@ -70,7 +70,7 @@ class _CustomappbarState extends State<Customappbar> {
               12.horizontalSpace,
               InkWell(
                   onTap: () {
-                    context.push(const Addopenhomes());
+                    context.navPush(const Addopenhomes());
                   },
                   child: Image.asset(
                     'assets/images/addicon.png',

@@ -104,7 +104,7 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
 
     return Scaffold(
         appBar: AppBar(
-        //  leadingWidth: 90,
+          //  leadingWidth: 90,
           automaticallyImplyLeading: true,
           // leading: Padding(
           //   padding: const EdgeInsets.all(12.0),
@@ -208,7 +208,7 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                     //     ?
                                     InkWell(
                                       onTap: () {
-                                        context.push(
+                                        context.navPush(
                                           AddProperty(
                                             propertyData: propertyData,
                                             propertyUniqueId: widget.id,
@@ -255,7 +255,8 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                       : "",
                                 ),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
@@ -263,7 +264,8 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                     title: 'TYPE',
                                     title2: propertyData?.sPropertyType ?? ''),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
@@ -344,7 +346,8 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                 // child: CustomContainerText(
                                 //     title: 'Attributes', title2: '',),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
@@ -354,14 +357,16 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                         ? propertyData.agencyName.toString()
                                         : ""),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
                                 child: CustomContainerText(
                                     title: 'FEATURES', title2: ''),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                             ],
                           ),
                         ),
@@ -445,7 +450,7 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                     //     ?
                                     InkWell(
                                       onTap: () {
-                                        context.push(AddProperty(
+                                        context.navPush(AddProperty(
                                           propertyData: propertyData,
                                           propertyUniqueId: widget.id,
                                           propertyId: widget.propertyId,
@@ -481,13 +486,15 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
                                 child: CustomContainerText(
                                   title: 'OWNER FOLIO',
                                   title2: propertyData?.ownerAccountFolio ?? "",
                                 ),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
@@ -502,7 +509,8 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                       : '',
                                 ),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
@@ -517,7 +525,8 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                       : '',
                                 ),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
@@ -532,7 +541,8 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                       : '',
                                 ),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
@@ -553,7 +563,8 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                       )
                                     : null, // returns nothing if address is null or empty
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                             ],
                           ),
                         ),
@@ -586,7 +597,7 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        context.push(const AttributeWidget(
+                                        context.navPush(const AttributeWidget(
                                           isEdit: true,
                                         ));
                                       },
@@ -624,77 +635,88 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                   title2: "",
                                 ),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
                                 child: CustomContainerText(
                                     title: 'TENANT CHECKSUM', title2: ""),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
                                 child: CustomContainerText(
                                     title: 'RENT REVIEW FREQUENCY', title2: ""),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
                                 child: CustomContainerText(
                                     title: 'RENT INCLUDE TAX', title2: ""),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
                                 child: CustomContainerText(
                                     title: 'RENT', title2: ""),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
                                 child: CustomContainerText(
                                     title: 'PERIOD', title2: ""),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
                                 child: CustomContainerText(
                                     title: 'AGREEMENT START', title2: ""),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
                                 child: CustomContainerText(
                                     title: 'AGREEMENT END', title2: ""),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
                                 child: CustomContainerText(
                                     title: 'ABN', title2: ""),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
                                 child: CustomContainerText(
                                     title: 'Balance', title2: ""),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
                                 child: CustomContainerText(
                                     title: 'Bond Amount', title2: ""),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
@@ -717,7 +739,7 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
 
                           if (!hasTenantData) {
                             // Go to AddTenant screen
-                            context.push(
+                            context.navPush(
                               AddTenant(
                                 propertyId: propertyData?.propertyId,
                                 userId: propertyData?.userId,
@@ -743,8 +765,7 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                       ),
 
                       16.verticalSpace,
-                      if 
-                          (propertyData?.tenantDetails?.isNotEmpty ?? false)
+                      if (propertyData?.tenantDetails?.isNotEmpty ?? false)
                         PropertyDetailContainerWidget(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -808,7 +829,8 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                                   .tenantFname ??
                                               ''
                                           : '')),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
@@ -822,7 +844,8 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                             ''
                                         : ''),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
@@ -836,7 +859,8 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                             ''
                                         : ''),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                             ],
                           ),
                         ),
@@ -934,7 +958,7 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                     //if (showEditButton)
                                     InkWell(
                                       onTap: () {
-                                        context.push(
+                                        context.navPush(
                                           AddProperty(
                                             propertyData: propertyData,
                                             propertyUniqueId: widget.id,
@@ -982,7 +1006,8 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                       '',
                                 ),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 16),
@@ -994,7 +1019,8 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                       '',
                                 ),
                               ),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
 
                               /// RENT / PRICE
                               (propertyData?.listingDetails != null &&
@@ -1024,7 +1050,8 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                       ),
                                     )
                                   : const SizedBox.shrink(),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
 
                               /// AGREEMENT TYPE
                               (propertyData?.listingDetails != null &&
@@ -1054,7 +1081,8 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                       ),
                                     )
                                   : const SizedBox.shrink(),
-                              const Divider(height: 1, color: Color(0xFFE2E2E2)),
+                              const Divider(
+                                  height: 1, color: Color(0xFFE2E2E2)),
 
                               /// DATE AVAILABLE
                               (propertyData?.listingDetails != null &&
@@ -1134,6 +1162,7 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                 itemBuilder: (BuildContext context, int index) {
                                   final imagePath =
                                       propertyData?.propertyPics?[index];
+                                  print(imagePath);
                                   return SizedBox(
                                       height: 100,
                                       width: 100,
@@ -1181,6 +1210,7 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                   final imagePath = propertyData
                                       ?.addUpdatePropertyAdditionalDetailsModel
                                       ?.floorPics?[index];
+                                  print(imagePath);
                                   return SizedBox(
                                       height: 100,
                                       width: 100,

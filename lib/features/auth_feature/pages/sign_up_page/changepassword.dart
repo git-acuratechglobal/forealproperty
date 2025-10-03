@@ -48,7 +48,7 @@ class _ChangepasswordState extends ConsumerState<Changepassword> {
       switch (next) {
         case AsyncData<AuthState?> data when data.value != null:
           if (data.value?.authEvent == AuthEvent.changePassword) {
-            context.pop();
+            context.navPop();
           }
         case AsyncError error:
           Utils.showSnackBar(context, error.error.toString());
@@ -90,7 +90,7 @@ class _ChangepasswordState extends ConsumerState<Changepassword> {
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: InkWell(
                   onTap: () {
-                    context.pop();
+                    context.navPop();
                   },
                   child: Image.asset(
                     'assets/images/arrow-left.png',

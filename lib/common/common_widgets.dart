@@ -128,6 +128,134 @@ class _CustomCheckBoxState extends State<CustomCheckBox> {
   }
 }
 
+
+class TimeSlotDropdown extends StatelessWidget {
+  final String? value;
+
+  final ValueChanged<String?> onChanged;
+
+  final String? Function(String?)? validator;
+
+  final String? labelText;
+
+  final String? hintText;
+
+  final bool enabled;
+
+  final double menuMaxHeight;
+
+  final bool showCurrentTimeSlot;
+
+  const TimeSlotDropdown({
+    Key? key,
+    required this.value,
+    required this.onChanged,
+    this.validator,
+    this.labelText = 'Time Slot',
+    this.hintText = 'Select time slot',
+    this.enabled = true,
+    this.menuMaxHeight = 300.0,
+    this.showCurrentTimeSlot = false,
+  }) : super(key: key);
+
+   List<String> generateTimeSlots() {
+    List<String> slots = [];
+    for (int hour = 0; hour < 24; hour++) {
+      for (int minute = 0; minute < 60; minute += 15) {
+        final period = hour < 12 ? 'AM' : 'PM';
+        final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+        slots.add(
+          '${displayHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} $period',
+        );
+      }
+    }
+    return slots;
+  }
+
+  String getCurrentTimeSlot() {
+    final now = DateTime.now();
+    final roundedMinutes = _roundToNearest15(now.minute);
+
+    int hour = now.hour;
+    int minute = roundedMinutes;
+
+    // Handle minute overflow (60 minutes)
+    if (minute == 60) {
+      minute = 0;
+      hour = (hour + 1) % 24;
+    }
+
+    final period = hour < 12 ? 'AM' : 'PM';
+    final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+
+    return '${displayHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} $period';
+  }
+
+  int _roundToNearest15(int minute) {
+    return ((minute / 15).round() * 15);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final timeSlots = generateTimeSlots();
+    final initialValue = showCurrentTimeSlot && value == null
+        ? getCurrentTimeSlot()
+        : value;
+    return DropdownButtonFormField<String>(
+      style: Theme.of(context)
+          .textTheme
+          .bodyMedium
+          ?.copyWith(fontSize: 14.sp, fontWeight: FontWeight.w800),
+      hint: hintText!=null?Text(
+        hintText!,
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: const Color(0XFFa0a4b0),
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w800),
+      ):null,
+      value: value,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFE2E2E2)),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Color(0xFFE2E2E2)),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFE2E2E2)),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        errorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        focusedErrorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+      ),
+      isExpanded: true,
+      icon: const Icon(Icons.keyboard_arrow_down_outlined),
+      iconSize: 24,
+      elevation: 8,
+      dropdownColor: Colors.white,
+      menuMaxHeight: menuMaxHeight,
+      items: timeSlots.map((String timeSlot) {
+        return DropdownMenuItem<String>(
+          value: timeSlot,
+          child: Text(timeSlot),
+        );
+      }).toList(),
+      onChanged: enabled ? onChanged : null,
+      validator: validator,
+    );
+  }
+}
+
+
+
 class WidgetDropdown extends StatelessWidget {
   final List<String>? propertyOptions;
   final String? selectedValue;
@@ -135,6 +263,7 @@ class WidgetDropdown extends StatelessWidget {
   final String? hintText;
   final FormFieldValidator<String>? validator;
   final Widget? suffixIcon;
+  final String? initialValue;
   const WidgetDropdown(
       {super.key,
       this.validator,
@@ -142,14 +271,16 @@ class WidgetDropdown extends StatelessWidget {
       this.selectedValue,
       this.onChanged,
       this.hintText,
-      this.suffixIcon});
+      this.suffixIcon,
+      this.initialValue});
 
   @override
   Widget build(BuildContext context) {
     final validValue =
-        propertyOptions!.contains(selectedValue) ? selectedValue : null;
+        propertyOptions!.contains(selectedValue) ? selectedValue : initialValue;
 
     return DropdownButtonFormField<String>(
+      isExpanded: true,
       style: Theme.of(context)
           .textTheme
           .bodyMedium
@@ -196,7 +327,7 @@ class WidgetDropdown extends StatelessWidget {
       validator: validator,
       onChanged: (String? newValue) {
         if (newValue != null) {
-          onChanged?.call(newValue); // Call the original onChanged callback
+          onChanged?.call(newValue);
         }
       },
     );
@@ -212,24 +343,35 @@ class DynamicWidgetDropdown<T> extends StatelessWidget {
   final Widget? suffixIcon;
   final String Function(T)?
       displayText; // Function to convert T to display string
-
-  const DynamicWidgetDropdown({
-    super.key,
-    this.validator,
-    this.propertyOptions,
-    this.selectedValue,
-    this.onChanged,
-    this.hintText,
-    this.suffixIcon,
-    this.displayText,
-  });
+  final T? initialValue;
+  const DynamicWidgetDropdown(
+      {super.key,
+      this.validator,
+      this.propertyOptions,
+      this.selectedValue,
+      this.onChanged,
+      this.hintText,
+      this.suffixIcon,
+      this.displayText,
+      this.initialValue});
 
   @override
   Widget build(BuildContext context) {
-    final validValue =
-        propertyOptions?.contains(selectedValue) == true ? selectedValue : null;
+    final validValue = propertyOptions?.contains(selectedValue) == true
+        ? selectedValue
+        : initialValue;
 
     return DropdownButtonFormField<T>(
+      isExpanded: true,
+      selectedItemBuilder: (BuildContext context) {
+        return propertyOptions!.toSet().map((option) {
+          return Text(
+            _getDisplayText(option),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          );
+        }).toList();
+      },
       value: validValue,
       hint: hintText != null
           ? Text(
@@ -241,7 +383,10 @@ class DynamicWidgetDropdown<T> extends StatelessWidget {
               ),
             )
           : null,
-      icon: suffixIcon ?? const Icon(Icons.keyboard_arrow_down_outlined),
+      icon: suffixIcon ??
+          const Icon(
+            Icons.keyboard_arrow_down_outlined,
+          ),
       decoration: InputDecoration(
         border: const OutlineInputBorder(
           borderSide: BorderSide(color: Color(0xFFE2E2E2)),
@@ -267,7 +412,10 @@ class DynamicWidgetDropdown<T> extends StatelessWidget {
       items: propertyOptions?.toSet().map((option) {
         return DropdownMenuItem<T>(
           value: option,
-          child: Text(_getDisplayText(option)),
+          child: Text(
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              _getDisplayText(option)),
         );
       }).toList(),
       validator: validator,
@@ -297,6 +445,7 @@ class CommonTextField extends StatefulWidget {
   final String? prefixText;
   final int? maxLines;
   final Widget? prefixIcon;
+  final bool isEditable;
 
   /// Add inputFormatters here to allow customization
   final List<TextInputFormatter>? inputFormatters;
@@ -315,6 +464,7 @@ class CommonTextField extends StatefulWidget {
     this.inputFormatters,
     this.prefixText,
     this.prefixIcon,
+    this.isEditable=true
   });
 
   @override
@@ -336,6 +486,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: widget.isEditable,
       maxLines: widget.maxLines,
       validator: widget.validator,
       controller: controller,
@@ -449,21 +600,22 @@ class ServiceContainer extends StatelessWidget {
 
 class ReportContainer extends StatelessWidget {
   final String? title;
-  final List<ImageWithLetter>? imageItems; // ⬅️ updated
+  final List<ImageWithLetter>? imageItems;
   final VoidCallback? onTap;
-
-  const ReportContainer({super.key, this.title, this.imageItems, this.onTap});
+final Color ?color;
+  const ReportContainer({super.key, this.title, this.imageItems, this.onTap,this.color=Colors.white});
 
   @override
   Widget build(BuildContext context) {
     return Material(
+
       borderRadius: BorderRadius.circular(10),
       child: InkWell(
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
           decoration: ShapeDecoration(
-            color: Colors.white,
+            color: color,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -482,7 +634,8 @@ class ReportContainer extends StatelessWidget {
               Expanded(
                 child: Text(
                   title ?? "",
-                  style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
+                  style:
+                      TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
                 ),
               ),
 
@@ -537,16 +690,12 @@ class ImageWithLetter {
 }
 
 class InspectionContainer extends StatefulWidget {
-  final double? height;
-  final double? width;
   final String? title;
   final bool initialValue;
-  final ValueChanged<bool>? onChanged;
+  final void Function(bool)? onChanged;
 
   const InspectionContainer({
     super.key,
-    this.height,
-    this.width,
     this.title,
     this.initialValue = true,
     this.onChanged,
@@ -568,8 +717,6 @@ class _InspectionContainerState extends State<InspectionContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.height,
-      width: widget.width,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       decoration: ShapeDecoration(
         color: Colors.white,
@@ -600,50 +747,17 @@ class _InspectionContainerState extends State<InspectionContainer> {
             ),
           ),
           10.horizontalSpace,
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                width: 51.0,
-                height: 31.0,
-                decoration: BoxDecoration(
-                  color: !isSwitched ? Colors.red : Colors.transparent,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                alignment: Alignment.center,
-                child: CupertinoSwitch(
-                  value: isSwitched,
-                  activeTrackColor: const Color(0xFF91D35F),
-                  onChanged: (value) {
-                    setState(() {
-                      isSwitched = value;
-                    });
-                    widget.onChanged?.call(value);
-                  },
-                ),
-              ),
-              SizedBox(
-                width: 51.0,
-                height: 31.0,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                  child: Align(
-                    alignment: isSwitched
-                        ? Alignment.centerLeft
-                        : Alignment.centerRight,
-                    child: Text(
-                      isSwitched ? 'Y' : 'N',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          )
+          CustomToggle(
+              value: isSwitched,
+              onChanged: (val) {
+                setState(() {
+                  isSwitched = val;
+                  if (widget.onChanged != null) {
+                    widget.onChanged!(val);
+                  }
+                });
+
+              }),
         ],
       ),
     );
@@ -700,6 +814,93 @@ class _ToggleContainerState extends State<ToggleContainer> {
         ]));
   }
 }
+
+
+
+
+class ToggleContainer2 extends StatefulWidget {
+  final bool initialValue;
+  final String label;
+
+
+  const ToggleContainer2(
+      {super.key, required this.initialValue, required this.label,});
+
+  @override
+  State<ToggleContainer2> createState() => _ToggleContainer2State();
+}
+
+class _ToggleContainer2State extends State<ToggleContainer2> {
+
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isSwitched=widget.initialValue;
+    return Container(
+        height: 99.h,
+        width: 99.w,
+        decoration: BoxDecoration(
+          color: const Color(0xFFEBF3F5),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: const EdgeInsets.all(8),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text(
+            widget.label,
+            style: TextStyle(
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w700,
+                color: const Color(0xFF1A1B28)),
+          ),
+          10.verticalSpace,
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              // Background with CupertinoSwitch
+              Container(
+                width: 51.0,
+                height: 31.0,
+                decoration: BoxDecoration(
+                  color: !isSwitched ? Colors.red : Colors.transparent,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                alignment: Alignment.center,
+                child: CupertinoSwitch(
+                  value: isSwitched,
+                  activeColor: const Color(0xFF91D35F),
+                  onChanged: (value) {
+
+                  },
+                ),
+              ),
+
+              // Label text positioned based on switch value
+              SizedBox(
+                width: 51.0,
+                height: 31.0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                  child: Align(
+                    alignment:
+                    isSwitched ? Alignment.centerLeft : Alignment.centerRight,
+                    child: Text(
+                      isSwitched ? 'Y' : 'N',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
+        ]));
+  }
+}
+
+
 
 class CustomCupertinoToggle extends HookWidget {
   final bool initialValue;
@@ -770,6 +971,59 @@ class CustomCupertinoToggle extends HookWidget {
                   : Alignment.centerRight,
               child: Text(
                 isSwitched.value ? trueLabel : falseLabel,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14.sp,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CustomToggle extends StatelessWidget {
+  final bool value;
+
+  final void Function(bool)? onChanged;
+
+  const CustomToggle({
+    super.key,
+    required this.value,
+    this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: 51.0,
+          height: 31.0,
+          decoration: BoxDecoration(
+            color: !value ? Colors.red : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          alignment: Alignment.center,
+          child: CupertinoSwitch(
+            value: value,
+            activeTrackColor: const Color(0xFF91D35F),
+            onChanged: onChanged,
+          ),
+        ),
+        SizedBox(
+          width: 51.0,
+          height: 31.0,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6.0),
+            child: Align(
+              alignment: value ? Alignment.centerLeft : Alignment.centerRight,
+              child: Text(
+                value ? 'Y' : 'N',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

@@ -164,7 +164,7 @@ class _RegisterscreenState extends ConsumerState<Registerscreen> {
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () {
-                      context.push(const ProfileScreen());
+                      context.navPush(const ProfileScreen());
                     },
                     child: Text(
                       'Submit',
@@ -231,7 +231,7 @@ class _RegisterscreenState extends ConsumerState<Registerscreen> {
           padding: const EdgeInsets.symmetric(vertical: 30),
           child: InkWell(
             onTap: () {
-              context.push(const LoginScreen());
+              context.navPush(const LoginScreen());
             },
             child: Text.rich(
               TextSpan(

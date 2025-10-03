@@ -50,9 +50,13 @@ class DashedLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      size: Size(1, height),
-      painter: _DashedLinePainter(color: color),
+    return SizedBox(
+      width: 2,
+      child: SizedBox.expand(
+        child: CustomPaint(
+          painter: _DashedLinePainter(color: color),
+        ),
+      ),
     );
   }
 }
@@ -73,11 +77,10 @@ class _DashedLinePainter extends CustomPainter {
     double startY = 0;
 
     while (startY < size.height) {
-      canvas.drawLine(
-        Offset(size.width / 2, startY),
-        Offset(size.width / 2, startY + dashHeight),
-        paint,
-      );
+      final endY = (startY + dashHeight).clamp(0.0, size.height);
+      // draw centered in our fixed-width area
+      final x = size.width / 2;
+      canvas.drawLine(Offset(x, startY), Offset(x, endY), paint);
       startY += dashHeight + dashSpace;
     }
   }

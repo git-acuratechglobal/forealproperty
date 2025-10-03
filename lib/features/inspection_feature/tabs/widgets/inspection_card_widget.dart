@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foreal_property/Theme/navigation.dart';
 import '../../model/inspection_list_model.dart';
-import '../../pages/property_inspection_details/inspection_details.dart';
+import '../../pages/property_inspection_details/edit_report.dart';
+import '../../pages/property_inspection_details/inspection_details_tab.dart';
 
 class InspectionCardWidget extends StatelessWidget {
   const InspectionCardWidget({super.key, required this.obj});
@@ -217,7 +218,7 @@ class InspectionCardWidget extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      context.push(PropertyInspectionDetails(
+                      context.navPush(InspectionDetailsTab(
                         inspectionId: obj.inspectionId ?? 0,
                         inspectionUniqueId: obj.inspectionUniqueId ?? "",
                       ));

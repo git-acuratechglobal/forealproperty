@@ -71,7 +71,7 @@ class _CustomappbarState extends State<Customappbar> {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: InkWell(
                 onTap: () {
-                  context.push(const AddContactField());
+                  context.navPush(const AddContactField());
                 },
                 child: Image.asset(
                   'assets/images/addicon.png',

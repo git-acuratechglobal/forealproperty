@@ -3,12 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foreal_property/Theme/navigation.dart';
 import 'package:foreal_property/common/common_widgets.dart';
-import 'package:foreal_property/features/agreement19/manage_agreement_list_tab.dart';
+import 'package:foreal_property/features/aggrement_feature/manage_agreement_list_tab.dart';
 import 'package:foreal_property/features/home_features/pages/home/contact/contact.dart';
 
 import 'package:foreal_property/features/home_features/pages/home/notification.dart';
 import 'package:foreal_property/features/home_features/pages/home/openhouse/house.dart';
 import 'package:foreal_property/features/inspection_feature/inspection.dart';
+import 'package:go_router/go_router.dart';
 
 class Services extends ConsumerStatefulWidget {
   const Services({super.key});
@@ -95,7 +96,8 @@ class _ServicesState extends ConsumerState<Services> {
                     imagewidth: 79.w,
                     title: 'Inspection',
                     onTap: () {
-                     context.push(const InspectionScreen());
+                     // context.navPush(const InspectionScreen());
+                     context.pushNamed('inspection');
                     },
                   ),
                 ),
@@ -108,7 +110,7 @@ class _ServicesState extends ConsumerState<Services> {
                   imagewidth: 79.w,
                   title: 'Open Homes',
                   onTap: () {
-                    context.push(const House());
+                    context.navPush(const House());
                   },
                 ),
               ],
@@ -127,7 +129,7 @@ class _ServicesState extends ConsumerState<Services> {
                     imagewidth: 79.w,
                     title: 'Contacts',
                     onTap: () {
-                      context.push(const Contact());
+                      context.navPush(const Contact());
                     },
                   ),
                 ),
@@ -153,7 +155,8 @@ class _ServicesState extends ConsumerState<Services> {
                   imagewidth: 79.w,
                   title: 'Aggrement',
                   onTap: () {
-                    context.push(const ManageAgreementListTab());
+                    // context.navPush(const ManageAgreementListTab());
+                    context.pushNamed('management-agreement');
                   },
                 ),
               ],

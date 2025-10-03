@@ -83,7 +83,7 @@ class _EdithomesState extends ConsumerState<Edithomes> {
                           //  20.horizontalSpace,
                           InkWell(
                             onTap: () {
-                              context.pop();
+                              context.navPop();
                             },
                             child: Image.asset(
                               'assets/images/exit.png',

@@ -13,17 +13,16 @@ class AsyncWidget<T> extends StatelessWidget {
   final bool skipLoadingOnRefresh;
   final bool skipError;
   final bool showLoading;
-  const AsyncWidget({
-    super.key,
-    required this.value,
-    required this.data,
-    this.onRetry,
-    this.skipLoadingOnReload = false,
-    this.skipLoadingOnRefresh = true,
-    this.skipError = false,
-    this.height = 200,
-    this.showLoading=true
-  });
+  const AsyncWidget(
+      {super.key,
+      required this.value,
+      required this.data,
+      this.onRetry,
+      this.skipLoadingOnReload = false,
+      this.skipLoadingOnRefresh = true,
+      this.skipError = false,
+      this.height = 200,
+      this.showLoading = true});
 
   @override
   Widget build(BuildContext context) {
@@ -530,7 +529,7 @@ class PaginationWidgetC<E, T extends PaginationResponse<E>> extends HookWidget {
           return emptyWidget;
         }
         return ListView.separated(
-           physics: const NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           padding: padding,
           scrollDirection: scrollDirection,
@@ -542,19 +541,8 @@ class PaginationWidgetC<E, T extends PaginationResponse<E>> extends HookWidget {
               return itemBuilder(index, list.data[index]);
             } else {
               if (value.isRefreshing) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Please wait"),
-                    8.horizontalSpace,
-                    Center(
-                      child: LoadingAnimationWidget.twistingDots(
-                        size: 30,
-                        rightDotColor: Colors.white,
-                        leftDotColor: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ],
+                return const LoadingWidget(
+                  height: 100,
                 );
               } else if (value.hasError) {
                 return Container(

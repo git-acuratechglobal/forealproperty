@@ -146,7 +146,7 @@ class _OwnerListState extends ConsumerState<OwnerList> {
                   }
                   return InkWell(
                     onTap: () {
-                      context.push(ContactDetailScreen(
+                      context.navPush(ContactDetailScreen(
                           onOpenHomesTap: widget.onOpenHomesTap,
                           filteredContacts[index].contactUniqueId.toString()));
                       print(filteredContacts[index].contactUniqueId);
@@ -251,7 +251,7 @@ class _OwnerListState extends ConsumerState<OwnerList> {
                                   onTap: () {
                                     if (allContact != null &&
                                         allContact.isNotEmpty) {
-                                      context.push(
+                                      context.navPush(
                                         AddContactField(
                                             contact: allContact[
                                                 index]), // 👈 Pass first contact

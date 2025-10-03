@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:foreal_property/Theme/navigation.dart';
 import 'package:foreal_property/features/inspection_feature/pages/property_inspection_details/widgets/edit_template_from_widget.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../../../../core/utils/appbutton.dart';
-import '../../../../core/utils/appsnackbar.dart';
 import '../../model/inspection_details_model.dart';
 import '../../model/property_inspection_view_model.dart';
 import '../../params/update_inspection_params.dart';
-import '../../provider/inspection_details_provider.dart';
 import '../../provider/inspection_provider.dart';
 
 class EditTemplateScreen2 extends HookConsumerWidget {
@@ -23,15 +19,25 @@ class EditTemplateScreen2 extends HookConsumerWidget {
     final initialData =
         useState<PropertyInspectionViewModel>(PropertyInspectionViewModel(
       initialImages: templatesDetail.templateDetailsPictures
-              ?.map((e) => e.fileName ?? "")
+              ?.where((e) => e.isTenantUploaded == false)
+              .map((e) => e.fileName ?? "")
               .toList() ??
           [],
       comments: templatesDetail.agentComment,
       images: [],
-      available: true,
       clean: templatesDetail.cleaned ?? false,
       unDamage: templatesDetail.undermanaged ?? false,
       working: templatesDetail.working ?? false,
+      tenantImages: templatesDetail.templateDetailsPictures
+              ?.where((e) => e.isTenantUploaded == true)
+              .map((e) => e.fileName ?? "")
+              .toList() ??
+          [],
+      tenantComment: templatesDetail.tenantComment,
+      isTenantAgree: templatesDetail.isTenantAgree,
+      cleanByTenant: templatesDetail.cleanedByTenant ?? false,
+      unDamageByTenant: templatesDetail.undermanagedByTenant ?? false,
+      workingByTenant: templatesDetail.workingByTenant ?? false,
     ));
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -46,14 +52,19 @@ class EditTemplateScreen2 extends HookConsumerWidget {
       initialData: initialData.value,
       onChanged: (PropertyInspectionViewModel data) {
         final obj = SelectedAttribute(
-            Id: templatesDetail.id ?? 0,
-            Cleaned: data.clean,
-            Undermanaged: data.unDamage,
-            Working: data.working,
-            AddUpdatePictures: data.images
-                .map((e) => {'id': 0, 'PicturePath': e.path})
-                .toList(),
-            AgentComment: data.comments);
+          Id: templatesDetail.id ?? 0,
+          Cleaned: data.clean,
+          Undermanaged: data.unDamage,
+          Working: data.working,
+          AddUpdatePictures:
+              data.images.map((e) => {'id': 0, 'PicturePath': e.path}).toList(),
+          AgentComment: data.comments,
+          IsTenantAgree: data.isTenantAgree,
+          CleanedByTenant: data.cleanByTenant,
+          UndermanagedByTenant: data.unDamageByTenant,
+          WorkingByTenant: data.workingByTenant,
+          TenantComment: data.tenantComment,
+        );
         updateParam.update((e) => e.copyWith(SelectedAttributeList: [obj]));
       },
       onNext: () {
