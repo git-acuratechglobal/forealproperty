@@ -323,7 +323,8 @@ mixin _$TenantList2 {
   String? get tenantMobile => throw _privateConstructorUsedError;
   String? get tenantEmail => throw _privateConstructorUsedError;
   int? get contactId => throw _privateConstructorUsedError;
-  int? get tenantId => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  String? get contactUniqueId => throw _privateConstructorUsedError;
 
   /// Serializes this TenantList2 to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -347,7 +348,7 @@ abstract class $TenantList2CopyWith<$Res> {
       String? tenantMobile,
       String? tenantEmail,
       int? contactId,
-      int? tenantId});
+      @JsonKey(includeIfNull: false) String? contactUniqueId});
 }
 
 /// @nodoc
@@ -370,7 +371,7 @@ class _$TenantList2CopyWithImpl<$Res, $Val extends TenantList2>
     Object? tenantMobile = freezed,
     Object? tenantEmail = freezed,
     Object? contactId = freezed,
-    Object? tenantId = freezed,
+    Object? contactUniqueId = freezed,
   }) {
     return _then(_value.copyWith(
       tenantFname: freezed == tenantFname
@@ -393,10 +394,10 @@ class _$TenantList2CopyWithImpl<$Res, $Val extends TenantList2>
           ? _value.contactId
           : contactId // ignore: cast_nullable_to_non_nullable
               as int?,
-      tenantId: freezed == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as int?,
+      contactUniqueId: freezed == contactUniqueId
+          ? _value.contactUniqueId
+          : contactUniqueId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -415,7 +416,7 @@ abstract class _$$TenantList2ImplCopyWith<$Res>
       String? tenantMobile,
       String? tenantEmail,
       int? contactId,
-      int? tenantId});
+      @JsonKey(includeIfNull: false) String? contactUniqueId});
 }
 
 /// @nodoc
@@ -436,7 +437,7 @@ class __$$TenantList2ImplCopyWithImpl<$Res>
     Object? tenantMobile = freezed,
     Object? tenantEmail = freezed,
     Object? contactId = freezed,
-    Object? tenantId = freezed,
+    Object? contactUniqueId = freezed,
   }) {
     return _then(_$TenantList2Impl(
       tenantFname: freezed == tenantFname
@@ -459,10 +460,10 @@ class __$$TenantList2ImplCopyWithImpl<$Res>
           ? _value.contactId
           : contactId // ignore: cast_nullable_to_non_nullable
               as int?,
-      tenantId: freezed == tenantId
-          ? _value.tenantId
-          : tenantId // ignore: cast_nullable_to_non_nullable
-              as int?,
+      contactUniqueId: freezed == contactUniqueId
+          ? _value.contactUniqueId
+          : contactUniqueId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -476,7 +477,7 @@ class _$TenantList2Impl implements _TenantList2 {
       this.tenantMobile,
       this.tenantEmail,
       this.contactId = null,
-      this.tenantId = null});
+      @JsonKey(includeIfNull: false) this.contactUniqueId = null});
 
   factory _$TenantList2Impl.fromJson(Map<String, dynamic> json) =>
       _$$TenantList2ImplFromJson(json);
@@ -493,12 +494,12 @@ class _$TenantList2Impl implements _TenantList2 {
   @JsonKey()
   final int? contactId;
   @override
-  @JsonKey()
-  final int? tenantId;
+  @JsonKey(includeIfNull: false)
+  final String? contactUniqueId;
 
   @override
   String toString() {
-    return 'TenantList2(tenantFname: $tenantFname, tenantLname: $tenantLname, tenantMobile: $tenantMobile, tenantEmail: $tenantEmail, contactId: $contactId, tenantId: $tenantId)';
+    return 'TenantList2(tenantFname: $tenantFname, tenantLname: $tenantLname, tenantMobile: $tenantMobile, tenantEmail: $tenantEmail, contactId: $contactId, contactUniqueId: $contactUniqueId)';
   }
 
   @override
@@ -516,14 +517,14 @@ class _$TenantList2Impl implements _TenantList2 {
                 other.tenantEmail == tenantEmail) &&
             (identical(other.contactId, contactId) ||
                 other.contactId == contactId) &&
-            (identical(other.tenantId, tenantId) ||
-                other.tenantId == tenantId));
+            (identical(other.contactUniqueId, contactUniqueId) ||
+                other.contactUniqueId == contactUniqueId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, tenantFname, tenantLname,
-      tenantMobile, tenantEmail, contactId, tenantId);
+      tenantMobile, tenantEmail, contactId, contactUniqueId);
 
   /// Create a copy of TenantList2
   /// with the given fields replaced by the non-null parameter values.
@@ -543,12 +544,13 @@ class _$TenantList2Impl implements _TenantList2 {
 
 abstract class _TenantList2 implements TenantList2 {
   const factory _TenantList2(
-      {final String? tenantFname,
-      final String? tenantLname,
-      final String? tenantMobile,
-      final String? tenantEmail,
-      final int? contactId,
-      final int? tenantId}) = _$TenantList2Impl;
+          {final String? tenantFname,
+          final String? tenantLname,
+          final String? tenantMobile,
+          final String? tenantEmail,
+          final int? contactId,
+          @JsonKey(includeIfNull: false) final String? contactUniqueId}) =
+      _$TenantList2Impl;
 
   factory _TenantList2.fromJson(Map<String, dynamic> json) =
       _$TenantList2Impl.fromJson;
@@ -564,7 +566,8 @@ abstract class _TenantList2 implements TenantList2 {
   @override
   int? get contactId;
   @override
-  int? get tenantId;
+  @JsonKey(includeIfNull: false)
+  String? get contactUniqueId;
 
   /// Create a copy of TenantList2
   /// with the given fields replaced by the non-null parameter values.

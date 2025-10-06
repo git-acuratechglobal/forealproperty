@@ -119,7 +119,7 @@ final managementAgreementRepairDetailsParamProvider = NotifierProvider<
 typedef _$ManagementAgreementRepairDetailsParam
     = Notifier<ManagementAgremntRepairDetailsParams>;
 String _$updateTenantInAgreementHash() =>
-    r'1a7b2a56496f2bcb1183d9628b798b8960bcfc81';
+    r'4861fe213549406ec4deee6a6ec3531828d041f8';
 
 /// See also [UpdateTenantInAgreement].
 @ProviderFor(UpdateTenantInAgreement)

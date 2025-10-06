@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foreal_property/Theme/theme.dart';
 import 'package:foreal_property/core/services/local_storage_service/local_storage_service.dart';
-import 'package:foreal_property/splash_screen/splash_screen1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/routes/app_router.dart';
@@ -46,4 +44,4 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
-                    
+

@@ -39,7 +39,7 @@ _$TenantList2Impl _$$TenantList2ImplFromJson(Map<String, dynamic> json) =>
       tenantMobile: json['tenantMobile'] as String?,
       tenantEmail: json['tenantEmail'] as String?,
       contactId: (json['contactId'] as num?)?.toInt() ?? null,
-      tenantId: (json['tenantId'] as num?)?.toInt() ?? null,
+      contactUniqueId: json['contactUniqueId'] as String? ?? null,
     );
 
 Map<String, dynamic> _$$TenantList2ImplToJson(_$TenantList2Impl instance) =>
@@ -49,7 +49,7 @@ Map<String, dynamic> _$$TenantList2ImplToJson(_$TenantList2Impl instance) =>
       'tenantMobile': instance.tenantMobile,
       'tenantEmail': instance.tenantEmail,
       'contactId': instance.contactId,
-      'tenantId': instance.tenantId,
+      if (instance.contactUniqueId case final value?) 'contactUniqueId': value,
     };
 
 _$UpdateLandlordTenantDetailsParamsImpl

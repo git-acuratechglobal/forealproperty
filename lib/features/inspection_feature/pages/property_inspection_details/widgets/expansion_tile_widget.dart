@@ -30,7 +30,6 @@ class ExpansionTileWidget extends HookConsumerWidget {
         ref.listenManual(inspectionNotifierProvider, (_, next) {
           switch (next) {
             case AsyncData<String?> data when data.value != null:
-
               if (targetStep.value >= 0) {
                 controller.value.expand(targetStep.value);
                 activeStep.value = targetStep.value;
@@ -108,15 +107,15 @@ class ExpansionTileWidget extends HookConsumerWidget {
                 //     letter: 'A',
                 //   ),
                 // ),
-                if(detail.isTenantAgree!=null)
-                AgreeStatusWidget(
-                  imageItems: ImageWithLetter(
-                    path: detail.isTenantAgree == true
-                        ? 'assets/images/blue.png'
-                        : 'assets/images/orange.png',
-                    letter: 'T',
+                if (detail.isTenantAgree != null)
+                  AgreeStatusWidget(
+                    imageItems: ImageWithLetter(
+                      path: detail.isTenantAgree == true
+                          ? 'assets/images/blue.png'
+                          : 'assets/images/orange.png',
+                      letter: 'T',
+                    ),
                   ),
-                ),
 
                 // ImageWithLetter(
                 //     path: 'assets/images/blue.png',

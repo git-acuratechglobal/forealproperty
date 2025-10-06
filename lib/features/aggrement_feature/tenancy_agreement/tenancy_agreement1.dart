@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foreal_property/Theme/navigation.dart';
 import 'package:foreal_property/common/page_loading_widget.dart';
 import 'package:foreal_property/core/utils/appbutton.dart';
 import 'package:foreal_property/core/widgets/asyncwidget.dart';
@@ -11,7 +10,6 @@ import 'package:foreal_property/features/aggrement_feature/providers/update_tena
 import 'package:foreal_property/features/aggrement_feature/sales_agency_agreement/widgets/heading_text.dart';
 import 'package:foreal_property/features/aggrement_feature/sales_agency_agreement/widgets/sub_heading_text.dart';
 import 'package:foreal_property/features/aggrement_feature/sales_agency_agreement/widgets/text_field.dart';
-import 'package:foreal_property/features/aggrement_feature/tenancy_agreement/tenancy_agreement2.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/utils/searchbutton.dart';
@@ -251,8 +249,9 @@ class TenancyAgreement1 extends HookConsumerWidget {
                                             : "Tenant ${index + 1}",
                                       ),
                                       15.verticalSpace,
-                                     if (tenantCtrl?.fName.text.isEmpty ==
-                                          true)
+                                      if (index != 0 &&
+                                          tenantCtrl?.fName.text.isEmpty ==
+                                              true)
                                         CustomSearchFiled<SearchContactModel>(
                                           controller:
                                               tenantCtrl?.searchController,
@@ -273,7 +272,9 @@ class TenancyAgreement1 extends HookConsumerWidget {
                                           onSelected: (val) {
                                             if (val != null) {
                                               showContactList.value = false;
-                                               updateTenantAgreement.updateDetails(val.uid??'', index);
+                                              updateTenantAgreement
+                                                  .updateDetails(
+                                                      val.uid ?? '', index);
                                             }
                                           },
                                           displayString: (item) =>

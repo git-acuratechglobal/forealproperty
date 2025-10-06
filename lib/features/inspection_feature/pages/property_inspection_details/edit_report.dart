@@ -76,7 +76,7 @@ class EditReport extends HookConsumerWidget {
                             color:entryInspectionData
                                 .inspectionComplianceUtilitiesDetails
                                 ?.isSubmited ==
-                                true?const Color(0xffe63bf86):Colors.white,
+                                true?const Color(0xffd1fae5):Colors.white,
                             title: 'Compliance/Utilities',
                             imageItems: const [
                               // if (entryInspectionData
@@ -121,7 +121,7 @@ class EditReport extends HookConsumerWidget {
                                   },
                                   widgetKey: ValueKey(template.label),
                                   child: ReportContainer(
-                                    color:template.isSubmited==true?const Color(0xffe63bf86):Colors.white,
+                                    color:template.isSubmited==true?const Color(0xffd1fae5):Colors.white,
                                     title: template.label ?? '',
                                     imageItems: const [
                                       // if (template.isSubmited!)

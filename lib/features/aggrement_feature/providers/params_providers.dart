@@ -408,15 +408,15 @@ class UpdateTenantInAgreement extends _$UpdateTenantInAgreement {
     final contactData = await ref
         .watch(agreementServiceProvider)
         .getTenantContactDetails(contactId);
-    final updatedList = <TenantList2> [...(state.TenantList ?? [])];
+    final updatedList = <TenantList2>[...(state.TenantList ?? [])];
 
     updatedList[index] = updatedList[index].copyWith(
-      contactId: contactData.contactId,
-      tenantFname: contactData.firstName,
-      tenantLname: contactData.lastName,
-      tenantEmail: contactData.email,
-      tenantMobile: contactData.mobileNumber,
-    );
+        contactId: contactData.contactId,
+        tenantFname: contactData.firstName,
+        tenantLname: contactData.lastName,
+        tenantEmail: contactData.email,
+        tenantMobile: contactData.mobileNumber,
+        contactUniqueId: contactData.contactUniqueId);
 
     state = state.copyWith(TenantList: updatedList);
     if (index < tenantControllers.length) {
@@ -471,7 +471,7 @@ class UpdateTenantInAgreement extends _$UpdateTenantInAgreement {
                     tenantLname: e.tenantLname,
                     tenantMobile: e.tenantMobile,
                     tenantEmail: e.tenantEmail,
-                    tenantId: e.tenantId))
+                    contactUniqueId: e.contactUId))
                 .toList() ??
             [const TenantList2()]);
     final tenantsList = data.tenants ?? [];

@@ -42,8 +42,8 @@ class MinioService {
   bool _isInitialized = false;
 
   // AWS/S3 Configuration
-  static const String _accessKey = 'AKIAR4BCBDVB5XPQSKRG';
-  static const String _secretKey = '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';
+  static const String _accessKey = 'AKIAR4BCBDVB7WRPN4XV';
+  static const String _secretKey = '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';
   static const String _bucketName = 'forealproperties';
   static const String _region = 'ap-southeast-2';
   static const String _bucketPrefix = ''; // Add your bucket prefix if needed

@@ -58,6 +58,7 @@ class ManangeAgreementView extends HookConsumerWidget {
                   context.pushNamed('manage-agreement-6');
                   break;
                 case 9:
+                case 10:
                   context.pushNamed('manage-agreement-tab', pathParameters: {
                     'propertyId': agreementData.propertyUId ?? "",
                     'agreementType': '1'

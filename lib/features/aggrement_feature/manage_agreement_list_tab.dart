@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foreal_property/Theme/navigation.dart';
 import 'package:foreal_property/core/utils/appsnackbar.dart';
-import 'package:foreal_property/features/aggrement_feature/agreement.dart';
 import 'package:foreal_property/features/aggrement_feature/all_manage_agreement.dart';
 import 'package:foreal_property/features/aggrement_feature/providers/get_agreement_doc_list.dart';
 import 'package:foreal_property/features/aggrement_feature/providers/update_management_agreement.dart';
+import 'package:foreal_property/features/aggrement_feature/providers/update_sales_agreement.dart';
+import 'package:foreal_property/features/aggrement_feature/providers/update_tenancy_agreement.dart';
+import 'package:foreal_property/features/aggrement_feature/states/update_management_agreement_state.dart';
+import 'package:foreal_property/features/aggrement_feature/states/update_sales_agreement_state.dart';
+import 'package:foreal_property/features/aggrement_feature/states/update_tenancy_agreement_state.dart';
 import 'package:go_router/go_router.dart';
 
 class ManageAgreementListTab extends ConsumerStatefulWidget {
@@ -22,11 +25,125 @@ class _ManageAgreementListTabState
   @override
   void initState() {
     super.initState();
+
+    ref.listenManual(updateManagementAgreementProvider, (_, next) {
+      switch (next) {
+        case AsyncData<UpdateManagementAgreementState?> data
+            when data.value != null:
+          final propertyId = data.value?.propertyId;
+          if (data.value?.response != null) {
+            Utils.showSnackBar(context, data.value?.response ?? "");
+          }
+          switch (data.value!.event) {
+            case EventType.updatePropertyDetails:
+              context.pushNamed('manage-agreement-1');
+              break;
+
+            case EventType.updatePeriodDetails:
+              context.pushNamed('manage-agreement-3');
+              break;
+
+            case EventType.updateFeeCharges:
+              context.pushNamed('manage-agreement-4');
+              break;
+            case EventType.updateTribunalFees:
+              context.pushNamed('manage-agreement-5');
+              break;
+            case EventType.updatePromotionDetails:
+              context.pushNamed('manage-agreement-6');
+              break;
+            case EventType.updateRepairDetails:
+              context.pushNamed('manage-agreement-tab', pathParameters: {
+                'propertyId': propertyId ?? "",
+                'agreementType': '1'
+              });
+              break;
+            case EventType.generatePdfReport:
+          }
+
+        case AsyncError error:
+          Utils.showSnackBar(context, error.error.toString());
+      }
+    });
+
+    ref.listenManual(updateTenancyAgreementProvider, (_, next) {
+      switch (next) {
+        case AsyncData<UpdateTenancyAgreementState?> data
+            when data.value != null:
+          final propertyId = data.value?.propertyId;
+          if (data.value?.response != null) {
+            Utils.showSnackBar(context, data.value?.response ?? "");
+          }
+          switch (data.value!.event) {
+            case TenancyEventType.updateTenantDetails:
+              context.pushNamed('tenancy-agreement-2');
+              break;
+
+            case TenancyEventType.updateLandlordDetails:
+              context.pushNamed('tenancy-agreement-3');
+              break;
+
+            case TenancyEventType.updateRentBondDetails:
+              context.pushNamed('tenancy-agreement-4');
+              break;
+            case TenancyEventType.updateTenantAgreementInfo:
+              context.pushNamed('manage-agreement-tab', pathParameters: {
+                'propertyId': propertyId ?? "",
+                'agreementType': '2'
+              });
+              break;
+            case TenancyEventType.generatePdfReport:
+              break;
+          }
+
+        case AsyncError error:
+          Utils.showSnackBar(context, error.error.toString());
+      }
+    });
+    ref.listenManual(updateSalesAgreementProvider, (_, next) {
+      switch (next) {
+        case AsyncData<UpdateSalesAgreementState?> data when data.value != null:
+          final propertyId = data.value?.propertyId;
+          if (data.value?.response != null) {
+            Utils.showSnackBar(context, data.value?.response ?? "");
+          }
+          switch (data.value!.event) {
+            case SalesEventType.updateSalesDetails:
+              context.pushNamed('sales-agreement-2');
+              break;
+
+            case SalesEventType.updateSolicitor:
+              context.pushNamed('sales-agreement-3');
+              break;
+
+            case SalesEventType.updatePeriodDetails:
+              context.pushNamed('sales-agreement-4');
+              break;
+            case SalesEventType.updateRemuneration:
+              context.pushNamed('sales-agreement-5');
+              break;
+            case SalesEventType.updateExpensesCharge:
+              context.pushNamed('sales-agreement-6');
+              break;
+            case SalesEventType.updatePromotionDetails:
+              context.pushNamed('manage-agreement-tab', pathParameters: {
+                'propertyId': propertyId ?? "",
+                'agreementType': '3'
+              });
+              break;
+            case SalesEventType.generatePdfReport:
+              break;
+          }
+
+        case AsyncError error:
+          Utils.showSnackBar(context, error.error.toString());
+      }
+    });
     ref.listenManual(deleteAgreementProvider, (_, next) {
       next.whenOrNull(
         data: (data) {
           if (data != null && data.isNotEmpty)
-            return Utils.showSnackBar(context, data ?? "");
+            return Utils.showSnackBar(context, data);
         },
         error: (err, st) => Utils.showSnackBar(context, err.toString()),
       );

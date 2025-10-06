@@ -575,7 +575,9 @@ class CustomSearchFiled<T> extends HookConsumerWidget {
       this.controller,
       this.showList = false,
       this.onClear,
-      this.isLoading = false});
+      this.isLoading = false,
+      this.initialValue
+      });
   final List<T> items;
   final String Function(T item) displayString;
   final void Function(T? selected) onSelected;
@@ -584,9 +586,10 @@ class CustomSearchFiled<T> extends HookConsumerWidget {
   final bool showList;
   final void Function()? onClear;
   final bool isLoading;
+  final String? initialValue;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final textController = controller ?? useTextEditingController();
+    final textController = controller ?? useTextEditingController(text: initialValue);
     final _focus=useFocusNode();
     return Column(
       children: [

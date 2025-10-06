@@ -223,7 +223,7 @@ class EditTemplateFromWidget extends HookWidget {
           ),
           24.verticalSpace,
 
-          // Image Picker
+
           Text(
             'Property Images',
             style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
@@ -238,7 +238,7 @@ class EditTemplateFromWidget extends HookWidget {
           ),
           24.verticalSpace,
 
-          // Comment Box
+
           Text(
             'Agent Comments',
             style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),

@@ -55,66 +55,72 @@ class SalesAgreement5 extends HookConsumerWidget {
                           ],
                         ),
                         30.verticalSpace,
+                        const SizedBox(
+                            height: 30,
+                            child: SubHeadingText(text: "Services")),
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                      height: 47,
-                                      child: SubHeadingText(text: "Services")),
-                                  8.verticalSpace,
-                                  AppTextFiled(
-                                    controller: param.expenseANDChargesService1,
-                                    hintText: "Marketing Fee",
-                                    onSaved: (val) {
-                                      param.updateParam((e) => e.copyWith(
-                                            ExpenseANDChargesService1: val,
-                                          ));
-                                    },
-                                  ),
-                                  40.verticalSpace,
-                                  AppTextFiled(
-                                    controller: param.expenseANDChargesService2,
-                                    hintText: "Nil",
-                                    onSaved: (val) {
-                                      param.updateParam((e) => e.copyWith(
-                                            ExpenseANDChargesService2: val,
-                                          ));
-                                    },
-                                  ),
-                                ],
+                              child: AppTextFiled(
+                                controller: param.expenseANDChargesService1,
+                                hintText: "Marketing Fee",
+                                onSaved: (val) {
+                                  param.updateParam((e) => e.copyWith(
+                                        ExpenseANDChargesService1: val,
+                                      ));
+                                },
                               ),
                             ),
-                            20.horizontalSpace,
+                            10.horizontalSpace,
+                            Expanded(
+                              child: AppTextFiled(
+                                controller: param.expenseANDChargesService2,
+                                hintText: "Nil",
+                                onSaved: (val) {
+                                  param.updateParam((e) => e.copyWith(
+                                        ExpenseANDChargesService2: val,
+                                      ));
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        20.verticalSpace,
+                        const SizedBox(
+                            height: 30,
+                            child: SubHeadingText(text: "Amount \$")),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                                child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                AppTextFiled(
+                                  controller: param.expenseANDChargesEstimate1,
+                                  hintText: "Marketing Fee",
+                                  onSaved: (val) {
+                                    if (val == null) return;
+                                    param.updateParam((e) => e.copyWith(
+                                          ExpenseANDChargesEstimate1:
+                                              int.parse(val),
+                                        ));
+                                  },
+                                ),
+                                10.verticalSpace,
+                                Text(
+                                  "GST : 300.00",
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                              ],
+                            )),
+                            10.horizontalSpace,
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const SizedBox(
-                                      height: 47,
-                                      child: SubHeadingText(text: "Amount \$")),
-                                  8.verticalSpace,
-                                  AppTextFiled(
-                                    controller:
-                                        param.expenseANDChargesEstimate1,
-                                    hintText: "Marketing Fee",
-                                    onSaved: (val) {
-                                      if (val == null) return;
-                                      param.updateParam((e) => e.copyWith(
-                                            ExpenseANDChargesEstimate1:
-                                                int.parse(val),
-                                          ));
-                                    },
-                                  ),
-                                  10.verticalSpace,
-                                  Text(
-                                    "GST : 300.00",
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                  16.verticalSpace,
                                   AppTextFiled(
                                     controller:
                                         param.expenseANDChargesEstimate2,
@@ -129,7 +135,7 @@ class SalesAgreement5 extends HookConsumerWidget {
                                               (amount! * 0.10).toString()));
                                     },
                                     onChanged: (val) {
-                                     param.updateAmount(val);
+                                      param.updateAmount(val);
                                     },
                                   ),
                                   if (param.gst2Cntrl.text.isNotEmpty) ...[
@@ -143,36 +149,36 @@ class SalesAgreement5 extends HookConsumerWidget {
                                 ],
                               ),
                             ),
-                            20.horizontalSpace,
+                          ],
+                        ),
+                        20.verticalSpace,
+                        const SizedBox(
+                            height: 30,
+                            child:
+                                SubHeadingText(text: 'When due and payable')),
+                        Row(
+                          children: [
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                      height: 47,
-                                      child: SubHeadingText(
-                                          text: 'When due and payable')),
-                                  8.verticalSpace,
-                                  AppTextFiled(
-                                    controller: param.expenseANDChargesdue1,
-                                    hintText: "Marketing Fee",
-                                    onSaved: (val) {
-                                      param.updateParam((e) => e.copyWith(
-                                            ExpenseANDChargesdue1: val,
-                                          ));
-                                    },
-                                  ),
-                                  40.verticalSpace,
-                                  AppTextFiled(
-                                    controller: param.expenseANDChargesdue2,
-                                    hintText: "Nil",
-                                    onSaved: (val) {
-                                      param.updateParam((e) => e.copyWith(
-                                            ExpenseANDChargesdue2: val,
-                                          ));
-                                    },
-                                  ),
-                                ],
+                              child: AppTextFiled(
+                                controller: param.expenseANDChargesdue1,
+                                hintText: "Marketing Fee",
+                                onSaved: (val) {
+                                  param.updateParam((e) => e.copyWith(
+                                        ExpenseANDChargesdue1: val,
+                                      ));
+                                },
+                              ),
+                            ),
+                            10.horizontalSpace,
+                            Expanded(
+                              child: AppTextFiled(
+                                controller: param.expenseANDChargesdue2,
+                                hintText: "Nil",
+                                onSaved: (val) {
+                                  param.updateParam((e) => e.copyWith(
+                                        ExpenseANDChargesdue2: val,
+                                      ));
+                                },
                               ),
                             )
                           ],
@@ -182,102 +188,97 @@ class SalesAgreement5 extends HookConsumerWidget {
                           color: Color(0xffE2E2E2),
                         ),
                         20.verticalSpace,
+                        const SizedBox(
+                            height: 30,
+                            child: SubHeadingText(text: 'Services')),
                         Row(
                           children: [
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                      height: 47,
-                                      child: SubHeadingText(text: 'Services')),
-                                  8.verticalSpace,
-                                  AppTextFiled(
-                                    controller: param.otherServicesService1,
-                                    hintText: "Nil",
-                                    onSaved: (val) {
-                                      param.updateParam((e) => e.copyWith(
-                                            OtherServicesService1: val,
-                                          ));
-                                    },
-                                  ),
-                                  20.verticalSpace,
-                                  AppTextFiled(
-                                    controller: param.otherServicesService2,
-                                    hintText: "Nil",
-                                    onSaved: (val) {
-                                      param.updateParam((e) => e.copyWith(
-                                            OtherServicesService2: val,
-                                          ));
-                                    },
-                                  ),
-                                ],
+                              child: AppTextFiled(
+                                controller: param.otherServicesService1,
+                                hintText: "Nil",
+                                onSaved: (val) {
+                                  param.updateParam((e) => e.copyWith(
+                                        OtherServicesService1: val,
+                                      ));
+                                },
                               ),
                             ),
-                            20.horizontalSpace,
+                            10.horizontalSpace,
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                      height: 47,
-                                      child:
-                                          SubHeadingText(text: "\$ (GST Inc)")),
-                                  8.verticalSpace,
-                                  AppTextFiled(
-                                    controller: param.otherServicesGST1,
-                                    hintText: "0",
-                                    onSaved: (val) {
-                                      if (val == null) return;
-                                      param.updateParam((e) => e.copyWith(
-                                            OtherServicesGST1: int.parse(val),
-                                          ));
-                                    },
-                                  ),
-                                  20.verticalSpace,
-                                  AppTextFiled(
-                                    controller: param.otherServicesGST2,
-                                    hintText: "0",
-                                    onSaved: (val) {
-                                      if (val == null) return;
-                                      param.updateParam((e) => e.copyWith(
-                                            OtherServicesGST2: int.parse(val),
-                                          ));
-                                    },
-                                  ),
-                                ],
+                              child: AppTextFiled(
+                                controller: param.otherServicesService2,
+                                hintText: "Nil",
+                                onSaved: (val) {
+                                  param.updateParam((e) => e.copyWith(
+                                        OtherServicesService2: val,
+                                      ));
+                                },
                               ),
                             ),
-                            20.horizontalSpace,
+                          ],
+                        ),
+                        20.verticalSpace,
+                        const SizedBox(
+                            height: 30,
+                            child: SubHeadingText(text: "\$ (GST Inc)")),
+                        Row(
+                          children: [
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                      height: 47,
-                                      child: SubHeadingText(
-                                          text: "When due and payable")),
-                                  8.verticalSpace,
-                                  AppTextFiled(
-                                    controller: param.otherServicesdue1,
-                                    hintText: "Nil",
-                                    onSaved: (val) {
-                                      param.updateParam((e) => e.copyWith(
-                                            OtherServicesdue1: val,
-                                          ));
-                                    },
-                                  ),
-                                  20.verticalSpace,
-                                  AppTextFiled(
-                                    controller: param.otherServicesdue2,
-                                    hintText: "Nil",
-                                    onSaved: (val) {
-                                      param.updateParam((e) => e.copyWith(
-                                            OtherServicesdue1: val,
-                                          ));
-                                    },
-                                  ),
-                                ],
+                              child: AppTextFiled(
+                                controller: param.otherServicesGST1,
+                                hintText: "0",
+                                onSaved: (val) {
+                                  if (val == null) return;
+                                  param.updateParam((e) => e.copyWith(
+                                        OtherServicesGST1: int.parse(val),
+                                      ));
+                                },
+                              ),
+                            ),
+                            10.horizontalSpace,
+                            Expanded(
+                              child: AppTextFiled(
+                                controller: param.otherServicesGST2,
+                                hintText: "0",
+                                onSaved: (val) {
+                                  if (val == null) return;
+                                  param.updateParam((e) => e.copyWith(
+                                        OtherServicesGST2: int.parse(val),
+                                      ));
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        20.verticalSpace,
+                        const SizedBox(
+                            height: 30,
+                            child:
+                                SubHeadingText(text: "When due and payable")),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: AppTextFiled(
+                                controller: param.otherServicesdue1,
+                                hintText: "Nil",
+                                onSaved: (val) {
+                                  param.updateParam((e) => e.copyWith(
+                                        OtherServicesdue1: val,
+                                      ));
+                                },
+                              ),
+                            ),
+                            10.horizontalSpace,
+                            Expanded(
+                              child: AppTextFiled(
+                                controller: param.otherServicesdue2,
+                                hintText: "Nil",
+                                onSaved: (val) {
+                                  param.updateParam((e) => e.copyWith(
+                                        OtherServicesdue1: val,
+                                      ));
+                                },
                               ),
                             )
                           ],

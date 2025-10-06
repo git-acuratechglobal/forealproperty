@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foreal_property/Theme/navigation.dart';
 import 'package:foreal_property/core/s3_sigleton/s3_widget.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -246,13 +247,18 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                           child: Stack(
                             alignment: Alignment.topRight,
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10.sp),
-                                child: Image.file(
-                                  File(file.path),
-                                  width: 100.w,
-                                  height: 100.h,
-                                  fit: BoxFit.cover,
+                              InkWell(
+                                onTap: () {
+                                  _showDialog2(context, file.path, false);
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.sp),
+                                  child: Image.file(
+                                    File(file.path),
+                                    width: 100.w,
+                                    height: 100.h,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                               GestureDetector(
@@ -285,8 +291,13 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                         child: SizedBox(
                           width: 100.w,
                           height: 100.h,
-                          child: S3ImageDisplayWidget(
-                            imagePath: imageUrl,
+                          child: InkWell(
+                            onTap: () {
+                              _showDialog2(context, imageUrl, true);
+                            },
+                            child: S3ImageDisplayWidget(
+                              imagePath: imageUrl,
+                            ),
                           ),
                         ),
                       ),
@@ -317,34 +328,83 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
 
                 // // Add new image button
                 // if ((state.value!.length + _currentImages.length) < 6)
-                  GestureDetector(
-                    onTap: () async {
-                      final pickedImages = await showDialog<List<dynamic>>(
-                        barrierDismissible: true,
-                        context: context,
-                        builder: (context) {
-                          return const ImagePickerOptions2(isMultiple: true);
-                        },
-                      );
+                GestureDetector(
+                  onTap: () async {
+                    final pickedImages = await showDialog<List<dynamic>>(
+                      barrierDismissible: true,
+                      context: context,
+                      builder: (context) {
+                        return const ImagePickerOptions2(isMultiple: true);
+                      },
+                    );
 
-                      if (pickedImages != null && pickedImages.isNotEmpty) {
-                        setState(() {
-                          state.didChange([
-                            ...state.value ?? [],
-                            ...pickedImages
-                          ].cast<XFile>().toList());
-                        });
-                      }
-                    },
-                    child: Image.asset(
-                      'assets/images/groupphoto.png',
-                      height: 99.h,
-                      width: 99.w,
-                    ),
+                    if (pickedImages != null && pickedImages.isNotEmpty) {
+                      setState(() {
+                        state.didChange([...state.value ?? [], ...pickedImages]
+                            .cast<XFile>()
+                            .toList());
+                      });
+                    }
+                  },
+                  child: Image.asset(
+                    'assets/images/groupphoto.png',
+                    height: 99.h,
+                    width: 99.w,
                   ),
+                ),
               ],
             ),
           ],
+        );
+      },
+    );
+  }
+
+  void _showDialog2(
+      BuildContext context, String imagePath, bool isNetworkImage) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: "Dismiss",
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return Align(
+          alignment: Alignment.center,
+          child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 30),
+              height: 400,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: switch (isNetworkImage) {
+                      true => S3ImageDisplayWidget(imagePath: imagePath),
+                      false => Image.file(
+                          File(imagePath),
+                          fit: BoxFit.cover,
+                        )
+                    },
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.clear,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        context.pop();
+                      },
+                    ),
+                  )
+                ],
+              )),
         );
       },
     );

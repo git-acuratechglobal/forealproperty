@@ -637,7 +637,7 @@
         <entry key="google_maps_flutter_platform_interface">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.12.1/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.14.0/lib" />
             </list>
           </value>
         </entry>
@@ -1704,7 +1704,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/google_maps_flutter-2.12.3/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/google_maps_flutter_android-2.17.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/google_maps_flutter_ios-2.15.4/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.12.1/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.14.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/google_maps_flutter_web-0.5.12+2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/google_places_flutter-2.1.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/graphs-2.3.2/lib" />

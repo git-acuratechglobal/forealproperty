@@ -26,7 +26,7 @@ class TenantList2 with _$TenantList2 {
     String? tenantMobile,
     String? tenantEmail,
     @Default(null) int? contactId,
-    @Default(null) int? tenantId,
+    @JsonKey(includeIfNull: false) @Default(null) String? contactUniqueId,
   }) = _TenantList2;
 
   factory TenantList2.fromJson(Map<String, dynamic> json) =>
