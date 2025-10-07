@@ -11,6 +11,9 @@ import 'package:intl/intl.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../core/network/apiend_points.dart';
+import '../../../../../core/utils/network_image_widget.dart';
+
 class Openhome extends ConsumerStatefulWidget {
   final String openHomeUniqueId;
   const Openhome(this.openHomeUniqueId, {super.key});
@@ -182,9 +185,9 @@ class _OpenhomeState extends ConsumerState<Openhome> {
                       borderRadius: BorderRadius.circular(12),
                       child: (openhomedata.propertyPic != null &&
                               openhomedata.propertyPic!.isNotEmpty)
-                          ? S3ImageDisplayWidget(
-                              imagePath: openhomedata.propertyPic!,
-                            )
+                          ? NetworkImageWidget(
+                          imageUrl:
+                          '${ApiEndPoints.imageUrl}${openhomedata.propertyPic}')
                           : Image.asset(
                               'assets/images/placeholder.png',
                               height: 72.h,

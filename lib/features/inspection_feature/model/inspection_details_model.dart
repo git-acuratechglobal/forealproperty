@@ -211,7 +211,7 @@ class InspectionComplianceUtilitiesDetails {
           fieldType: FieldType.date,
           initialDateValue: smokeAlaramLastChecked != null
               ? DateFormat('dd-MM-yyyy').format(smokeAlaramLastChecked!)
-              : 'Select a date'),
+              : null),
       InspectionToggleModel(
           title:
               'Batteries in the all smoke alarms been replaced within the last 12 months, except for removable lithium batteries',
@@ -222,7 +222,7 @@ class InspectionComplianceUtilitiesDetails {
           fieldType: FieldType.date,
           initialDateValue: battryChangedDate != null
               ? DateFormat('dd-MM-yyyy').format(battryChangedDate!)
-              : "Select a date"),
+              : null),
       InspectionToggleModel(
           title:
               'Batteries in all the smoke alarms with removable lithium battery have been replaced in the period specified by the manufacturer',
@@ -233,7 +233,7 @@ class InspectionComplianceUtilitiesDetails {
           fieldType: FieldType.date,
           initialDateValue: removableBattryChangedDate != null
               ? DateFormat('dd-MM-yyyy').format(removableBattryChangedDate!)
-              : "Select a date"),
+              : null),
     ];
   }
 
@@ -288,62 +288,68 @@ class InspectionComplianceUtilitiesDetails {
           title: 'No leaking taps', initialValue: checkedWaterLeakage ?? false),
       // InspectionToggleModel(title:  'Last checked to see if it is compliant with the water efficiency measures',
       InspectionToggleModel(
-          title: "Water Meter Reading(Start of the Tenancy)",
+          title: "Water Meter Reading",
           fieldType: FieldType.input,
           initialInputValue:
               waterMeterReading != null ? waterMeterReading.toString() : ""),
       InspectionToggleModel(
           title: "Date of reading",
           fieldType: FieldType.date,
+          initialDateValue: waterEfficiencyDateChecked != null
+              ? DateFormat('dd-MM-yyyy').format(waterEfficiencyDateChecked!)
+              : null),
+      // InspectionToggleModel(
+      //     title: "Water Meter Reading(End of the Tenancy)",
+      //     fieldType: FieldType.input,
+      //     initialInputValue: watermeterReadingEnd != null
+      //         ? watermeterReadingEnd.toString()
+      //         : ""),
+      InspectionToggleModel(
+          title: "Date of reading Start",
+          fieldType: FieldType.date,
           initialDateValue: dateofWaterMeterReadingStart != null
               ? DateFormat('dd-MM-yyyy').format(dateofWaterMeterReadingStart!)
-              : "Select a date"),
+              : null),
       InspectionToggleModel(
-          title: "Water Meter Reading(End of the Tenancy)",
-          fieldType: FieldType.input,
-          initialInputValue: watermeterReadingEnd != null
-              ? watermeterReadingEnd.toString()
-              : ""),
-      InspectionToggleModel(
-          title: "Date of reading",
+          title: "Date of reading End",
           fieldType: FieldType.date,
           initialDateValue: dateOdWaterMeterReadingEnd != null
               ? DateFormat('dd-MM-yyyy').format(dateOdWaterMeterReadingEnd!)
-              : "Select a date")
+              : null)
     ];
   }
 
-  String get smokeAlaramLastDate {
+  String? get smokeAlaramLastDate {
     if (lastDateInstalledSmokeAlarms == null) {
-      return "";
+      return null;
     }
     return DateFormat('dd-MM-yyyy').format(lastDateInstalledSmokeAlarms!);
   }
 
-  String get lastDatePaintingExternalDate {
+  String? get lastDatePaintingExternalDate {
     if (lastDatePaintingExternal == null) {
-      return "";
+      return null;
     }
     return DateFormat('dd-MM-yyyy').format(lastDatePaintingExternal!);
   }
 
-  String get lastDatePaintingInternalDate {
+  String? get lastDatePaintingInternalDate {
     if (lastDatePaintingInternal == null) {
-      return "";
+      return null;
     }
     return DateFormat('dd-MM-yyyy').format(lastDatePaintingInternal!);
   }
 
-  String get lastDateFloorCleanedDate {
+  String? get lastDateFloorCleanedDate {
     if (lastDateFloorCleaned == null) {
-      return "";
+      return null;
     }
     return DateFormat('dd-MM-yyyy').format(lastDateFloorCleaned!);
   }
 
-  String get tenantReceivedOnDate {
+  String? get tenantReceivedOnDate {
     if (landLordWorkDoneBy?.isEmpty ?? true) {
-      return "";
+      return null;
     }
     return landLordWorkDoneBy!.first;
   }

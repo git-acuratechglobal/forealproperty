@@ -822,7 +822,7 @@ class AddUpdatePropertyAdditionalDetailsModel {
     @JsonKey(name: "propertyPics")
     List<String>? propertyPics;
     @JsonKey(name: "floorPics")
-    List<dynamic>? floorPics;
+    List<String>? floorPics;
     @JsonKey(name: "hastoDeletePictures")
     dynamic hastoDeletePictures;
     @JsonKey(name: "hastoDeleteFloorPictures")

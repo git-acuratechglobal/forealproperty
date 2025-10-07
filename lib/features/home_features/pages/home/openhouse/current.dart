@@ -13,6 +13,9 @@ import 'package:foreal_property/features/home_features/pages/home/openhouse/open
 import 'package:foreal_property/features/home_features/providers/openhomelist.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../core/network/apiend_points.dart';
+import '../../../../../core/utils/network_image_widget.dart';
+
 class CurrentPage extends ConsumerStatefulWidget {
   final PropertyDetailModel? propertyData;
   final bool? isCurrent;
@@ -596,11 +599,9 @@ class _CurrentState extends ConsumerState<Current> {
                                                                 .propertyPic
                                                                 ?.isNotEmpty ==
                                                             true
-                                                        ? S3ImageDisplayWidget(
-                                                            imagePath: dataToShow[
-                                                                    index]
-                                                                .propertyPic!,
-                                                          )
+                                                        ? NetworkImageWidget(
+                                                        imageUrl:
+                                                        '${ApiEndPoints.imageUrl}${dataToShow[index].propertyPic}')
                                                         : Image.asset(
                                                             'assets/images/placeholder.png',
                                                             height: 72.h,

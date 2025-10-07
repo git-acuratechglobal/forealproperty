@@ -11,6 +11,9 @@ import 'package:foreal_property/features/home_features/pages/home/steps/address.
 import 'package:foreal_property/features/home_features/providers/openhomelist.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/network/apiend_points.dart';
+import '../../../../core/utils/network_image_widget.dart';
+
 class Dashboard extends ConsumerStatefulWidget {
   final VoidCallback? onOpenHomesTap;
   const Dashboard({super.key, this.onOpenHomesTap});
@@ -254,10 +257,9 @@ class _DashboardState extends ConsumerState<Dashboard> with AutomaticKeepAliveCl
                                                       .propertyPic
                                                       ?.isNotEmpty ==
                                                   true
-                                              ? S3ImageDisplayWidget(
-                                                  imagePath: openHomeData[index]
-                                                      .propertyPic!,
-                                                )
+                                              ? NetworkImageWidget(
+                                              imageUrl:
+                                              '${ApiEndPoints.imageUrl}${openHomeData[index].propertyPic}')
                                               : Image.asset(
                                                   'assets/images/placeholder.png',
                                                   height: 72.h,

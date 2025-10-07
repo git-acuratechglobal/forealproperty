@@ -214,8 +214,8 @@ class _PhotosState extends ConsumerState<Photos> {
                     16.verticalSpace,
                     ImagePickerForm2(
                       context: context,
-                      // initialImages: widget.propertyData
-                      //     ?.addUpdatePropertyAdditionalDetailsModel?.floorPics,
+                      initialImages: widget.propertyData
+                          ?.addUpdatePropertyAdditionalDetailsModel?.floorPics as List<String>??[],
                       onSaved: (newValue) {
                         if (newValue == null || newValue.isEmpty) return;
 
@@ -229,7 +229,7 @@ class _PhotosState extends ConsumerState<Photos> {
 
                         ref
                             .read(photoFormProvider.notifier)
-                            .addPropertyImages(newImages);
+                            .addFloorImages(newImages);
 
                         ref.read(addImageDataProvider.notifier).update(
                               (p) => p!.copyWith(floorImages: customPaths),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:foreal_property/core/services/local_storage_service/local_storage_service.dart';
 import 'package:foreal_property/features/inspection_feature/pages/property_inspection_details/widgets/edit_template_from_widget.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../model/inspection_details_model.dart';
@@ -15,9 +16,13 @@ class EditTemplateScreen2 extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    late PropertyInspectionViewModel savingData;
     final updateParam = ref.read(updateInspectionParamProvider.notifier);
     final initialData =
         useState<PropertyInspectionViewModel>(PropertyInspectionViewModel(
+          inspectionId: inspectionId,
+          templateId: templatesDetail.inspectionTemplateId ?? 0,
+      id: templatesDetail.id ?? 0,
       initialImages: templatesDetail.templateDetailsPictures
               ?.where((e) => e.isTenantUploaded == false)
               .map((e) => e.fileName ?? "")
@@ -66,9 +71,11 @@ class EditTemplateScreen2 extends HookConsumerWidget {
           TenantComment: data.tenantComment,
         );
         updateParam.update((e) => e.copyWith(SelectedAttributeList: [obj]));
+        savingData=data;
       },
       onNext: () {
-        ref.read(inspectionNotifierProvider.notifier).updateInspection();
+        // ref.read(inspectionNotifierProvider.notifier).updateInspection();
+        ref.read(localStorageServiceProvider).addInspection(savingData);
       },
       isLoading: ref.watch(inspectionNotifierProvider).isLoading,
     );

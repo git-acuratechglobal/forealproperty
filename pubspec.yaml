@@ -21,7 +21,7 @@ dependencies:
   easy_stepper: ^0.8.5+1
  
   auto_size_text: ^3.0.0
-  image_picker: ^1.1.2
+  image_picker: ^1.2.0
   timeline_tile: ^2.0.0
   extended_image: ^9.1.0
   rename_app: ^1.6.2

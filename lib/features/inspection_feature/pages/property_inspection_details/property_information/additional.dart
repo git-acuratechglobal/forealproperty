@@ -8,196 +8,204 @@ import '../../../../../common/common_widgets.dart';
 import '../../../../../core/utils/appbutton.dart';
 import '../../../../home_features/pages/home/openhouse/addopenhomes.dart';
 import '../../../model/inspection_details_model.dart';
+import '../../../provider/inspection_details_provider.dart';
 
 class AdditionalScreen extends ConsumerStatefulWidget {
-  const AdditionalScreen({super.key, required this.utilitiesDetails});
+  const AdditionalScreen(
+      {super.key, required this.utilitiesDetails, required this.inspectionId});
   final InspectionComplianceUtilitiesDetails? utilitiesDetails;
+  final int inspectionId;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _AdditionalScreenState();
 }
 
 class _AdditionalScreenState extends ConsumerState<AdditionalScreen> {
-
   @override
   Widget build(BuildContext context) {
     final params = ref.read(inspectionComplianceParamProvider.notifier);
-    final additional= widget.utilitiesDetails;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Additional'),
-        centerTitle: true,
-        automaticallyImplyLeading: true,
-      ),
-      backgroundColor: const Color(0xFFEBF3F5),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Agent Additional Comments on Minimum Standard, Health Issues, smoke alarms, other safety issues, communication facilities, water usage charging and efficiency devices',
-              style: TextStyle(
-                color: const Color(0xFF1A1B28),
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w700,
+    final additional = widget.utilitiesDetails;
+    return PopScope(
+      onPopInvokedWithResult: (result, obj) {
+        ref.invalidate(
+            getInspectionDetailsProvider(inspectionId: widget.inspectionId));
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Additional'),
+          centerTitle: true,
+          automaticallyImplyLeading: true,
+        ),
+        backgroundColor: const Color(0xFFEBF3F5),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Agent Additional Comments on Minimum Standard, Health Issues, smoke alarms, other safety issues, communication facilities, water usage charging and efficiency devices',
+                style: TextStyle(
+                  color: const Color(0xFF1A1B28),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-            12.verticalSpace,
-            CommonTextField(
-              initialValue: additional?.additionalComments,
-              label: 'Write additional comment...',
-              maxLines: 4,
-              onChanged: (val) {
-                params.update(
-                  (p) => p.copyWith(AdditionalComments: val),
-                );
-              },
-            ),
-            24.verticalSpace,
-            Text(
-              'WORK LAST DONE',
-              style: TextStyle(
-                color: const Color(0xFF164C63),
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            16.verticalSpace,
-            Text(
-              'Date of Installation, repair or maintenance of smoke alarm',
-              style: TextStyle(
-                color: const Color(0xFF1A1B28),
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            12.verticalSpace,
-
-            DatePickerDropdown2(
-                validator: (value) => value == null || value.trim().isEmpty
-                    ? 'This field is required'
-                    : null,
-                selectedDate: additional?.smokeAlaramLastDate,
-                onDateSelected: (date) {
+              12.verticalSpace,
+              CommonTextField(
+                initialValue: additional?.additionalComments,
+                label: 'Write additional comment...',
+                maxLines: 4,
+                onChanged: (val) {
                   params.update(
-                    (p) => p.copyWith(LastDateInstalledSmokeAlarms: date),
+                    (p) => p.copyWith(AdditionalComments: val),
                   );
-                }),
-            16.verticalSpace,
-            Text(
-              'Date of painting of premises (external)',
-              style: TextStyle(
-                color: const Color(0xFF1A1B28),
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w700,
+                },
               ),
-            ),
-            12.verticalSpace,
-            DatePickerDropdown2(
-
-                validator: (value) => value == null || value.trim().isEmpty
-                    ? 'This field is required'
-                    : null,
-                selectedDate: additional?.lastDatePaintingExternalDate,
-                onDateSelected: (date) {
+              24.verticalSpace,
+              Text(
+                'WORK LAST DONE',
+                style: TextStyle(
+                  color: const Color(0xFF164C63),
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              16.verticalSpace,
+              Text(
+                'Date of Installation, repair or maintenance of smoke alarm',
+                style: TextStyle(
+                  color: const Color(0xFF1A1B28),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              12.verticalSpace,
+              DatePickerDropdown2(
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? 'This field is required'
+                      : null,
+                  selectedDate: additional?.smokeAlaramLastDate,
+                  onDateSelected: (date) {
+                    params.update(
+                      (p) => p.copyWith(LastDateInstalledSmokeAlarms: date),
+                    );
+                  }),
+              16.verticalSpace,
+              Text(
+                'Date of painting of premises (external)',
+                style: TextStyle(
+                  color: const Color(0xFF1A1B28),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              12.verticalSpace,
+              DatePickerDropdown2(
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? 'This field is required'
+                      : null,
+                  selectedDate: additional?.lastDatePaintingExternalDate,
+                  onDateSelected: (date) {
+                    params.update(
+                      (p) => p.copyWith(LastDatePaintingExternal: date),
+                    );
+                  }),
+              16.verticalSpace,
+              Text(
+                'Date of painting of premises (Internal)',
+                style: TextStyle(
+                  color: const Color(0xFF1A1B28),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              12.verticalSpace,
+              DatePickerDropdown2(
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? 'This field is required'
+                      : null,
+                  selectedDate: additional?.lastDatePaintingInternalDate,
+                  onDateSelected: (date) {
+                    params.update(
+                      (p) => p.copyWith(LastDatePaintingInternal: date),
+                    );
+                  }),
+              16.verticalSpace,
+              Text(
+                'Date of flooring laid/replaced/cleaned',
+                style: TextStyle(
+                  color: const Color(0xFF1A1B28),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              12.verticalSpace,
+              DatePickerDropdown2(
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? 'This field is required'
+                      : null,
+                  selectedDate: additional?.lastDateFloorCleanedDate,
+                  onDateSelected: (date) {
+                    params.update(
+                      (p) => p.copyWith(LastDateFloorCleaned: date),
+                    );
+                  }),
+              16.verticalSpace,
+              Text(
+                'Landlord’s promise to undertake work',
+                style: TextStyle(
+                  color: const Color(0xFF1A1B28),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              12.verticalSpace,
+              CommonTextField(
+                initialValue:
+                    additional?.landLordWorkDoneNote?.isNotEmpty == true
+                        ? additional!.landLordWorkDoneNote![0]
+                        : '',
+                label: 'Write promise...',
+                maxLines: 4,
+                onChanged: (val) {
                   params.update(
-                    (p) => p.copyWith(LastDatePaintingExternal: date),
+                    (p) => p.copyWith(LandLordWorkDoneNote: [val]),
                   );
-                }),
-            16.verticalSpace,
-            Text(
-              'Date of painting of premises (Internal)',
-              style: TextStyle(
-                color: const Color(0xFF1A1B28),
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w700,
+                },
               ),
-            ),
-            12.verticalSpace,
-            DatePickerDropdown2(
-                validator: (value) => value == null || value.trim().isEmpty
-                    ? 'This field is required'
-                    : null,
-                selectedDate: additional?.lastDatePaintingInternalDate,
-                onDateSelected: (date) {
-                  params.update(
-                    (p) => p.copyWith(LastDatePaintingInternal: date),
-                  );
-                }),
-            16.verticalSpace,
-            Text(
-              'Date of flooring laid/replaced/cleaned',
-              style: TextStyle(
-                color: const Color(0xFF1A1B28),
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w700,
+              16.verticalSpace,
+              Text(
+                'Landlord agrees to complete that work by',
+                style: TextStyle(
+                  color: const Color(0xFF1A1B28),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-            12.verticalSpace,
-            DatePickerDropdown2(
-                validator: (value) => value == null || value.trim().isEmpty
-                    ? 'This field is required'
-                    : null,
-                selectedDate: additional?.lastDateFloorCleanedDate,
-                onDateSelected: (date) {
-                  params.update(
-                    (p) => p.copyWith(LastDateFloorCleaned: date),
-                  );
-                }),
-            16.verticalSpace,
-            Text(
-              'Landlord’s promise to undertake work',
-              style: TextStyle(
-                color: const Color(0xFF1A1B28),
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w700,
+              12.verticalSpace,
+              DatePickerDropdown2(
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? 'This field is required'
+                      : null,
+                  selectedDate: additional?.tenantReceivedOnDate,
+                  onDateSelected: (date) {
+                    final value = DateFormat('dd-MM-yyyy').format(date!);
+                    params.update(
+                      (p) => p.copyWith(LandLordWorkDoneBy: [value]),
+                    );
+                  }),
+              24.verticalSpace,
+              PrimaryButton(
+                isLoading: ref.watch(inspectionNotifierProvider).isLoading,
+                title: 'Update',
+                onClick: () {
+                  ref
+                      .read(inspectionNotifierProvider.notifier)
+                      .updateCompliance();
+                },
               ),
-            ),
-            12.verticalSpace,
-             CommonTextField(
-               initialValue: additional?.landLordWorkDoneNote?.isNotEmpty == true
-                   ? additional!.landLordWorkDoneNote![0]
-                   : '',
-              label: 'Write promise...',
-              maxLines: 4,
-               onChanged: (val){
-                 params.update(
-                   (p) => p.copyWith(LandLordWorkDoneNote: [val]),
-                 );
-               },
-            ),
-            16.verticalSpace,
-            Text(
-              'Landlord agrees to complete that work by',
-              style: TextStyle(
-                color: const Color(0xFF1A1B28),
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            12.verticalSpace,
-            DatePickerDropdown2(
-                validator: (value) => value == null || value.trim().isEmpty
-                    ? 'This field is required'
-                    : null,
-                selectedDate: additional?.tenantReceivedOnDate,
-                onDateSelected: (date) {
-                  final value=DateFormat('dd-MM-yyyy').format(date!);
-                  params.update(
-                    (p) => p.copyWith(LandLordWorkDoneBy: [value]),
-                  );
-                }),
-            24.verticalSpace,
-            PrimaryButton(
-              isLoading: ref.watch(inspectionNotifierProvider).isLoading,
-              title: 'Update',
-              onClick: () {
-          ref.read(inspectionNotifierProvider.notifier).updateCompliance();
-              },
-            ),
-
-          ],
+            ],
+          ),
         ),
       ),
     );

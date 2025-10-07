@@ -1,4 +1,3 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:foreal_property/core/network/api_client.dart';
 import 'package:foreal_property/core/network/apiend_points.dart';
@@ -90,19 +89,19 @@ class HomeServices {
         data: bodyData,
       );
 
-      final List<dynamic> jsonList =
-          response.data['object']['propertyListingList']; // yeh sei trika hai
-
-      return jsonList.map((e) => PropertyListingList.fromJson(e)).toList();
+      if (response.data['object']['propertyListingList'] != null) {
+        final List<dynamic> jsonList =
+            response.data['object']['propertyListingList']; // yeh sei trika hai
+        return jsonList.map((e) => PropertyListingList.fromJson(e)).toList();
+      } else {
+        return [];
+      }
     });
   }
 
-  Future<List<PropertyForInspection>> searchPropertyForInspection({
- String?search=""
-  }) async {
-    final bodyData = {
-      "Search": search, "RecordsPerPage": 10, "PageNo": 1
-    };
+  Future<List<PropertyForInspection>> searchPropertyForInspection(
+      {String? search = ""}) async {
+    final bodyData = {"Search": search, "RecordsPerPage": 10, "PageNo": 1};
 
     return asyncGuard(() async {
       final response = await _client.post(
@@ -110,8 +109,7 @@ class HomeServices {
         data: bodyData,
       );
 
-      final List<dynamic> jsonList =
-      response.data['list']??[];
+      final List<dynamic> jsonList = response.data['list'] ?? [];
 
       return jsonList.map((e) => PropertyForInspection.fromJson(e)).toList();
     });

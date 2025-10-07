@@ -159,7 +159,7 @@ class _AddNewFacilityState extends ConsumerState<AddNewFacility> {
               ),
               20.verticalSpace,
               PrimaryButton(
-                  title: 'Submit',
+                  title: 'Add',
                   onClick: () {
                     if (typeValue != null && typeValue!.isNotEmpty) {
                       ref

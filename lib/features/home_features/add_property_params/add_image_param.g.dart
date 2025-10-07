@@ -49,7 +49,7 @@ Map<String, dynamic> _$$AddImageImplToJson(_$AddImageImpl instance) =>
 // RiverpodGenerator
 // **************************************************************************
 
-String _$addImageDataHash() => r'acf037a9d8d8a0b000150d6c2bcdb6cdb1c507d5';
+String _$addImageDataHash() => r'6d17b7b59617d966e66ff8571dd5075519f6ba61';
 
 /// See also [AddImageData].
 @ProviderFor(AddImageData)

@@ -612,7 +612,9 @@ AddUpdatePropertyAdditionalDetailsModel
           propertyPics: (json['propertyPics'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList(),
-          floorPics: json['floorPics'] as List<dynamic>?,
+          floorPics: (json['floorPics'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList(),
           hastoDeletePictures: json['hastoDeletePictures'],
           hastoDeleteFloorPictures: json['hastoDeleteFloorPictures'],
           uploadedImages: json['uploadedImages'],

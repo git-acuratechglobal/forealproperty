@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../common/common_widgets.dart';
+import '../../../../../core/network/apiend_points.dart';
 import '../../../../../core/s3_sigleton/s3_widget.dart';
 import '../../../../../core/utils/appbutton.dart';
 import '../../../../../core/utils/imagepicker.dart';
+import '../../../../../core/utils/network_image_widget.dart';
 import '../../../model/property_inspection_view_model.dart';
 //
 // class EditTemplateFromWidget extends HookWidget {
@@ -171,39 +173,12 @@ class EditTemplateFromWidget extends HookWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Text(
-          //       'Available',
-          //       style: TextStyle(
-          //         color: const Color(0xFF1A1B28),
-          //         fontSize: 15.sp,
-          //         fontWeight: FontWeight.w700,
-          //       ),
-          //     ),
-          //     SizedBox(
-          //       width: 48,
-          //       height: 28,
-          //       child: CustomCupertinoToggle(
-          //         initialValue: formData.value.available,
-          //         trueLabel: 'Y',
-          //         falseLabel: 'N',
-          //         onChanged: (val) =>
-          //             _update(formData.value.copyWith(available: val)),
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // 24.verticalSpace,
-
           Row(
             children: [
               ToggleContainer(
                 label: 'Clean',
                 initialValue: formData.value.clean,
-                onToggle: (val) =>
-                    _update(formData.value.copyWith(clean: val)),
+                onToggle: (val) => _update(formData.value.copyWith(clean: val)),
               ),
               15.horizontalSpace,
               ToggleContainer(
@@ -223,7 +198,6 @@ class EditTemplateFromWidget extends HookWidget {
           ),
           24.verticalSpace,
 
-
           Text(
             'Property Images',
             style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
@@ -232,12 +206,12 @@ class EditTemplateFromWidget extends HookWidget {
           ImagePickerForm3(
             context: context,
             initialImages: formData.value.initialImages,
+            pickedImages: formData.value.images,
             onSaved: (newImages) {
               _update(formData.value.copyWith(images: newImages));
             },
           ),
           24.verticalSpace,
-
 
           Text(
             'Agent Comments',
@@ -248,8 +222,7 @@ class EditTemplateFromWidget extends HookWidget {
             label: 'Enter comment...',
             maxLines: 5,
             initialValue: formData.value.comments,
-            onChanged: (val) =>
-                _update(formData.value.copyWith(comments: val)),
+            onChanged: (val) => _update(formData.value.copyWith(comments: val)),
           ),
           24.verticalSpace,
 
@@ -294,19 +267,20 @@ class EditTemplateFromWidget extends HookWidget {
                   ...formData.value.tenantImages
                       .map(
                         (e) => Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10.sp),
-                          child: SizedBox(
-                            width: 100.w,
-                            height: 100.h,
-                            child: S3ImageDisplayWidget(imagePath: e),
-                          ),
+                          alignment: Alignment.topRight,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10.sp),
+                              child: SizedBox(
+                                width: 100.w,
+                                height: 100.h,
+                                child: NetworkImageWidget(
+                                    imageUrl: '${ApiEndPoints.imageUrl}${e}'),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  )
+                      )
                       .toList(),
                 ],
               ),
@@ -341,8 +315,6 @@ class EditTemplateFromWidget extends HookWidget {
               24.verticalSpace,
             ],
           ],
-
-
 
           // Next Button
           PrimaryButton(

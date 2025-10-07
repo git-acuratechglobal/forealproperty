@@ -44,11 +44,10 @@ void updateAddImage(PropertyDetailModel? addImage) {
       propertyHeading: addImage.addUpdatePropertyAdditionalDetailsModel?.propertyHeading,
       propertyId: addImage.propertyId,
       propertyDescription: addImage.addUpdatePropertyAdditionalDetailsModel?.propertyDescription,
-      // Optional: Uncomment and update if you handle images
-       propertyImages: addImage.addUpdatePropertyAdditionalDetailsModel?.propertyPics ?? [],
-      // updatedFloorImages: addImage.floorPics != null && addImage.floorPics!.isNotEmpty
-      //     ? [addImage.floorPics!.first]
-      //     : [],
+      UpdatedfloorImages: addImage.floorPics != null && addImage.floorPics!.isNotEmpty
+          ? [addImage.floorPics!.first]
+          : [],
+        updatePropertyImages: addImage.addUpdatePropertyAdditionalDetailsModel?.propertyPics ?? [],
     );
   } else {
     // Optional fallback state

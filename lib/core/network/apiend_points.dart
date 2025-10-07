@@ -1,6 +1,8 @@
 class ApiEndPoints {
   static const String baseUrl = "https://forealproperty.com.au:8002/api/";
 
+  static const String imageUrl='https://forealproperties.s3.ap-southeast-2.amazonaws.com/';
+
   static const String login = "Account/Login";
 
   static const String register = "Account/Register";

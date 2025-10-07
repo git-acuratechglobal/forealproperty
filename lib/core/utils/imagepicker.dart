@@ -6,9 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foreal_property/Theme/navigation.dart';
 import 'package:foreal_property/core/s3_sigleton/s3_widget.dart';
+import 'package:foreal_property/core/utils/network_image_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../network/apiend_points.dart';
 
 class ImagePickerForm2 extends StatefulWidget {
   final BuildContext context;
@@ -115,9 +118,12 @@ class _ImagePickerForm2State extends State<ImagePickerForm2> {
                         child: SizedBox(
                           width: 100.w,
                           height: 100.h,
-                          child: S3ImageDisplayWidget(
-                            imagePath: imageUrl,
-                          ),
+                          child: NetworkImageWidget(
+                              imageUrl:
+                              '${ApiEndPoints.imageUrl}${imageUrl}')
+                          // S3ImageDisplayWidget(
+                          //   imagePath: imageUrl,
+                          // ),
                         ),
                       ),
                       GestureDetector(
@@ -184,6 +190,7 @@ class _ImagePickerForm2State extends State<ImagePickerForm2> {
 class ImagePickerForm3 extends StatefulWidget {
   final BuildContext context;
   final List<String>? initialImages;
+  final List<XFile> pickedImages;
   final void Function(List<String> removedImages)? onRemovedInitialImages;
   final FormFieldSetter<List<XFile>>? onSaved;
 
@@ -193,6 +200,7 @@ class ImagePickerForm3 extends StatefulWidget {
     required this.context,
     this.onRemovedInitialImages,
     this.onSaved,
+    this.pickedImages = const [],
   }) : super(key: key);
 
   @override
@@ -208,6 +216,7 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
   void initState() {
     super.initState();
     _currentImages = List.from(widget.initialImages ?? []);
+    _pickedImages=List.from(widget.pickedImages ?? []);
   }
 
   @override
@@ -292,13 +301,16 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                           width: 100.w,
                           height: 100.h,
                           child: InkWell(
-                            onTap: () {
-                              _showDialog2(context, imageUrl, true);
-                            },
-                            child: S3ImageDisplayWidget(
-                              imagePath: imageUrl,
-                            ),
-                          ),
+                              onTap: () {
+                                _showDialog2(context, imageUrl, true);
+                              },
+                              child: NetworkImageWidget(
+                                  imageUrl:
+                                      '${ApiEndPoints.imageUrl}${imageUrl}')
+                              // S3ImageDisplayWidget(
+                              //   imagePath: imageUrl,
+                              // ),
+                              ),
                         ),
                       ),
                       GestureDetector(
@@ -384,7 +396,8 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: switch (isNetworkImage) {
-                      true => S3ImageDisplayWidget(imagePath: imagePath),
+                      true => NetworkImageWidget(
+                          imageUrl: '${ApiEndPoints.imageUrl}${imagePath}'),
                       false => Image.file(
                           File(imagePath),
                           fit: BoxFit.cover,

@@ -9,6 +9,9 @@ import 'package:foreal_property/core/widgets/asyncwidget.dart';
 import 'package:foreal_property/features/home_features/pages/home/properties/propertydetails2.dart';
 import 'package:foreal_property/features/home_features/providers/get_property_list.dart';
 
+import '../../../../../core/network/apiend_points.dart';
+import '../../../../../core/utils/network_image_widget.dart';
+
 class AllPropertyList extends ConsumerStatefulWidget {
   final VoidCallback? onOpenHomesTap;
   const AllPropertyList({super.key, this.onOpenHomesTap});
@@ -239,10 +242,8 @@ class _AppPropertiesListState extends ConsumerState<AppPropertiesList> {
                                                 child: property.propertyPic
                                                             ?.isNotEmpty ==
                                                         true
-                                                    ? S3ImageDisplayWidget(
-                                                        imagePath: property
-                                                            .propertyPic!,
-                                                      )
+                                                    ? NetworkImageWidget(
+                                                    imageUrl: '${ApiEndPoints.imageUrl}${property.propertyPic}')
                                                     : Image.asset(
                                                         'assets/images/placeholder.png',
                                                         height: 72.h,

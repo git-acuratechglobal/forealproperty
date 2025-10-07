@@ -5,6 +5,8 @@ import 'package:foreal_property/features/auth_feature/model/add_property_model.d
 import 'package:foreal_property/features/auth_feature/model/user_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../features/inspection_feature/model/property_inspection_view_model.dart';
 part 'local_storage_service.g.dart';
 
 @Riverpod(keepAlive: true)
@@ -25,6 +27,9 @@ class LocalStorageService {
   static const String _onBoardingKey = 'onBoarding';
   // static const String _propertyId = 'propertyId';
   static const String _propertyModel = 'propertModel';
+
+  static const String _local_inspection_data = 'inspection';
+
   Future<void> setUser(UserModel user) async {
     await _preferences.setString(_userKey, jsonEncode(user.toJson()));
   }
@@ -56,5 +61,51 @@ class LocalStorageService {
     return propertyModelJson == null
         ? null
         : AddPropertyModel.fromJson(jsonDecode(propertyModelJson));
+  }
+
+  Future<void> addInspection(PropertyInspectionViewModel data) async {
+    final existingString = _preferences.getString(_local_inspection_data);
+    List<PropertyInspectionViewModel> list = [];
+
+    if (existingString != null) {
+      final decoded = jsonDecode(existingString) as List;
+      list =
+          decoded.map((e) => PropertyInspectionViewModel.fromJson(e)).toList();
+    }
+
+    list.removeWhere((item) => item.id == data.id);
+
+    list.add(data);
+
+    await _preferences.setString(
+      _local_inspection_data,
+      jsonEncode(list.map((e) => e.toJson()).toList()),
+    );
+  }
+
+  List<PropertyInspectionViewModel>? getAllInspections() {
+    final existingString = _preferences.getString(_local_inspection_data);
+    if (existingString == null) return [];
+
+    final decoded = jsonDecode(existingString) as List;
+    return decoded.map((e) => PropertyInspectionViewModel.fromJson(e)).toList();
+  }
+
+  PropertyInspectionViewModel? getInspectionById(int id) {
+    final list = getAllInspections() ?? [];
+    return list.firstWhere((e) => e.id == id, orElse: null);
+  }
+
+  Future<void> removeInspection(int id) async {
+    final list = getAllInspections();
+    list?.removeWhere((item) => item.id == id);
+    await _preferences.setString(
+      _local_inspection_data,
+      jsonEncode(list?.map((e) => e.toJson()).toList()),
+    );
+  }
+
+  Future<void> clearAll() async {
+    await _preferences.remove(_local_inspection_data);
   }
 }

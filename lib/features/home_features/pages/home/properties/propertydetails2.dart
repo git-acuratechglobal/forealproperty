@@ -10,6 +10,9 @@ import 'package:foreal_property/features/home_features/pages/home/steps/addprope
 import 'package:foreal_property/features/home_features/pages/home/steps/attributes.dart';
 import 'package:foreal_property/features/home_features/providers/get_property_detail.dart';
 
+import '../../../../../core/network/apiend_points.dart';
+import '../../../../../core/utils/network_image_widget.dart';
+
 class Propertydetails2 extends ConsumerStatefulWidget {
   const Propertydetails2(this.id, this.propertyId, {super.key});
 
@@ -1170,9 +1173,10 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                         borderRadius: BorderRadius.circular(10),
                                         child: GestureDetector(
                                           onTap: () =>
-                                              _showDialog2(context, imagePath),
-                                          child: S3ImageDisplayWidget(
-                                              imagePath: imagePath!),
+                                              _showDialog2(context, imagePath!),
+                                          child: NetworkImageWidget(
+                                              imageUrl:
+                                                  '${ApiEndPoints.imageUrl}${imagePath}'),
                                         ),
                                       ));
                                 },
@@ -1218,9 +1222,10 @@ class _Propertydetails2State extends ConsumerState<Propertydetails2> {
                                         borderRadius: BorderRadius.circular(10),
                                         child: GestureDetector(
                                           onTap: () =>
-                                              _showDialog2(context, imagePath),
-                                          child: S3ImageDisplayWidget(
-                                              imagePath: imagePath!),
+                                              _showDialog2(context, imagePath!),
+                                          child: NetworkImageWidget(
+                                              imageUrl:
+                                                  '${ApiEndPoints.imageUrl}${imagePath}'),
                                         ),
                                       ));
                                 },
@@ -1262,7 +1267,8 @@ class Popupimage3 extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: S3ImageDisplayWidget(imagePath: imagePath),
+        child: NetworkImageWidget(
+            imageUrl: '${ApiEndPoints.imageUrl}${imagePath}'),
       ),
     );
   }

@@ -10,6 +10,9 @@ import 'package:foreal_property/features/home_features/pages/home/openhouse/addo
 import 'package:foreal_property/features/home_features/pages/home/properties/propertydetails2.dart';
 import 'package:foreal_property/features/home_features/providers/get_property_listing.dart';
 
+import '../../../../../core/network/apiend_points.dart';
+import '../../../../../core/utils/network_image_widget.dart';
+
 class PropertyListingTab extends ConsumerStatefulWidget {
   final String? id;
   final int? propertyId;
@@ -395,10 +398,9 @@ class _CurrentListingState extends ConsumerState<CurrentListing> {
                                                       child: item.propertyPic
                                                                   ?.isNotEmpty ==
                                                               true
-                                                          ? S3ImageDisplayWidget(
-                                                              imagePath: item
-                                                                  .propertyPic!,
-                                                            )
+                                                          ? NetworkImageWidget(
+                                                          imageUrl:
+                                                          '${ApiEndPoints.imageUrl}${item.propertyPic}')
                                                           : Image.asset(
                                                               'assets/images/placeholder.png',
                                                               height: 72.h,

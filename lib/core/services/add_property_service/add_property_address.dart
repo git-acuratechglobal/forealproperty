@@ -70,8 +70,12 @@ class AddPropertyService {
               params.propertyImages![i],
             )
         ]);
+        print(result.map((e) => e.key).toList());
         params = params.copyWith(
-          propertyImages: result.map((e) => e.key ?? '').toList(),
+          propertyImages: [
+            ...result.map((e) => e.key ?? '').toList(),
+            ...params.updatePropertyImages ?? []
+          ],
         );
       }
 
@@ -88,7 +92,10 @@ class AddPropertyService {
         ]);
 
         params = params.copyWith(
-          floorImages: result.map((e) => e.key ?? '').toList(),
+          floorImages: [
+            ...result.map((e) => e.key ?? '').toList(),
+            ...params.UpdatedfloorImages ?? []
+          ],
         );
       }
 
