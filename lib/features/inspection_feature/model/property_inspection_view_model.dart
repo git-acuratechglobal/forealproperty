@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:image_picker/image_picker.dart';
 
+import '../../../core/utils/imagepicker.dart';
+
 class PropertyInspectionViewModel {
   final int inspectionId;
   final int templateId;
@@ -9,7 +11,7 @@ class PropertyInspectionViewModel {
   final bool clean;
   final bool unDamage;
   final bool working;
-  final List<XFile> images;
+  final List<ImageMetaData> images;
   final String? comments;
   final List<String> initialImages;
   final List<String> tenantImages;
@@ -21,7 +23,7 @@ class PropertyInspectionViewModel {
   PropertyInspectionViewModel({
     required this.inspectionId,
     required this.templateId,
-   required this.id,
+    required this.id,
     this.clean = false,
     this.unDamage = false,
     this.working = false,
@@ -40,7 +42,7 @@ class PropertyInspectionViewModel {
     bool? clean,
     bool? unDamage,
     bool? working,
-    List<XFile>? images,
+    List<ImageMetaData>? images,
     String? comments,
     List<String>? initialImages,
     List<String>? tenantImages,
@@ -52,8 +54,8 @@ class PropertyInspectionViewModel {
   }) {
     return PropertyInspectionViewModel(
       inspectionId: inspectionId,
-      templateId: templateId,
-      id:id,
+      templateId: this.templateId,
+      id: id,
       clean: clean ?? this.clean,
       unDamage: unDamage ?? this.unDamage,
       working: working ?? this.working,
@@ -69,15 +71,15 @@ class PropertyInspectionViewModel {
     );
   }
 
-
-
   Map<String, dynamic> toJson() {
     return {
+      'inspectionId': inspectionId,
+      'templateId': templateId,
       'id': id,
       'clean': clean,
       'unDamage': unDamage,
       'working': working,
-      'images': images.map((xfile) => xfile.path).toList(),
+      'images': images.map((imageMetaData) => imageMetaData.toJson()).toList(),
       'comments': comments,
       'initialImages': initialImages,
       'tenantImages': tenantImages,
@@ -89,7 +91,6 @@ class PropertyInspectionViewModel {
     };
   }
 
-
   factory PropertyInspectionViewModel.fromJson(Map<String, dynamic> json) {
     return PropertyInspectionViewModel(
       inspectionId: json['inspectionId'] ?? 0,
@@ -98,10 +99,7 @@ class PropertyInspectionViewModel {
       clean: json['clean'] ?? false,
       unDamage: json['unDamage'] ?? false,
       working: json['working'] ?? false,
-      images: (json['images'] as List<dynamic>?)
-          ?.map((path) => XFile(path.toString()))
-          .toList() ??
-          [],
+      images: _parseImages(json['images']),
       comments: json['comments'],
       initialImages:
       (json['initialImages'] as List<dynamic>?)?.cast<String>() ?? [],
@@ -115,15 +113,31 @@ class PropertyInspectionViewModel {
     );
   }
 
+  static List<ImageMetaData> _parseImages(dynamic imagesJson) {
+    if (imagesJson == null) return [];
+
+    try {
+      final imagesList = imagesJson as List<dynamic>;
+      return imagesList.map((imageJson) {
+        if (imageJson is Map<String, dynamic>) {
+
+          return ImageMetaData.fromJson(imageJson);
+        } else if (imageJson is String) {
+          return ImageMetaData(DateTime.now(), XFile(imageJson));
+        } else {
+          throw FormatException('Invalid image format: $imageJson');
+        }
+      }).toList();
+    } catch (e) {
+      print('Error parsing images: $e');
+      return [];
+    }
+  }
 
   String toRawJson() => jsonEncode(toJson());
 
   factory PropertyInspectionViewModel.fromRawJson(String str) =>
       PropertyInspectionViewModel.fromJson(jsonDecode(str));
-
-
-
-
 
   @override
   String toString() {

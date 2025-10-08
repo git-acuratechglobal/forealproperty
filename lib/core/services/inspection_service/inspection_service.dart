@@ -93,7 +93,7 @@ class InspectionService {
     return asyncGuard(() async {
       final response = await _dio.post(ApiEndPoints.addInspection,
           data: jsonEncode(param.toJson()));
-      return response.data['message'];
+      return jsonEncode(response.data);
     });
   }
 
@@ -109,47 +109,50 @@ class InspectionService {
   Future<String> updateInspection(
       {required UpdateInspectionParams param}) async {
     return asyncGuard(() async {
-      if (param.SelectedAttributeList[0].AddUpdatePictures.isNotEmpty) {
-        final timestamp = DateTime.now().millisecondsSinceEpoch;
-        final customPaths = List.generate(
-          param.SelectedAttributeList[0].AddUpdatePictures.length,
-          (i) {
-            final filePath = param.SelectedAttributeList[0].AddUpdatePictures[i]
-                ['PicturePath'];
-            final extension = path.extension(filePath).toLowerCase();
+      List<SelectedAttribute> updatedAttributes = [];
 
-            final safeExt = extension.isNotEmpty ? extension : ".jpg";
+      for (var i = 0; i < param.SelectedAttributeList.length; i++) {
+        final attr = param.SelectedAttributeList[i];
 
-            return 'inspection${timestamp + i}$safeExt';
-          },
-        );
-        final result = await Future.wait([
-          for (var i = 0; i < customPaths.length; i++)
-            minioService.uploadInspectionPropertyImage(
-              File(param.SelectedAttributeList[0].AddUpdatePictures[i]
-                  ['PicturePath']),
-              customPaths[i],
-            )
-        ]);
-        print(result.map((e) => e.key));
-        final updatedAttributes = param.SelectedAttributeList.asMap()
-            .map((index, attr) {
-              if (index == 0) {
-                return MapEntry(
-                  index,
-                  attr.copyWith(
-                      AddUpdatePictures: result
-                          .map((e) => {"id": 0, "PicturePath": e.key})
-                          .toList()),
-                );
-              }
-              return MapEntry(index, attr);
-            })
-            .values
-            .toList();
+        if (attr.AddUpdatePictures.isNotEmpty) {
+          final timestamp = DateTime.now().millisecondsSinceEpoch;
 
-        param = param.copyWith(SelectedAttributeList: updatedAttributes);
+          final customPaths = List.generate(
+            attr.AddUpdatePictures.length,
+            (j) {
+              final filePath = attr.AddUpdatePictures[j]['PicturePath'];
+              final extension = path.extension(filePath).toLowerCase();
+              final safeExt = extension.isNotEmpty ? extension : ".jpg";
+
+              return 'inspection${timestamp}_${i}_${j}$safeExt';
+            },
+          );
+
+          final uploadResults = await Future.wait([
+            for (var j = 0; j < customPaths.length; j++)
+              minioService.uploadInspectionPropertyImage(
+                File(attr.AddUpdatePictures[j]['PicturePath']),
+                customPaths[j],
+              )
+          ]);
+
+          print(
+              'Uploaded images for attribute $i: ${uploadResults.map((e) => e.key)}');
+
+          updatedAttributes.add(
+            attr.copyWith(
+              AddUpdatePictures: uploadResults
+                  .map((e) => {"id": 0, "PicturePath": e.key})
+                  .toList(),
+            ),
+          );
+        } else {
+          updatedAttributes.add(attr);
+        }
       }
+
+      param = param.copyWith(SelectedAttributeList: updatedAttributes);
+
       final response =
           await _dio.post(ApiEndPoints.updateInspection, data: param.toJson());
       return response.data['message'];

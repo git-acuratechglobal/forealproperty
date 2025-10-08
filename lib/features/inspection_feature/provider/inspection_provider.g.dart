@@ -7,7 +7,7 @@ part of 'inspection_provider.dart';
 // **************************************************************************
 
 String _$inspectionNotifierHash() =>
-    r'73786cff3748d24508c8d44911181ab0df366308';
+    r'97b532cdda98461066690dc6fb4cf25533af3650';
 
 /// See also [InspectionNotifier].
 @ProviderFor(InspectionNotifier)

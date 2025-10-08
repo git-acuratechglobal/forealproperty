@@ -224,6 +224,7 @@ TemplatesDetail _$TemplatesDetailFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num?)?.toInt(),
       inspectionTemplateId: (json['inspectionTemplateId'] as num?)?.toInt(),
       facilityId: (json['facilityId'] as num?)?.toInt(),
+      agentProgress: (json['agentProgress'] as num?)?.toInt(),
       facilityName: json['facilityName'] as String?,
       cleaned: json['cleaned'] as bool?,
       undermanaged: json['undermanaged'] as bool?,

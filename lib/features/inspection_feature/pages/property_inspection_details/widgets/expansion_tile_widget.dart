@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:foreal_property/core/services/local_storage_service/local_storage_service.dart';
+import 'package:foreal_property/core/utils/appbutton.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:expansion_tile_list/expansion_tile_list.dart';
 
@@ -25,135 +27,145 @@ class ExpansionTileWidget extends HookConsumerWidget {
     final activeStep = useState(-1);
     final targetStep = useRef(-1);
     final controller = useRef(ExpansionTileListController());
-    useEffect(() {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.listenManual(inspectionNotifierProvider, (_, next) {
-          switch (next) {
-            case AsyncData<String?> data when data.value != null:
-              if (targetStep.value >= 0) {
-                controller.value.expand(targetStep.value);
-                activeStep.value = targetStep.value;
-                targetStep.value = -1; // Reset after expansion
-              }
-              // Utils.showSnackBar(context, data.value!);
-              break;
-            case AsyncError error:
-              Utils.showSnackBar(context, error.error.toString());
-              break;
-          }
-        });
-      });
-      return null;
-    }, const []);
-    return ExpansionTileList(
-      padding: const EdgeInsets.only(top: 20, bottom: 40),
-      expansionMode: ExpansionMode.atMostOne,
-      controller: controller.value,
-      shrinkWrap: true,
-      children: templatesDetails.asMap().entries.map((entry) {
-        final index = entry.key;
-        final detail = entry.value;
+    final templateId = (templatesDetails.isNotEmpty
+            ? templatesDetails.first.inspectionTemplateId
+            : null) ??
+        0;
 
-        return ExpansionTileItem(
-          shape: const RoundedRectangleBorder(),
-          maintainState: true,
-          expandedCrossAxisAlignment: CrossAxisAlignment.center,
-          expandedAlignment: Alignment.center,
-          tilePadding: const EdgeInsets.only(
-            left: 30,
-          ),
-          onExpansionChanged: (isExpanded) {
-            if (isExpanded) {
-              activeStep.value = index;
-              if (index + 1 < templatesDetails.length) {
-                targetStep.value = index + 1;
-              } else {
-                targetStep.value = -1;
-              }
-            } else {
-              if (activeStep.value == index) {
-                activeStep.value = -1;
-              }
-            }
-          },
-          title: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 30,
-            ),
-            decoration: ShapeDecoration(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    detail.facilityName ?? "",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ExpansionTileList(
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.only(top: 20, bottom: 40),
+            expansionMode: ExpansionMode.atMostOne,
+            controller: controller.value,
+            shrinkWrap: true,
+            children: templatesDetails.asMap().entries.map((entry) {
+              final index = entry.key;
+              final detail = entry.value;
+
+              return ExpansionTileItem(
+                shape: const RoundedRectangleBorder(),
+                maintainState: true,
+                expandedCrossAxisAlignment: CrossAxisAlignment.center,
+                expandedAlignment: Alignment.center,
+                tilePadding: const EdgeInsets.only(
+                  left: 30,
                 ),
-                10.horizontalSpace,
-                // AgreeStatusWidget(
-                //   imageItems: ImageWithLetter(
-                //     path: isSubmit
-                //         ? 'assets/images/blue.png'
-                //         : 'assets/images/orange.png',
-                //     letter: 'A',
-                //   ),
-                // ),
-                if (detail.isTenantAgree != null)
-                  AgreeStatusWidget(
-                    imageItems: ImageWithLetter(
-                      path: detail.isTenantAgree == true
-                          ? 'assets/images/blue.png'
-                          : 'assets/images/orange.png',
-                      letter: 'T',
+                onExpansionChanged: (isExpanded) {
+                  if (isExpanded) {
+                    activeStep.value = index;
+                    if (index + 1 < templatesDetails.length) {
+                      targetStep.value = index + 1;
+                    } else {
+                      targetStep.value = -1;
+                    }
+                  } else {
+                    if (activeStep.value == index) {
+                      activeStep.value = -1;
+                    }
+                  }
+                },
+                title: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 30,
+                  ),
+                  decoration: ShapeDecoration(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-
-                // ImageWithLetter(
-                //     path: 'assets/images/blue.png',
-                //     letter: 'A')
-                // else
-                //   ImageWithLetter(
-                //       path: 'assets/images/orange.png',
-                //       letter: 'A'),
-                AnimatedSwitcher(
-                  duration: const Duration(microseconds: 800),
-                  transitionBuilder: (child, animation) => RotationTransition(
-                    turns: animation,
-                    child: child,
-                  ),
-                  child: activeStep.value != index
-                      ? const Icon(
-                          Icons.keyboard_arrow_down,
-                          color: Colors.black,
-                        )
-                      : const Icon(
-                          Icons.keyboard_arrow_up_outlined,
-                          color: Colors.black,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          detail.facilityName ?? "",
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
+                      ),
+                      10.horizontalSpace,
+                      if (detail.agentProgress != null)
+                        AgreeStatusWidget(
+                          imageItems: ImageWithLetter(
+                            path: detail.agentProgress == 3
+                                ? 'assets/images/blue.png'
+                                : 'assets/images/orange.png',
+                            letter: 'A',
+                          ),
+                        ),
+                      if (detail.isTenantAgree != null)
+                        AgreeStatusWidget(
+                          imageItems: ImageWithLetter(
+                            path: detail.isTenantAgree == true
+                                ? 'assets/images/blue.png'
+                                : 'assets/images/orange.png',
+                            letter: 'T',
+                          ),
+                        ),
+
+                      AnimatedSwitcher(
+                        duration: const Duration(microseconds: 800),
+                        transitionBuilder: (child, animation) =>
+                            RotationTransition(
+                          turns: animation,
+                          child: child,
+                        ),
+                        child: activeStep.value != index
+                            ? const Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Colors.black,
+                              )
+                            : const Icon(
+                                Icons.keyboard_arrow_up_outlined,
+                                color: Colors.black,
+                              ),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 24),
+                    child: EditTemplateScreen2(
+                      templatesDetail: detail,
+                      inspectionId: inspectionId,
+                      onUpdate: () {
+                        if (targetStep.value >= 0) {
+                          controller.value.expand(targetStep.value);
+                          activeStep.value = targetStep.value;
+                          targetStep.value = -1;
+                        } else {
+                          controller.value.collapseAll();
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
           ),
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-              child: EditTemplateScreen2(
-                templatesDetail: detail,
-                inspectionId: inspectionId,
-              ),
-            ),
-          ],
-        );
-      }).toList(),
+          20.verticalSpace,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: PrimaryButton(
+                title: "Submit",
+                onClick: () {
+
+                  ref
+                      .read(inspectionNotifierProvider.notifier)
+                      .updateInspection(inspectionId, templateId);
+                }),
+          ),
+          20.verticalSpace,
+        ],
+      ),
     );
   }
 }
@@ -172,10 +184,10 @@ class AgreeStatusWidget extends StatelessWidget {
             height: 20.h,
             width: 20.w,
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             imageItems.letter,
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
           ),
         ],
       ),

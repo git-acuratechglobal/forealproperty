@@ -8,7 +8,8 @@ import '../../../model/inspection_details_model.dart';
 import '../../../provider/inspection_details_provider.dart';
 
 class MinimumStandard extends ConsumerStatefulWidget {
-  const MinimumStandard({super.key, required this.utilitiesDetails, required this.inspectionId});
+  const MinimumStandard(
+      {super.key, required this.utilitiesDetails, required this.inspectionId});
   final InspectionComplianceUtilitiesDetails? utilitiesDetails;
   final int inspectionId;
   @override
@@ -21,8 +22,8 @@ class _MinimumStandardState extends ConsumerState<MinimumStandard> {
     final params = ref.read(inspectionComplianceParamProvider.notifier);
     return PopScope(
       onPopInvokedWithResult: (result, obj) {
-        ref.invalidate(getInspectionDetailsProvider(
-            inspectionId: widget.inspectionId));
+        ref.invalidate(
+            getInspectionDetailsProvider(inspectionId: widget.inspectionId));
       },
       child: Scaffold(
         appBar: AppBar(
@@ -103,6 +104,7 @@ class _MinimumStandardState extends ConsumerState<MinimumStandard> {
                           0),
               24.verticalSpace,
               PrimaryButton(
+                isLoading: ref.watch(inspectionNotifierProvider).isLoading,
                 title: 'Update',
                 onClick: () {
                   ref

@@ -43,6 +43,10 @@ class LocalStorageService {
     await _preferences.remove(_userKey);
   }
 
+  Future<void> clearInspection() async {
+    await _preferences.remove(_local_inspection_data);
+  }
+
   Future<void> setOnBoardingComplete() async {
     await _preferences.setBool(_onBoardingKey, true);
   }
@@ -83,25 +87,73 @@ class LocalStorageService {
     );
   }
 
-  List<PropertyInspectionViewModel>? getAllInspections() {
+  List<PropertyInspectionViewModel> getAllInspections() {
+    try {
+      final existingString = _preferences.getString(_local_inspection_data);
+      if (existingString == null || existingString.isEmpty) return [];
+
+      final decoded = jsonDecode(existingString);
+      if (decoded is! List) return [];
+
+      return decoded
+          .map((e) => PropertyInspectionViewModel.fromJson(e))
+          .toList()
+          .cast<PropertyInspectionViewModel>();
+    } catch (e,st) {
+      print('Error decoding inspections: $e');
+      return [];
+    }
+  }
+
+  List<PropertyInspectionViewModel>? getFilteredInspections(
+      int inspectionId, int templateId) {
     final existingString = _preferences.getString(_local_inspection_data);
     if (existingString == null) return [];
+    try {
+      final decoded = jsonDecode(existingString) as List;
+      final all =
+          decoded.map((e) => PropertyInspectionViewModel.fromJson(e)).toList();
 
-    final decoded = jsonDecode(existingString) as List;
-    return decoded.map((e) => PropertyInspectionViewModel.fromJson(e)).toList();
+      final filtered = all
+          .where((e) =>
+              e.inspectionId == inspectionId && e.templateId == templateId)
+          .toList();
+
+      return filtered;
+    } catch (e) {
+      print('Error parsing inspections: $e');
+      return [];
+    }
   }
 
   PropertyInspectionViewModel? getInspectionById(int id) {
-    final list = getAllInspections() ?? [];
-    return list.firstWhere((e) => e.id == id, orElse: null);
+    final list = getAllInspections();
+
+    for (final inspection in list) {
+      if (inspection.id == id) {
+        return inspection;
+      }
+    }
+
+    return null;
   }
 
   Future<void> removeInspection(int id) async {
     final list = getAllInspections();
-    list?.removeWhere((item) => item.id == id);
+    list.removeWhere((item) => item.id == id);
     await _preferences.setString(
       _local_inspection_data,
-      jsonEncode(list?.map((e) => e.toJson()).toList()),
+      jsonEncode(list.map((e) => e.toJson()).toList()),
+    );
+  }
+
+  Future<void> removeInspectionByIds(List<int> ids) async {
+    final list = getAllInspections();
+    if ( list.isEmpty) return;
+    list.removeWhere((item) => ids.contains(item.id));
+    await _preferences.setString(
+      _local_inspection_data,
+      jsonEncode(list.map((e) => e.toJson()).toList()),
     );
   }
 

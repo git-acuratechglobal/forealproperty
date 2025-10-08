@@ -1,13 +1,17 @@
+import 'package:foreal_property/core/services/local_storage_service/local_storage_service.dart';
 import 'package:foreal_property/features/inspection_feature/params/plan_inspection_param.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/services/inspection_service/inspection_service.dart';
 import '../model/inspection_details_model.dart';
 import '../model/inspection_overview_model.dart';
+import '../model/property_inspection_view_model.dart';
 import '../params/add_inspection_params.dart';
 import '../params/add_template_param.dart';
 import '../params/inspection_compliance_params.dart';
 import '../params/update_inspection_params.dart';
 import '../params/update_overview_param.dart';
+import 'inspection_details_provider.dart';
 part 'inspection_provider.g.dart';
 
 @riverpod
@@ -27,16 +31,91 @@ class InspectionNotifier extends _$InspectionNotifier {
     });
   }
 
-  Future<void> updateInspection() async {
+  Future<void> updateInspection(int inspectionId, int templateId) async {
     state = const AsyncLoading();
 
+    final localInspections = _getLocalInspections(inspectionId, templateId);
+    if (localInspections == null || localInspections.isEmpty) {
+      state = const AsyncError('No inspection update', StackTrace.empty);
+      return;
+    }
+
     state = await AsyncValue.guard(() async {
-      final param = ref.read(updateInspectionParamProvider);
+      final selectedAttributes = _mapToSelectedAttributes(localInspections);
+      final updateParams =
+          _createUpdateParams(localInspections, selectedAttributes);
+
       final response = await ref
           .read(inspectionServiceProvider)
-          .updateInspection(param: param);
+          .updateInspection(param: updateParams);
+
+      await _cleanupAfterUpdate(localInspections);
+
       return response;
     });
+  }
+
+  List<PropertyInspectionViewModel>? _getLocalInspections(
+      int inspectionId, int templateId) {
+    return ref
+        .read(localStorageServiceProvider)
+        .getFilteredInspections(inspectionId, templateId);
+  }
+
+  List<SelectedAttribute> _mapToSelectedAttributes(
+      List<PropertyInspectionViewModel> inspections) {
+    return inspections
+        .map((inspection) => SelectedAttribute(
+              Id: inspection.id,
+              Cleaned: inspection.clean,
+              Undermanaged: inspection.unDamage,
+              Working: inspection.working,
+              AgentComment: inspection.comments,
+              TenantComment: inspection.tenantComment,
+              IsTenantAgree: inspection.isTenantAgree,
+              CleanedByTenant: inspection.cleanByTenant,
+              UndermanagedByTenant: inspection.unDamageByTenant,
+              WorkingByTenant: inspection.workingByTenant,
+              AddUpdatePictures: _mapImagesToPictures(
+                  inspection.images.map((e) => e.image).toList()),
+            ))
+        .toList();
+  }
+
+  List<Map<String, dynamic>> _mapImagesToPictures(List<XFile> images) {
+    return images
+        .map((image) => {
+              'id': 0,
+              'PicturePath': image.path,
+            })
+        .toList();
+  }
+
+  UpdateInspectionParams _createUpdateParams(
+    List<PropertyInspectionViewModel> inspections,
+    List<SelectedAttribute> selectedAttributes,
+  ) {
+    final firstInspection = inspections.first;
+
+    return UpdateInspectionParams(
+      InspectionId: firstInspection.inspectionId,
+      TemplateId: firstInspection.templateId,
+      SelectedAttributeList: selectedAttributes,
+      TemplateNotes: '',
+      AddUpdatePictures: [],
+    );
+  }
+
+  Future<void> _cleanupAfterUpdate(
+      List<PropertyInspectionViewModel> inspections) async {
+    final firstInspection = inspections.first;
+
+    ref.invalidate(getInspectionDetailsProvider(
+      inspectionId: firstInspection.inspectionId,
+    ));
+
+    final inspectionIds = inspections.map((e) => e.id).toList();
+    ref.read(localStorageServiceProvider).removeInspectionByIds(inspectionIds);
   }
 
   Future<void> shareInspection(

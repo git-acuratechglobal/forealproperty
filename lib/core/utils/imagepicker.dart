@@ -9,6 +9,7 @@ import 'package:foreal_property/core/s3_sigleton/s3_widget.dart';
 import 'package:foreal_property/core/utils/network_image_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:native_exif/native_exif.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../network/apiend_points.dart';
@@ -116,15 +117,14 @@ class _ImagePickerForm2State extends State<ImagePickerForm2> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10.sp),
                         child: SizedBox(
-                          width: 100.w,
-                          height: 100.h,
-                          child: NetworkImageWidget(
-                              imageUrl:
-                              '${ApiEndPoints.imageUrl}${imageUrl}')
-                          // S3ImageDisplayWidget(
-                          //   imagePath: imageUrl,
-                          // ),
-                        ),
+                            width: 100.w,
+                            height: 100.h,
+                            child: NetworkImageWidget(
+                                imageUrl: '${ApiEndPoints.imageUrl}${imageUrl}')
+                            // S3ImageDisplayWidget(
+                            //   imagePath: imageUrl,
+                            // ),
+                            ),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -190,9 +190,11 @@ class _ImagePickerForm2State extends State<ImagePickerForm2> {
 class ImagePickerForm3 extends StatefulWidget {
   final BuildContext context;
   final List<String>? initialImages;
-  final List<XFile> pickedImages;
+  final List<ImageMetaData> pickedImages;
   final void Function(List<String> removedImages)? onRemovedInitialImages;
-  final FormFieldSetter<List<XFile>>? onSaved;
+  final FormFieldSetter<List<ImageMetaData>>? onSaved;
+  final void Function(List<ImageMetaData>)?
+      onChanged; // Updated to use ImageMetaData
 
   const ImagePickerForm3({
     Key? key,
@@ -201,6 +203,7 @@ class ImagePickerForm3 extends StatefulWidget {
     this.onRemovedInitialImages,
     this.onSaved,
     this.pickedImages = const [],
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -210,18 +213,35 @@ class ImagePickerForm3 extends StatefulWidget {
 class _ImagePickerForm3State extends State<ImagePickerForm3> {
   late List<String> _currentImages;
   final List<String> _removedInitialImages = [];
-  List<XFile> _pickedImages = [];
+  List<ImageMetaData> _pickedImages = [];
 
   @override
   void initState() {
     super.initState();
     _currentImages = List.from(widget.initialImages ?? []);
-    _pickedImages=List.from(widget.pickedImages ?? []);
+    _pickedImages = List.from(widget.pickedImages ?? []);
+  }
+
+
+  Future<ImageMetaData> _createImageMetaData(XFile imageFile) async {
+    try {
+      final exif = await Exif.fromPath(imageFile.path);
+      final captureDate = await exif.getOriginalDate();
+      await exif.close();
+
+      return ImageMetaData(
+        captureDate,
+        imageFile,
+      );
+    } catch (e) {
+      print('Error reading EXIF data from ${imageFile.name}: $e');
+      return ImageMetaData(null,imageFile);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FormField<List<XFile>>(
+    return FormField<List<ImageMetaData>>(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       onSaved: widget.onSaved,
       initialValue: _pickedImages,
@@ -233,11 +253,11 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
               spacing: 10.w,
               runSpacing: 10.h,
               children: [
-                // Show picked images
+
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10.sp),
                   child: SizedBox(
-                    height: 130,
+                    height: 100.h,
                     child: ReorderableListView(
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
@@ -247,34 +267,62 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                         final item = state.value!.removeAt(oldIndex);
                         state.value!.insert(newIndex, item);
 
-                        setState(() {}); // Ensure this is inside StatefulWidget
+                        setState(() {});
+                        widget.onChanged?.call(state.value!);
                       },
-                      children: state.value!.map((file) {
+                      children: state.value!.map((imageMetaData) {
                         return Padding(
-                          key: ValueKey(file.path),
+                          key: ValueKey(imageMetaData.image.path),
                           padding: const EdgeInsets.only(right: 10),
                           child: Stack(
                             alignment: Alignment.topRight,
                             children: [
                               InkWell(
                                 onTap: () {
-                                  _showDialog2(context, file.path, false);
+                                  _showDialog2(
+                                      context, imageMetaData.image.path, false);
                                 },
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.sp),
                                   child: Image.file(
-                                    File(file.path),
+                                    File(imageMetaData.image.path),
                                     width: 100.w,
                                     height: 100.h,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
+                              if (imageMetaData.captureDate != null)
+                                Positioned(
+                                  bottom: 0.sp,
+                                  child: Container(
+                                    width: 100.w,
+                                    padding: EdgeInsets.all(4.sp),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black54,
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10.sp),
+                                        bottomRight: Radius.circular(10.sp),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      imageMetaData.formattedDate,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10.sp,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    state.value!.remove(file);
+                                    state.value!.remove(imageMetaData);
                                   });
+                                  widget.onChanged?.call(state.value!);
                                 },
                                 child: Image.asset(
                                   'assets/images/ic_exit.png',
@@ -290,7 +338,6 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                   ),
                 ),
 
-                // Show initial network images
                 ..._currentImages.map(
                   (imageUrl) => Stack(
                     alignment: Alignment.topRight,
@@ -301,28 +348,20 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                           width: 100.w,
                           height: 100.h,
                           child: InkWell(
-                              onTap: () {
-                                _showDialog2(context, imageUrl, true);
-                              },
-                              child: NetworkImageWidget(
-                                  imageUrl:
-                                      '${ApiEndPoints.imageUrl}${imageUrl}')
-                              // S3ImageDisplayWidget(
-                              //   imagePath: imageUrl,
-                              // ),
-                              ),
+                            onTap: () {
+                              _showDialog2(context, imageUrl, true);
+                            },
+                            child: NetworkImageWidget(
+                              imageUrl: '${ApiEndPoints.imageUrl}${imageUrl}',
+                            ),
+                          ),
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            // Remove from the local list
                             _currentImages.remove(imageUrl);
-
-                            // Track removed URLs
                             _removedInitialImages.add(imageUrl);
-
-                            // Notify parent of removed images
                             widget.onRemovedInitialImages
                                 ?.call(_removedInitialImages);
                           });
@@ -338,8 +377,6 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                   ),
                 ),
 
-                // // Add new image button
-                // if ((state.value!.length + _currentImages.length) < 6)
                 GestureDetector(
                   onTap: () async {
                     final pickedImages = await showDialog<List<dynamic>>(
@@ -351,11 +388,43 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                     );
 
                     if (pickedImages != null && pickedImages.isNotEmpty) {
-                      setState(() {
-                        state.didChange([...state.value ?? [], ...pickedImages]
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+
+                      try {
+                        final List<Future<ImageMetaData>> futures = pickedImages
                             .cast<XFile>()
-                            .toList());
-                      });
+                            .map((imageFile) => _createImageMetaData(imageFile))
+                            .toList();
+
+                        final List<ImageMetaData> newImageMetaData =
+                            await Future.wait(futures);
+
+                        final updatedList = [
+                          ...state.value ?? [],
+                          ...newImageMetaData
+                        ].cast<ImageMetaData>();
+
+                        if (mounted) {
+                          Navigator.of(context).pop();
+
+                          setState(() {
+                            state.didChange(updatedList);
+                          });
+
+                          widget.onChanged?.call(updatedList);
+                        }
+                      } catch (e) {
+                        if (mounted) {
+                          Navigator.of(context).pop();
+                          print('Error processing images: $e');
+                        }
+                      }
                     }
                   },
                   child: Image.asset(
@@ -371,6 +440,8 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
       },
     );
   }
+
+
 
   void _showDialog2(
       BuildContext context, String imagePath, bool isNetworkImage) {
@@ -510,7 +581,7 @@ class ImagePickerOptions2 extends StatelessWidget {
                         builder: (context) =>
                             MultiShotCamera(camera: cameras.first)));
 
-                List<XFile> images = result;
+                List<XFile>? images = result ?? [];
 
                 Navigator.of(context).pop(images);
               }),
@@ -552,6 +623,11 @@ class _MultiShotCameraState extends State<MultiShotCamera> {
   List<XFile> capturedImages = [];
   final ScrollController _scrollController = ScrollController();
 
+  double _minAvailableZoom = 1.0;
+  double _maxAvailableZoom = 1.0;
+  double _currentZoomLevel = 1.0;
+  double _baseScaleFactor = 1.0;
+
   @override
   void initState() {
     super.initState();
@@ -571,7 +647,33 @@ class _MultiShotCameraState extends State<MultiShotCamera> {
       widget.camera,
       ResolutionPreset.ultraHigh,
     );
-    _initializeControllerFuture = _controller.initialize();
+    _initializeControllerFuture = _controller.initialize().then((_) {
+
+      _getZoomLimits();
+    });
+  }
+
+  Future<void> _getZoomLimits() async {
+    _maxAvailableZoom = await _controller.getMaxZoomLevel();
+    _minAvailableZoom = await _controller.getMinZoomLevel();
+    setState(() {});
+  }
+
+
+  void _handleScaleStart(ScaleStartDetails details) {
+    _baseScaleFactor = _currentZoomLevel;
+  }
+
+  Future<void> _handleScaleUpdate(ScaleUpdateDetails details) async {
+
+    if (details.scale == 1.0) return;
+
+    final double scale = _baseScaleFactor * details.scale;
+
+
+    _currentZoomLevel = scale.clamp(_minAvailableZoom, _maxAvailableZoom);
+
+    await _controller.setZoomLevel(_currentZoomLevel);
   }
 
   @override
@@ -608,19 +710,25 @@ class _MultiShotCameraState extends State<MultiShotCamera> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SafeArea(
-        child: FutureBuilder<void>(
-          future: _initializeControllerFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Column(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: FutureBuilder<void>(
+        future: _initializeControllerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return GestureDetector(
+              onScaleStart: _handleScaleStart,
+              onScaleUpdate: _handleScaleUpdate,
+              child: Column(
                 children: [
                   Stack(
                     children: [
                       FittedBox(
                         fit: BoxFit.contain,
                         child: SizedBox(
-                          width: _controller.value.previewSize!.height,
+                          width: _controller.value.previewSize!.height + 60,
                           height: _controller.value.previewSize!.width,
                           child: CameraPreview(_controller),
                         ),
@@ -678,13 +786,53 @@ class _MultiShotCameraState extends State<MultiShotCamera> {
                     ),
                   ),
                 ],
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
-        ),
+              ),
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }
+}
+
+class ImageMetaData {
+  final DateTime? captureDate;
+  final XFile image;
+  ImageMetaData(this.captureDate, this.image);
+
+  String get formattedDate =>
+      '${captureDate?.day}/${captureDate?.month}/${captureDate?.year}';
+
+  String get formattedDateTime =>
+      '${captureDate?.day}/${captureDate?.month}/${captureDate?.year} ${captureDate?.hour}:${captureDate?.minute.toString().padLeft(2, '0')}';
+  Map<String, dynamic> toJson() {
+    return {
+      'captureDate': captureDate?.toIso8601String(),
+      'imagePath': image.path,
+    };
+  }
+
+  factory ImageMetaData.fromJson(Map<String, dynamic> json) {
+    return ImageMetaData(
+      DateTime.parse(json['captureDate'] as String),
+      XFile(json['imagePath'] as String),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is ImageMetaData &&
+              runtimeType == other.runtimeType &&
+              captureDate == other.captureDate &&
+              image.path == other.image.path;
+
+  @override
+  int get hashCode => captureDate.hashCode ^ image.path.hashCode;
+
+  @override
+  String toString() => 'ImageMetaData(captureDate: $captureDate, imagePath: ${image}';
+
 }

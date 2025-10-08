@@ -20,57 +20,60 @@ class EntryInspectionDetails extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return PopScope(
       onPopInvokedWithResult: (result, obj) {
-        ref.invalidate(getInspectionDetailsProvider(
-            inspectionId: template.inspectionId ?? 0));
+        // ref.invalidate(getInspectionDetailsProvider(
+        //     inspectionId: template.inspectionId ?? 0));
       },
-      child: Scaffold(
-          appBar: AppBar(
-            title: Text(template.label ?? ""),
-            centerTitle: true,
-            automaticallyImplyLeading: true,
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 24),
-                child: PopupMenuButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: const BorderSide(
-                        width: 1,
-                        color: Color(0xFFE2E2E2),
-                      )),
-                  itemBuilder: (context) => <PopupMenuEntry<String>>[
-                    PopupMenuItem(
-                      //  value: 0,
-                      child: const Text('Add new Facility'),
-                      onTap: () {
-                        context.navPush(AddNewFacility(
-                          tempId: template.id ?? 0,
-                          inspectionId: template.inspectionId ?? 0,
-                        ));
-                      },
+      child: PageLoadingWidget(
+        isLoading: ref.watch(inspectionNotifierProvider).isLoading,
+        child: Scaffold(
+            appBar: AppBar(
+              title: Text(template.label ?? ""),
+              centerTitle: true,
+              automaticallyImplyLeading: true,
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 24),
+                  child: PopupMenuButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: const BorderSide(
+                          width: 1,
+                          color: Color(0xFFE2E2E2),
+                        )),
+                    itemBuilder: (context) => <PopupMenuEntry<String>>[
+                      PopupMenuItem(
+                        //  value: 0,
+                        child: const Text('Add new Facility'),
+                        onTap: () {
+                          context.navPush(AddNewFacility(
+                            tempId: template.id ?? 0,
+                            inspectionId: template.inspectionId ?? 0,
+                          ));
+                        },
+                      ),
+                    ],
+                    child: Image.asset(
+                      'assets/images/more-circle.png',
+                      height: 24.h,
+                      width: 24.w,
                     ),
-                  ],
-                  child: Image.asset(
-                    'assets/images/more-circle.png',
-                    height: 24.h,
-                    width: 24.w,
                   ),
-                ),
-              )
-            ],
-          ),
-          body: AsyncWidget(
-              value: ref.watch(getInspectionDetailsProvider(
-                  inspectionId: template.inspectionId ?? 0)),
-              data: (data) {
-                return ExpansionTileWidget(
-                  templatesDetails: data.templates
-                          ?.firstWhere((e) => e.id == template.id)
-                          .templatesDetails ??
-                      [],
-                  inspectionId: template.inspectionId ?? 0,
-                );
-              })),
+                )
+              ],
+            ),
+            body: AsyncWidget(
+                value: ref.watch(getInspectionDetailsProvider(
+                    inspectionId: template.inspectionId ?? 0)),
+                data: (data) {
+                  return ExpansionTileWidget(
+                    templatesDetails: data.templates
+                            ?.firstWhere((e) => e.id == template.id)
+                            .templatesDetails ??
+                        [],
+                    inspectionId: template.inspectionId ?? 0,
+                  );
+                })),
+      ),
     );
   }
 }

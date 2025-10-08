@@ -1,3 +1,4 @@
+import 'package:foreal_property/features/inspection_feature/model/property_inspection_view_model.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -531,6 +532,7 @@ class TemplatesDetail {
     required this.id,
     required this.inspectionTemplateId,
     required this.facilityId,
+    required this.agentProgress,
     required this.facilityName,
     required this.cleaned,
     required this.undermanaged,
@@ -548,6 +550,7 @@ class TemplatesDetail {
   final int? id;
   final int? inspectionTemplateId;
   final int? facilityId;
+  final int? agentProgress;
   final String? facilityName;
   final bool? cleaned;
   final bool? undermanaged;
@@ -563,6 +566,34 @@ class TemplatesDetail {
 
   factory TemplatesDetail.fromJson(Map<String, dynamic> json) =>
       _$TemplatesDetailFromJson(json);
+
+  PropertyInspectionViewModel remoteData(int inspectionId) {
+    return PropertyInspectionViewModel(
+      inspectionId: inspectionId,
+      templateId: inspectionTemplateId ?? 0,
+      id: id ?? 0,
+      initialImages: templateDetailsPictures
+              ?.where((e) => e.isTenantUploaded == false)
+              .map((e) => e.fileName ?? "")
+              .toList() ??
+          [],
+      comments: agentComment,
+      images: [],
+      clean: cleaned ?? false,
+      unDamage: undermanaged ?? false,
+      working: working ?? false,
+      tenantImages: templateDetailsPictures
+              ?.where((e) => e.isTenantUploaded == true)
+              .map((e) => e.fileName ?? "")
+              .toList() ??
+          [],
+      tenantComment: tenantComment,
+      isTenantAgree: isTenantAgree,
+      cleanByTenant: cleanedByTenant ?? false,
+      unDamageByTenant: undermanagedByTenant ?? false,
+      workingByTenant: workingByTenant ?? false,
+    );
+  }
 }
 
 @JsonSerializable(createToJson: false)

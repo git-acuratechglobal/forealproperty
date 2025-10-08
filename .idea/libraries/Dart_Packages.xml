@@ -916,6 +916,13 @@
             </list>
           </value>
         </entry>
+        <entry key="native_exif">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/native_exif-0.6.2/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="native_stack_traces">
           <value>
             <list>
@@ -1746,6 +1753,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/mustache_template-2.0.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/native_assets_builder-0.13.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/native_assets_cli-0.13.0/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/native_exif-0.6.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/native_stack_traces-0.6.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/node_preamble-2.0.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/octo_image-2.1.0/lib" />
