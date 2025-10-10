@@ -574,7 +574,10 @@ class TemplatesDetail {
       id: id ?? 0,
       initialImages: templateDetailsPictures
               ?.where((e) => e.isTenantUploaded == false)
-              .map((e) => e.fileName ?? "")
+              .map((e) => {
+                    'image_path': e.fileName ?? "",
+                    'capture_date': e.formatedDate
+                  })
               .toList() ??
           [],
       comments: agentComment,
@@ -584,7 +587,10 @@ class TemplatesDetail {
       working: working ?? false,
       tenantImages: templateDetailsPictures
               ?.where((e) => e.isTenantUploaded == true)
-              .map((e) => e.fileName ?? "")
+              .map((e) => {
+                    'image_path': e.fileName ?? "",
+                    'capture_date': e.formatedDate
+                  })
               .toList() ??
           [],
       tenantComment: tenantComment,
@@ -598,19 +604,19 @@ class TemplatesDetail {
 
 @JsonSerializable(createToJson: false)
 class TemplateDetailsPicture {
-  TemplateDetailsPicture({
-    required this.id,
-    required this.inspectionTemplateId,
-    required this.templateId,
-    required this.inspectionId,
-    required this.fileName,
-    required this.fileChecksum,
-    required this.description,
-    required this.filePath,
-    required this.inspectionTemplateDetailsId,
-    required this.isTenantUploaded,
-    required this.photoNumber,
-  });
+  TemplateDetailsPicture(
+      {required this.id,
+      required this.inspectionTemplateId,
+      required this.templateId,
+      required this.inspectionId,
+      required this.fileName,
+      required this.fileChecksum,
+      required this.description,
+      required this.filePath,
+      required this.inspectionTemplateDetailsId,
+      required this.isTenantUploaded,
+      required this.photoNumber,
+      required this.pictureUpdatedTime});
 
   final int? id;
   final int? inspectionTemplateId;
@@ -623,9 +629,14 @@ class TemplateDetailsPicture {
   final int? inspectionTemplateDetailsId;
   final bool? isTenantUploaded;
   final int? photoNumber;
+  final DateTime? pictureUpdatedTime;
 
   factory TemplateDetailsPicture.fromJson(Map<String, dynamic> json) =>
       _$TemplateDetailsPictureFromJson(json);
+
+  String? get formatedDate => pictureUpdatedTime != null
+      ? '${pictureUpdatedTime?.day}/${pictureUpdatedTime?.month}/${pictureUpdatedTime?.year}   ${pictureUpdatedTime?.hour}:${pictureUpdatedTime?.minute.toString().padLeft(2, '0')}'
+      : null;
 }
 
 @JsonSerializable(createToJson: false)

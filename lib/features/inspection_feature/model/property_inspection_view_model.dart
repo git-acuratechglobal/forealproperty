@@ -13,8 +13,9 @@ class PropertyInspectionViewModel {
   final bool working;
   final List<ImageMetaData> images;
   final String? comments;
-  final List<String> initialImages;
-  final List<String> tenantImages;
+  final List<Map<String, dynamic>> initialImages;
+  final List<Map<String, dynamic>> tenantImages;
+
   final String? tenantComment;
   final bool? isTenantAgree;
   final bool cleanByTenant;
@@ -44,8 +45,8 @@ class PropertyInspectionViewModel {
     bool? working,
     List<ImageMetaData>? images,
     String? comments,
-    List<String>? initialImages,
-    List<String>? tenantImages,
+    List<Map<String, dynamic>>? initialImages,
+    List<Map<String, dynamic>>? tenantImages,
     String? tenantComment,
     bool? isTenantAgree,
     bool? cleanByTenant,
@@ -101,10 +102,14 @@ class PropertyInspectionViewModel {
       working: json['working'] ?? false,
       images: _parseImages(json['images']),
       comments: json['comments'],
-      initialImages:
-      (json['initialImages'] as List<dynamic>?)?.cast<String>() ?? [],
-      tenantImages:
-      (json['tenantImages'] as List<dynamic>?)?.cast<String>() ?? [],
+      initialImages: (json['initialImages'] as List?)
+          ?.map((e) => Map<String, dynamic>.from(e as Map))
+          .toList() ??
+          [],
+      tenantImages: (json['tenantImages'] as List?)
+          ?.map((e) => Map<String, dynamic>.from(e as Map))
+          .toList() ??
+          [],
       tenantComment: json['tenantComment'],
       isTenantAgree: json['isTenantAgree'],
       cleanByTenant: json['cleanByTenant'] ?? true,
@@ -120,7 +125,6 @@ class PropertyInspectionViewModel {
       final imagesList = imagesJson as List<dynamic>;
       return imagesList.map((imageJson) {
         if (imageJson is Map<String, dynamic>) {
-
           return ImageMetaData.fromJson(imageJson);
         } else if (imageJson is String) {
           return ImageMetaData(DateTime.now(), XFile(imageJson));

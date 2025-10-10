@@ -108,7 +108,6 @@ class ExpansionTileWidget extends HookConsumerWidget {
                             letter: 'T',
                           ),
                         ),
-
                       AnimatedSwitcher(
                         duration: const Duration(microseconds: 800),
                         transitionBuilder: (child, animation) =>
@@ -157,7 +156,7 @@ class ExpansionTileWidget extends HookConsumerWidget {
             child: PrimaryButton(
                 title: "Submit",
                 onClick: () {
-
+                   // ref.read(localStorageServiceProvider).clearInspection();
                   ref
                       .read(inspectionNotifierProvider.notifier)
                       .updateInspection(inspectionId, templateId);

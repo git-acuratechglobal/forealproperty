@@ -1,4 +1,5 @@
 import 'package:foreal_property/core/services/local_storage_service/local_storage_service.dart';
+import 'package:foreal_property/core/utils/imagepicker.dart';
 import 'package:foreal_property/features/inspection_feature/params/plan_inspection_param.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -76,17 +77,17 @@ class InspectionNotifier extends _$InspectionNotifier {
               CleanedByTenant: inspection.cleanByTenant,
               UndermanagedByTenant: inspection.unDamageByTenant,
               WorkingByTenant: inspection.workingByTenant,
-              AddUpdatePictures: _mapImagesToPictures(
-                  inspection.images.map((e) => e.image).toList()),
+              AddUpdatePictures: _mapImagesToPictures(inspection.images),
             ))
         .toList();
   }
 
-  List<Map<String, dynamic>> _mapImagesToPictures(List<XFile> images) {
+  List<Map<String, dynamic>> _mapImagesToPictures(List<ImageMetaData> images) {
     return images
         .map((image) => {
               'id': 0,
-              'PicturePath': image.path,
+              'PicturePath': image.image.path,
+              'PictureUpdatedTime': image.formattedDateForApi
             })
         .toList();
   }

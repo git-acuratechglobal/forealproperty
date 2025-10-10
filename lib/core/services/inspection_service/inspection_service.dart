@@ -141,9 +141,15 @@ class InspectionService {
 
           updatedAttributes.add(
             attr.copyWith(
-              AddUpdatePictures: uploadResults
-                  .map((e) => {"id": 0, "PicturePath": e.key})
-                  .toList(),
+              AddUpdatePictures: List.generate(
+                uploadResults.length,
+                (j) => {
+                  "id": 0,
+                  "PicturePath": uploadResults[j].key,
+                  "PictureUpdatedTime": attr.AddUpdatePictures[j]
+                      ['PictureUpdatedTime'],
+                },
+              ),
             ),
           );
         } else {

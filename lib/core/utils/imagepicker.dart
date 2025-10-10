@@ -9,6 +9,7 @@ import 'package:foreal_property/core/s3_sigleton/s3_widget.dart';
 import 'package:foreal_property/core/utils/network_image_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:native_exif/native_exif.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -189,12 +190,11 @@ class _ImagePickerForm2State extends State<ImagePickerForm2> {
 
 class ImagePickerForm3 extends StatefulWidget {
   final BuildContext context;
-  final List<String>? initialImages;
+  final List<Map<String, dynamic>>? initialImages;
   final List<ImageMetaData> pickedImages;
   final void Function(List<String> removedImages)? onRemovedInitialImages;
   final FormFieldSetter<List<ImageMetaData>>? onSaved;
-  final void Function(List<ImageMetaData>)?
-      onChanged; // Updated to use ImageMetaData
+  final void Function(List<ImageMetaData>)? onChanged;
 
   const ImagePickerForm3({
     Key? key,
@@ -211,7 +211,7 @@ class ImagePickerForm3 extends StatefulWidget {
 }
 
 class _ImagePickerForm3State extends State<ImagePickerForm3> {
-  late List<String> _currentImages;
+  late List<Map<String, dynamic>> _currentImages;
   final List<String> _removedInitialImages = [];
   List<ImageMetaData> _pickedImages = [];
 
@@ -221,7 +221,6 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
     _currentImages = List.from(widget.initialImages ?? []);
     _pickedImages = List.from(widget.pickedImages ?? []);
   }
-
 
   Future<ImageMetaData> _createImageMetaData(XFile imageFile) async {
     try {
@@ -235,7 +234,7 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
       );
     } catch (e) {
       print('Error reading EXIF data from ${imageFile.name}: $e');
-      return ImageMetaData(null,imageFile);
+      return ImageMetaData(null, imageFile);
     }
   }
 
@@ -253,7 +252,6 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
               spacing: 10.w,
               runSpacing: 10.h,
               children: [
-
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10.sp),
                   child: SizedBox(
@@ -280,7 +278,9 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                               InkWell(
                                 onTap: () {
                                   _showDialog2(
-                                      context, imageMetaData.image.path, false);
+                                      context, imageMetaData.image.path, false,
+                                      imageDate:
+                                          imageMetaData.formattedDateTime);
                                 },
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.sp),
@@ -306,7 +306,7 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                                       ),
                                     ),
                                     child: Text(
-                                      imageMetaData.formattedDate,
+                                      imageMetaData.formattedDateTime,
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 10.sp,
@@ -337,7 +337,6 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                     ),
                   ),
                 ),
-
                 ..._currentImages.map(
                   (imageUrl) => Stack(
                     alignment: Alignment.topRight,
@@ -349,10 +348,13 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                           height: 100.h,
                           child: InkWell(
                             onTap: () {
-                              _showDialog2(context, imageUrl, true);
+                              _showDialog2(
+                                  context, imageUrl['image_path'], true,
+                                  imageDate: imageUrl['capture_date']);
                             },
                             child: NetworkImageWidget(
-                              imageUrl: '${ApiEndPoints.imageUrl}${imageUrl}',
+                              imageUrl:
+                                  '${ApiEndPoints.imageUrl}${imageUrl['image_path']}',
                             ),
                           ),
                         ),
@@ -361,7 +363,7 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                         onTap: () {
                           setState(() {
                             _currentImages.remove(imageUrl);
-                            _removedInitialImages.add(imageUrl);
+                            _removedInitialImages.add(imageUrl['image_path']);
                             widget.onRemovedInitialImages
                                 ?.call(_removedInitialImages);
                           });
@@ -373,10 +375,34 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
                               Icon(Icons.close, size: 16, color: Colors.white),
                         ),
                       ),
+                      if (imageUrl['capture_date'] != null)
+                        Positioned(
+                          bottom: 0.sp,
+                          child: Container(
+                            width: 100.w,
+                            padding: EdgeInsets.all(4.sp),
+                            decoration: BoxDecoration(
+                              color: Colors.black54,
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10.sp),
+                                bottomRight: Radius.circular(10.sp),
+                              ),
+                            ),
+                            child: Text(
+                              imageUrl['capture_date'],
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10.sp,
+                              ),
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
-
                 GestureDetector(
                   onTap: () async {
                     final pickedImages = await showDialog<List<dynamic>>(
@@ -441,10 +467,8 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
     );
   }
 
-
-
-  void _showDialog2(
-      BuildContext context, String imagePath, bool isNetworkImage) {
+  void _showDialog2(BuildContext context, String imagePath, bool isNetworkImage,
+      {String? imageDate}) {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -454,41 +478,72 @@ class _ImagePickerForm3State extends State<ImagePickerForm3> {
         return Align(
           alignment: Alignment.center,
           child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 30),
-              height: 400,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
+            margin: const EdgeInsets.symmetric(horizontal: 30),
+            height: 400,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: switch (isNetworkImage) {
-                      true => NetworkImageWidget(
-                          imageUrl: '${ApiEndPoints.imageUrl}${imagePath}'),
-                      false => Image.file(
-                          File(imagePath),
-                          fit: BoxFit.cover,
-                        )
-                    },
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.clear,
-                        color: Colors.white,
+                  switch (isNetworkImage) {
+                    true => NetworkImageWidget(
+                        imageUrl: '${ApiEndPoints.imageUrl}${imagePath}'),
+                    false => Image.file(
+                        File(imagePath),
+                        fit: BoxFit.cover,
+                      )
+                  },
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.black45,
+                        shape: BoxShape.circle,
                       ),
-                      onPressed: () {
-                        context.pop();
-                      },
+                      child: IconButton(
+                        icon: const Icon(Icons.clear, color: Colors.white),
+                        onPressed: () => context.pop(),
+                      ),
                     ),
-                  )
+                  ),
+                  if (imageDate != null)
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 6),
+                          decoration: const BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20),
+                            ),
+                          ),
+                          child: Text(
+                            imageDate,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
-              )),
+              ),
+            ),
+          ),
         );
       },
     );
@@ -648,7 +703,6 @@ class _MultiShotCameraState extends State<MultiShotCamera> {
       ResolutionPreset.ultraHigh,
     );
     _initializeControllerFuture = _controller.initialize().then((_) {
-
       _getZoomLimits();
     });
   }
@@ -659,17 +713,14 @@ class _MultiShotCameraState extends State<MultiShotCamera> {
     setState(() {});
   }
 
-
   void _handleScaleStart(ScaleStartDetails details) {
     _baseScaleFactor = _currentZoomLevel;
   }
 
   Future<void> _handleScaleUpdate(ScaleUpdateDetails details) async {
-
     if (details.scale == 1.0) return;
 
     final double scale = _baseScaleFactor * details.scale;
-
 
     _currentZoomLevel = scale.clamp(_minAvailableZoom, _maxAvailableZoom);
 
@@ -806,7 +857,12 @@ class ImageMetaData {
       '${captureDate?.day}/${captureDate?.month}/${captureDate?.year}';
 
   String get formattedDateTime =>
-      '${captureDate?.day}/${captureDate?.month}/${captureDate?.year} ${captureDate?.hour}:${captureDate?.minute.toString().padLeft(2, '0')}';
+      '${captureDate?.day}/${captureDate?.month}/${captureDate?.year}   ${captureDate?.hour}:${captureDate?.minute.toString().padLeft(2, '0')}';
+
+  String? get formattedDateForApi => captureDate != null
+      ? DateFormat('yyyy-MM-dd HH:mm:ss.SSS').format(captureDate!)
+      : null;
+
   Map<String, dynamic> toJson() {
     return {
       'captureDate': captureDate?.toIso8601String(),
@@ -816,7 +872,7 @@ class ImageMetaData {
 
   factory ImageMetaData.fromJson(Map<String, dynamic> json) {
     return ImageMetaData(
-      DateTime.parse(json['captureDate'] as String),
+        json['captureDate'] !=null?DateTime.parse(json['captureDate'] as String):null,
       XFile(json['imagePath'] as String),
     );
   }
@@ -824,15 +880,15 @@ class ImageMetaData {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is ImageMetaData &&
-              runtimeType == other.runtimeType &&
-              captureDate == other.captureDate &&
-              image.path == other.image.path;
+      other is ImageMetaData &&
+          runtimeType == other.runtimeType &&
+          captureDate == other.captureDate &&
+          image.path == other.image.path;
 
   @override
   int get hashCode => captureDate.hashCode ^ image.path.hashCode;
 
   @override
-  String toString() => 'ImageMetaData(captureDate: $captureDate, imagePath: ${image}';
-
+  String toString() =>
+      'ImageMetaData(captureDate: $captureDate, imagePath: ${image}';
 }

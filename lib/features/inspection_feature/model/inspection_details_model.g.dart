@@ -258,6 +258,9 @@ TemplateDetailsPicture _$TemplateDetailsPictureFromJson(
           (json['inspectionTemplateDetailsId'] as num?)?.toInt(),
       isTenantUploaded: json['isTenantUploaded'] as bool?,
       photoNumber: (json['photoNumber'] as num?)?.toInt(),
+      pictureUpdatedTime: json['pictureUpdatedTime'] == null
+          ? null
+          : DateTime.parse(json['pictureUpdatedTime'] as String),
     );
 
 TemplateAttribute _$TemplateAttributeFromJson(Map<String, dynamic> json) =>
