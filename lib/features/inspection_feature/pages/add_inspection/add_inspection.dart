@@ -184,7 +184,12 @@ class AddInspection extends HookConsumerWidget {
                     : null,
                 selectedTime: selectedStartTime.value,
                 onTimeSelected: (time) {
+                  print("Selected Time: $time");
                   selectedStartTime.value = time;
+                  final startDateTime = parseTime(time!);
+                  final endDateTime = startDateTime.add(const Duration(hours: 2));
+                  final endTimeString = formatTime(endDateTime);
+                  selectedEndTime.value = endTimeString;
                 },
                 onChanged: (val) {
                   addInspectionParam.update((e) => e.copyWith(StartTime: val));
@@ -224,6 +229,19 @@ class AddInspection extends HookConsumerWidget {
         ),
       ),
     );
+  }
+  DateTime parseTime(String timeString) {
+    final clean = timeString
+        .replaceAll('\u202F', ' ') // narrow no-break space
+        .replaceAll('\u00A0', ' ') // non-breaking space
+        .trim();
+    final format = DateFormat.jm();
+    return format.parse(clean);
+  }
+
+  String formatTime(DateTime dateTime) {
+    final format = DateFormat.jm(); // "h:mm a"
+    return format.format(dateTime);
   }
 
   TimeOfDay parseTimeOfDay(String timeString) {
